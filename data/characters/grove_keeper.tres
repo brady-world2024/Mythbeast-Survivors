@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://data/definitions/character_definition.gd" id="1_definition"]
 [ext_resource type="PackedScene" path="res://assets/characters/grove_hero_visual.tscn" id="2_visual"]
+[ext_resource type="Resource" path="res://data/weapons/arcane_bolt.tres" id="3_weapon"]
 
 [resource]
 script = ExtResource("1_definition")
@@ -9,6 +10,5 @@ id = &"grove_keeper"
 visual_scene = ExtResource("2_visual")
 move_speed = 190.0
 max_health = 100
-basic_attack_damage = 14
-basic_attack_range = 160.0
-basic_attack_interval = 0.65
+damage_invulnerability = 0.45
+starting_weapon = ExtResource("3_weapon")

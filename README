@@ -17,18 +17,19 @@ Getting started
 
 Current scope
 
-  A Forest Slime chases the hero in Whispering Grove. The hero automatically
-  strikes the nearest enemy in range, and enemy contact reduces hero health.
-  The arena supports defeat and returning to the menu. Re-enter the grove
-  to start another encounter. XP, level, and time are preview values.
+  Forest Slimes spawn in Whispering Grove and chase the hero. The hero casts
+  Arcane Bolt automatically toward the nearest enemy in range. Enemy contact
+  reduces health, with a brief recovery window between hits. At zero health,
+  choose Try Again for a fresh encounter or Main Menu to leave. XP, level,
+  and time are preview values.
   Android and iOS export configuration and device testing are also ahead.
 
 Project layout
 
   core/app          Application entry, scene navigation, and audio lifetime
-  features          Whispering Grove and the reusable player scene
+  features          Whispering Grove, player, enemies, and combat components
   ui                Menus, HUD, safe-area layout, and shared theme
-  data              Character definitions and the English text catalog
+  data              Character, enemy, and weapon definitions and English copy
   assets            Project artwork, application icon, and audio
   tests/smoke       Foundation navigation and behavior checks
 

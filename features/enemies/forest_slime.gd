@@ -4,6 +4,9 @@ const EnemyDefinition = preload("res://data/definitions/enemy_definition.gd")
 const Health = preload("res://features/combat/health.gd")
 const Player = preload("res://features/player/player.gd")
 
+const HIT_TINT := Color(1.75, 1.35, 1.48)
+const HIT_FLASH_SECONDS := 0.14
+
 @export var definition: EnemyDefinition
 
 @onready var health: Health = $Health
@@ -16,10 +19,12 @@ var target: Player
 var _contact_cooldown := 0.0
 var _bounce_phase := 0.0
 var _hop_strength := 0.0
+var _hit_flash: Tween
 
 
 func _ready() -> void:
 	health.configure(definition.max_health)
+	health.damaged.connect(_on_damaged)
 	health.depleted.connect(_on_depleted)
 
 
@@ -29,16 +34,22 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		return
 
-	velocity = global_position.direction_to(target.global_position) * definition.move_speed
-	move_and_slide()
-
+	var target_offset := target.global_position - global_position
 	var contact_range_squared := definition.contact_range * definition.contact_range
+	if absf(target_offset.x) > 3.0:
+		_body.flip_h = target_offset.x < 0.0
+	if target_offset.length_squared() > contact_range_squared:
+		velocity = target_offset.normalized() * definition.move_speed
+		move_and_slide()
+	else:
+		velocity = Vector2.ZERO
+
 	if (
 		_contact_cooldown <= 0.0
 		and global_position.distance_squared_to(target.global_position) <= contact_range_squared
 	):
 		_contact_cooldown = definition.contact_interval
-		target.health.damage(definition.contact_damage)
+		target.receive_damage(definition.contact_damage)
 
 
 func _process(delta: float) -> void:
@@ -52,6 +63,14 @@ func _process(delta: float) -> void:
 	_body.position.y = -lift * lerpf(2.0, 8.0, _hop_strength)
 	_body.scale = Vector2(1.0 + squash, 1.0 - squash)
 	_shadow.scale = Vector2.ONE * (1.0 - 0.12 * lift * _hop_strength)
+
+
+func _on_damaged(_amount: int) -> void:
+	if _hit_flash != null:
+		_hit_flash.kill()
+	_body.self_modulate = HIT_TINT
+	_hit_flash = create_tween()
+	_hit_flash.tween_property(_body, "self_modulate", Color.WHITE, HIT_FLASH_SECONDS)
 
 
 func _on_depleted() -> void:

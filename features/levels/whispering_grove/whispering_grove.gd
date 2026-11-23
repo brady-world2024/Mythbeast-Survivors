@@ -1,39 +1,51 @@
 extends Node2D
 
 signal back_requested
+signal restart_requested
 
 const English = preload("res://data/localization/english.gd")
+const BasicAttack = preload("res://features/combat/basic_attack.gd")
 const Player = preload("res://features/player/player.gd")
-const ForestSlime = preload("res://features/enemies/forest_slime.gd")
+const SlimeSpawner = preload("res://features/enemies/slime_spawner.gd")
 const FloatingStick = preload("res://ui/components/floating_stick.gd")
 const GroveHud = preload("res://ui/hud/grove_hud.gd")
 
 @onready var _player: Player = %Player
-@onready var _slime: ForestSlime = %ForestSlime
+@onready var _spawner: SlimeSpawner = %SlimeSpawner
 @onready var _hud: GroveHud = %HUD
 @onready var _stick: FloatingStick = %MovementStick
 @onready var _pause_overlay: Control = %PauseOverlay
-@onready var _pause_heading: Label = %PauseHeading
+@onready var _pause_panel: Control = %PausePanel
+@onready var _game_over_panel: Control = %GameOverPanel
 @onready var _pause_button: Button = _hud.get_node("%PauseButton")
 @onready var _resume: Button = %Resume
-@onready var _back_to_menu: Button = %BackToMenu
+@onready var _try_again: Button = %TryAgain
 
 var _defeated := false
+var _transition_requested := false
 
 
 func _ready() -> void:
-	_slime.target = _player
+	var basic_attack := _player.get_node("BasicAttack") as BasicAttack
+	basic_attack.projectile_parent = %Effects
 	_player.health.changed.connect(_hud.set_health)
-	_player.health.depleted.connect(_show_defeat)
+	_player.health.depleted.connect(_show_game_over)
 	_hud.set_health(_player.health.current, _player.health.maximum)
 	_stick.touch_region = _hud.get_node("%MovementArea")
 	get_viewport().size_changed.connect(_clear_movement)
-	_pause_heading.text = tr(English.PAUSED)
+	%PauseHeading.text = tr(English.PAUSED)
 	_resume.text = tr(English.RESUME)
-	_back_to_menu.text = tr(English.BACK_TO_MENU)
+	%BackToMenu.text = tr(English.BACK_TO_MENU)
+	%GameOverHeading.text = tr(English.GAME_OVER)
+	%GameOverMessage.text = tr(English.GAME_OVER_MESSAGE)
+	_try_again.text = tr(English.TRY_AGAIN)
+	%MainMenu.text = tr(English.MAIN_MENU)
 	_pause_button.pressed.connect(_set_paused.bind(true))
 	_resume.pressed.connect(_set_paused.bind(false))
-	_back_to_menu.pressed.connect(back_requested.emit)
+	%BackToMenu.pressed.connect(_request_menu)
+	_try_again.pressed.connect(_request_restart)
+	%MainMenu.pressed.connect(_request_menu)
+	_spawner.start(_player, %Entities, _spawn_bounds())
 
 
 func _physics_process(_delta: float) -> void:
@@ -61,31 +73,59 @@ func _notification(what: int) -> void:
 			_clear_movement()
 		NOTIFICATION_WM_GO_BACK_REQUEST:
 			if _defeated:
-				back_requested.emit()
+				_request_menu()
 			else:
 				_set_paused(not _pause_overlay.visible)
 
 
 func _set_paused(value: bool) -> void:
-	if _pause_overlay.visible == value or (_defeated and not value):
+	if _defeated or _pause_overlay.visible == value:
 		return
+	_apply_pause(value, _resume if value else _pause_button)
+
+
+func _apply_pause(value: bool, focus_target: Control) -> void:
 	if value:
 		_clear_movement()
 	_pause_overlay.visible = value
 	_pause_button.disabled = value
 	get_tree().paused = value
 	if not OS.has_feature("mobile"):
-		var focus_target := _pause_button
-		if value:
-			focus_target = _back_to_menu if _defeated else _resume
 		focus_target.grab_focus()
 
 
-func _show_defeat() -> void:
+func _show_game_over() -> void:
+	if _defeated:
+		return
 	_defeated = true
-	_pause_heading.text = tr(English.DEFEAT)
-	_resume.hide()
-	_set_paused(true)
+	_spawner.stop()
+	_pause_panel.hide()
+	_game_over_panel.show()
+	_apply_pause(true, _try_again)
+
+
+func _request_menu() -> void:
+	if _transition_requested:
+		return
+	_transition_requested = true
+	back_requested.emit()
+
+
+func _request_restart() -> void:
+	if not _defeated or _transition_requested:
+		return
+	_transition_requested = true
+	restart_requested.emit()
+
+
+func _spawn_bounds() -> Rect2:
+	var west: CollisionShape2D = $World/ArenaBounds/West
+	var east: CollisionShape2D = $World/ArenaBounds/East
+	var north: CollisionShape2D = $World/ArenaBounds/North
+	var south: CollisionShape2D = $World/ArenaBounds/South
+	var top_left := Vector2(west.global_position.x, north.global_position.y)
+	var bottom_right := Vector2(east.global_position.x, south.global_position.y)
+	return Rect2(top_left, bottom_right - top_left)
 
 
 func _clear_movement() -> void:

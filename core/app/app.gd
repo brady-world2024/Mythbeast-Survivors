@@ -51,8 +51,13 @@ func request_quit(exit_code: int = 0) -> void:
 	get_tree().quit(exit_code)
 
 
-func _show_screen(destination: Screen) -> void:
-	if _quitting or (_screen != null and destination == _active_route):
+func _restart_grove(source_id: int) -> void:
+	if _active_route == Screen.GROVE and is_instance_valid(_screen) and _screen.get_instance_id() == source_id:
+		_show_screen(Screen.GROVE, true)
+
+
+func _show_screen(destination: Screen, reload_current := false) -> void:
+	if _quitting or (_screen != null and destination == _active_route and not reload_current):
 		return
 	var path := SCREEN_PATHS[destination]
 	var scene := load(path) as PackedScene
@@ -67,6 +72,8 @@ func _show_screen(destination: Screen) -> void:
 		next.connect(&"credits_requested", _show_screen.bind(Screen.CREDITS), CONNECT_DEFERRED)
 	else:
 		next.connect(&"back_requested", _show_screen.bind(Screen.MENU), CONNECT_DEFERRED)
+	if destination == Screen.GROVE:
+		next.connect(&"restart_requested", _restart_grove.bind(next.get_instance_id()), CONNECT_DEFERRED)
 
 	get_tree().paused = false
 	if is_instance_valid(_screen):

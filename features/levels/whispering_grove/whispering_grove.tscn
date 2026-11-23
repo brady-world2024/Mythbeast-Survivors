@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" path="res://ui/hud/grove_hud.tscn" id="4_hud"]
 [ext_resource type="Script" path="res://ui/components/safe_area.gd" id="5_safe"]
 [ext_resource type="Script" path="res://ui/components/floating_stick.gd" id="6_stick"]
-[ext_resource type="PackedScene" path="res://features/enemies/forest_slime.tscn" id="7_slime"]
+[ext_resource type="Script" path="res://features/enemies/slime_spawner.gd" id="7_spawner"]
 
 [sub_resource type="WorldBoundaryShape2D" id="West"]
 normal = Vector2(1, 0)
@@ -48,17 +48,19 @@ position = Vector2(0, 362)
 shape = SubResource("South")
 
 [node name="Entities" type="Node2D" parent="World"]
+unique_name_in_owner = true
 y_sort_enabled = true
 
 [node name="Player" parent="World/Entities" instance=ExtResource("3_player")]
 unique_name_in_owner = true
 position = Vector2(0, 25)
 
-[node name="ForestSlime" parent="World/Entities" instance=ExtResource("7_slime")]
+[node name="SlimeSpawner" type="Node2D" parent="World"]
 unique_name_in_owner = true
-position = Vector2(-154, -90)
+script = ExtResource("7_spawner")
 
 [node name="Effects" type="Node2D" parent="World"]
+unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="World"]
 
@@ -112,27 +114,63 @@ script = ExtResource("5_safe")
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Panel" type="PanelContainer" parent="Interface/PauseOverlay/SafeArea/Center"]
+[node name="PausePanel" type="PanelContainer" parent="Interface/PauseOverlay/SafeArea/Center"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(338, 0)
 layout_mode = 2
 
-[node name="Stack" type="VBoxContainer" parent="Interface/PauseOverlay/SafeArea/Center/Panel"]
+[node name="Stack" type="VBoxContainer" parent="Interface/PauseOverlay/SafeArea/Center/PausePanel"]
 layout_mode = 2
 theme_override_constants/separation = 17
 
-[node name="PauseHeading" type="Label" parent="Interface/PauseOverlay/SafeArea/Center/Panel/Stack"]
+[node name="PauseHeading" type="Label" parent="Interface/PauseOverlay/SafeArea/Center/PausePanel/Stack"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"HeadingLabel"
 horizontal_alignment = 1
 
-[node name="Resume" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/Panel/Stack"]
+[node name="Resume" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/PausePanel/Stack"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 theme_type_variation = &"PrimaryButton"
 
-[node name="BackToMenu" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/Panel/Stack"]
+[node name="BackToMenu" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/PausePanel/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+
+[node name="GameOverPanel" type="PanelContainer" parent="Interface/PauseOverlay/SafeArea/Center"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(338, 0)
+layout_mode = 2
+
+[node name="Stack" type="VBoxContainer" parent="Interface/PauseOverlay/SafeArea/Center/GameOverPanel"]
+layout_mode = 2
+theme_override_constants/separation = 17
+
+[node name="GameOverHeading" type="Label" parent="Interface/PauseOverlay/SafeArea/Center/GameOverPanel/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+horizontal_alignment = 1
+
+[node name="GameOverMessage" type="Label" parent="Interface/PauseOverlay/SafeArea/Center/GameOverPanel/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="TryAgain" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/GameOverPanel/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+
+[node name="MainMenu" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/GameOverPanel/Stack"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 58)
 layout_mode = 2

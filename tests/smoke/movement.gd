@@ -20,6 +20,7 @@ func _run() -> void:
 		_capture_dir = arguments[0]
 	_arena = ARENA.instantiate() as Node2D
 	root.add_child(_arena)
+	_arena.get_node("%SlimeSpawner").call("stop")
 	for enemy in get_nodes_in_group(&"combat_enemies"):
 		enemy.queue_free()
 	_player = _arena.find_child("Player", true, false) as CharacterBody2D

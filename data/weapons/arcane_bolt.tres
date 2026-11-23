@@ -1,0 +1,15 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/weapon_definition.gd" id="1_definition"]
+[ext_resource type="PackedScene" path="res://features/combat/arcane_bolt.tscn" id="2_projectile"]
+
+[resource]
+resource_name = "Arcane Bolt"
+script = ExtResource("1_definition")
+id = &"arcane_bolt"
+projectile_scene = ExtResource("2_projectile")
+damage = 10
+attack_interval = 0.75
+attack_range = 220.0
+projectile_speed = 450.0
+projectile_lifetime = 1.5

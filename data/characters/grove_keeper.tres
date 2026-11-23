@@ -7,3 +7,4 @@
 script = ExtResource("1_definition")
 id = &"grove_keeper"
 visual_scene = ExtResource("2_visual")
+move_speed = 190.0

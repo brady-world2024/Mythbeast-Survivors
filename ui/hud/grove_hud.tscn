@@ -117,3 +117,21 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"CaptionLabel"
 horizontal_alignment = 2
+
+[node name="MovementArea" type="Control" parent="SafeArea/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="MovementGuide" type="PanelContainer" parent="SafeArea/Stack"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HudPanel"
+mouse_filter = 2
+
+[node name="MoveHint" type="Label" parent="SafeArea/Stack/MovementGuide"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+horizontal_alignment = 1

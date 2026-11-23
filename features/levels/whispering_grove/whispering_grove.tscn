@@ -5,6 +5,18 @@
 [ext_resource type="PackedScene" path="res://features/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://ui/hud/grove_hud.tscn" id="4_hud"]
 [ext_resource type="Script" path="res://ui/components/safe_area.gd" id="5_safe"]
+[ext_resource type="Script" path="res://ui/components/floating_stick.gd" id="6_stick"]
+
+[sub_resource type="WorldBoundaryShape2D" id="West"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="East"]
+normal = Vector2(-1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="North"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="South"]
 
 [node name="WhisperingGrove" type="Node2D"]
 process_mode = 3
@@ -15,10 +27,30 @@ process_mode = 1
 
 [node name="GroveMeadow" parent="World" instance=ExtResource("2_meadow")]
 
+[node name="ArenaBounds" type="StaticBody2D" parent="World"]
+collision_mask = 0
+
+[node name="West" type="CollisionShape2D" parent="World/ArenaBounds"]
+position = Vector2(-205, 0)
+shape = SubResource("West")
+
+[node name="East" type="CollisionShape2D" parent="World/ArenaBounds"]
+position = Vector2(205, 0)
+shape = SubResource("East")
+
+[node name="North" type="CollisionShape2D" parent="World/ArenaBounds"]
+position = Vector2(0, -145)
+shape = SubResource("North")
+
+[node name="South" type="CollisionShape2D" parent="World/ArenaBounds"]
+position = Vector2(0, 362)
+shape = SubResource("South")
+
 [node name="Entities" type="Node2D" parent="World"]
 y_sort_enabled = true
 
 [node name="Player" parent="World/Entities" instance=ExtResource("3_player")]
+unique_name_in_owner = true
 position = Vector2(0, 25)
 
 [node name="Effects" type="Node2D" parent="World"]
@@ -29,6 +61,18 @@ position = Vector2(0, 25)
 
 [node name="HUD" parent="Interface" instance=ExtResource("4_hud")]
 unique_name_in_owner = true
+
+[node name="MovementStick" type="Control" parent="Interface"]
+unique_name_in_owner = true
+process_mode = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_stick")
 
 [node name="PauseOverlay" type="Control" parent="Interface"]
 unique_name_in_owner = true

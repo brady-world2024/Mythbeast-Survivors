@@ -12,6 +12,7 @@ func _ready() -> void:
 	%GroveName.text = tr(English.GROVE)
 	%Preview.text = tr(English.PREVIEW)
 	%PauseButton.text = tr(English.PAUSE)
+	%MoveHint.text = tr(English.TOUCH_MOVE_HINT if OS.has_feature("mobile") else English.KEYBOARD_MOVE_HINT)
 	%HealthCaption.text = _metric(English.HEALTH, HEALTH_PREVIEW)
 	%XpCaption.text = _metric(English.XP, XP_PREVIEW)
 	%LevelCaption.text = _metric(English.LEVEL, LEVEL_PREVIEW)

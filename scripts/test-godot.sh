@@ -2,6 +2,11 @@
 set -euo pipefail
 
 project_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+gate_only=0
+if [[ ${1:-} == --gate ]]; then
+    gate_only=1
+    shift
+fi
 godot_bin=${1:-${GODOT_BIN:-godot}}
 shopt -s nullglob
 
@@ -28,8 +33,27 @@ run_godot --import
 printf '%s\n' 'Launching the configured main scene.'
 run_godot --quit-after 8
 
-for smoke in "$project_root"/tests/smoke/*.gd; do
+if (( gate_only )); then
+    # Keep the required gate on an explicit list of critical suites.
+    smoke_tests=(
+        "$project_root/tests/smoke/foundation.gd"
+        "$project_root/tests/smoke/movement.gd"
+    )
+else
+    smoke_tests=("$project_root"/tests/smoke/*.gd)
+fi
+
+for smoke in "${smoke_tests[@]}"; do
     test_path=${smoke#"$project_root"/}
-    printf 'Running %s\n' "$test_path"
-    run_godot --fixed-fps 60 --script "res://$test_path"
+    if [[ ! -f "$smoke" ]]; then
+        printf 'Required smoke test missing: %s\n' "$test_path" >&2
+        exit 1
+    fi
+    if (( gate_only )); then
+        printf 'Running %s (gate profile)\n' "$test_path"
+        run_godot --fixed-fps 60 --script "res://$test_path" -- --gate
+    else
+        printf 'Running %s\n' "$test_path"
+        run_godot --fixed-fps 60 --script "res://$test_path"
+    fi
 done

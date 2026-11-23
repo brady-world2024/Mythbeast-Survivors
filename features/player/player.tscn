@@ -2,12 +2,15 @@
 
 [ext_resource type="Script" path="res://features/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://data/characters/grove_keeper.tres" id="2_keeper"]
+[ext_resource type="Script" path="res://features/combat/health.gd" id="3_health"]
+[ext_resource type="Script" path="res://features/combat/basic_attack.gd" id="4_attack"]
 
 [sub_resource type="CircleShape2D" id="Footprint"]
 radius = 16.0
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
+collision_mask = 5
 motion_mode = 1
 script = ExtResource("1_player")
 definition = ExtResource("2_keeper")
@@ -16,3 +19,9 @@ definition = ExtResource("2_keeper")
 shape = SubResource("Footprint")
 
 [node name="VisualAnchor" type="Node2D" parent="."]
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("3_health")
+
+[node name="BasicAttack" type="Node2D" parent="."]
+script = ExtResource("4_attack")

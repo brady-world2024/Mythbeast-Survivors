@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://features/combat/arcane_bolt.gd" id="1_bolt"]
+
+[sub_resource type="CircleShape2D" id="BoltShape"]
+radius = 8.0
+
+[node name="ArcaneBolt" type="CharacterBody2D" groups=["arcane_bolts"]]
+z_index = 2
+collision_layer = 8
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("1_bolt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("BoltShape")

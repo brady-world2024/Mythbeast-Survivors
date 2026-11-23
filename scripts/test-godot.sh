@@ -38,6 +38,7 @@ if (( gate_only )); then
     smoke_tests=(
         "$project_root/tests/smoke/foundation.gd"
         "$project_root/tests/smoke/movement.gd"
+        "$project_root/tests/smoke/combat.gd"
     )
 else
     smoke_tests=("$project_root"/tests/smoke/*.gd)

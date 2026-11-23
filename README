@@ -17,17 +17,19 @@ Getting started
 
 Current scope
 
-  The arena has a four-direction animated hero, a floating touch stick,
-  collision boundaries, a camera, and a preview HUD. Its health, XP, level,
-  and timer are demonstration values. Combat and progression are planned.
+  Forest Slimes spawn in Whispering Grove and chase the hero. The hero casts
+  Arcane Bolt automatically toward the nearest enemy in range. Enemy contact
+  reduces health, with a brief recovery window between hits. At zero health,
+  choose Try Again for a fresh encounter or Main Menu to leave. XP, level,
+  and time are preview values.
   Android and iOS export configuration and device testing are also ahead.
 
 Project layout
 
   core/app          Application entry, scene navigation, and audio lifetime
-  features          Whispering Grove and the reusable player scene
+  features          Whispering Grove, player, enemies, and combat components
   ui                Menus, HUD, safe-area layout, and shared theme
-  data              Character definitions and the English text catalog
+  data              Character, enemy, and weapon definitions and English copy
   assets            Project artwork, application icon, and audio
   tests/smoke       Foundation navigation and behavior checks
 
@@ -39,9 +41,9 @@ Development checks
     bash scripts/test-godot.sh --gate
     bash scripts/test-godot.sh
 
-  The required gate runs a curated set of startup, navigation, and movement
-  checks. The second command runs the full local smoke suite. Add critical
-  regressions to the gate when related behavior changes.
+  The required gate runs a curated set of startup, navigation, movement,
+  and combat checks. The second command runs the full local smoke suite.
+  Add critical regressions to the gate when related behavior changes.
 
 Engine attribution
 

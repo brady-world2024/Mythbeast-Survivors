@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://ui/hud/grove_hud.tscn" id="4_hud"]
 [ext_resource type="Script" path="res://ui/components/safe_area.gd" id="5_safe"]
 [ext_resource type="Script" path="res://ui/components/floating_stick.gd" id="6_stick"]
+[ext_resource type="PackedScene" path="res://features/enemies/forest_slime.tscn" id="7_slime"]
 
 [sub_resource type="WorldBoundaryShape2D" id="West"]
 normal = Vector2(1, 0)
@@ -52,6 +53,10 @@ y_sort_enabled = true
 [node name="Player" parent="World/Entities" instance=ExtResource("3_player")]
 unique_name_in_owner = true
 position = Vector2(0, 25)
+
+[node name="ForestSlime" parent="World/Entities" instance=ExtResource("7_slime")]
+unique_name_in_owner = true
+position = Vector2(-154, -90)
 
 [node name="Effects" type="Node2D" parent="World"]
 

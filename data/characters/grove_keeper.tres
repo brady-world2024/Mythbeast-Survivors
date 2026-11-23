@@ -8,3 +8,7 @@ script = ExtResource("1_definition")
 id = &"grove_keeper"
 visual_scene = ExtResource("2_visual")
 move_speed = 190.0
+max_health = 100
+basic_attack_damage = 14
+basic_attack_range = 160.0
+basic_attack_interval = 0.65

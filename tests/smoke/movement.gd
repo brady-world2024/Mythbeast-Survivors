@@ -20,6 +20,8 @@ func _run() -> void:
 		_capture_dir = arguments[0]
 	_arena = ARENA.instantiate() as Node2D
 	root.add_child(_arena)
+	for enemy in get_nodes_in_group(&"combat_enemies"):
+		enemy.queue_free()
 	_player = _arena.find_child("Player", true, false) as CharacterBody2D
 	await _ticks(3)
 	await _check_keyboard()

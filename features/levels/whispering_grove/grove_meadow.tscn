@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://features/levels/whispering_grove/grove_meadow.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/environments/grove_meadow.svg" id="2"]
+
+[node name="GroveMeadow" type="Node2D"]
+z_index = -10
+script = ExtResource("1")
+
+[node name="PaintedClearing" type="Sprite2D" parent="."]
+show_behind_parent = true
+texture = ExtResource("2")

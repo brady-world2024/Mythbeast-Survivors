@@ -1,0 +1,135 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/screens/main_menu.gd" id="1_menu"]
+[ext_resource type="Texture2D" path="res://ui/screens/menu_grove.svg" id="2_grove"]
+[ext_resource type="Script" path="res://ui/screens/menu_backdrop.gd" id="3_motes"]
+[ext_resource type="Script" path="res://ui/components/safe_area.gd" id="4_safe"]
+[ext_resource type="PackedScene" path="res://assets/characters/grove_hero_visual.tscn" id="5_hero"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Forest" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_grove")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ForestMotes" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_motes")
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_safe")
+
+[node name="Stack" type="VBoxContainer" parent="SafeArea"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="UpperSpace" type="Control" parent="SafeArea/Stack"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.05
+mouse_filter = 2
+
+[node name="Header" type="VBoxContainer" parent="SafeArea/Stack"]
+custom_minimum_size = Vector2(370, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="SafeArea/Stack/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"DisplayLabel"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Subtitle" type="Label" parent="SafeArea/Stack/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LightLabel"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="HeroStage" type="Control" parent="SafeArea/Stack"]
+custom_minimum_size = Vector2(0, 251)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HeroAnchor" type="Control" parent="SafeArea/Stack/HeroStage"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -14.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="GroveHeroVisual" parent="SafeArea/Stack/HeroStage/HeroAnchor" instance=ExtResource("5_hero")]
+scale = Vector2(1.65, 1.65)
+
+[node name="Actions" type="VBoxContainer" parent="SafeArea/Stack"]
+custom_minimum_size = Vector2(332, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/separation = 11
+
+[node name="Play" type="Button" parent="SafeArea/Stack/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_type_variation = &"PrimaryButton"
+
+[node name="Settings" type="Button" parent="SafeArea/Stack/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_type_variation = &"SecondaryButton"
+
+[node name="Credits" type="Button" parent="SafeArea/Stack/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_type_variation = &"QuietButton"
+
+[node name="LowerSpace" type="Control" parent="SafeArea/Stack"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.85
+mouse_filter = 2

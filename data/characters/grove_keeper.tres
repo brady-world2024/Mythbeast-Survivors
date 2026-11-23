@@ -1,0 +1,9 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/character_definition.gd" id="1_definition"]
+[ext_resource type="PackedScene" path="res://assets/characters/grove_hero_visual.tscn" id="2_visual"]
+
+[resource]
+script = ExtResource("1_definition")
+id = &"grove_keeper"
+visual_scene = ExtResource("2_visual")

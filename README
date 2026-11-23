@@ -1,0 +1,43 @@
+Mythbeast Survivors
+
+An offline, single-player, portrait 2D survivor game built with Godot and
+GDScript. This foundation explores Whispering Grove, a woodland arena
+featuring an original chibi adventurer, soft forest scenery, and local audio.
+
+Getting started
+
+  Install Godot 4.7.2 Standard.
+  In the Godot Project Manager, import project.godot from this directory.
+  Press F5 and select Play to enter Whispering Grove.
+
+  The main menu also opens Settings and Credits. Settings controls the
+  music and sound effects for the current session. In the arena, use Pause
+  or Esc to open the pause menu, then choose Resume or Back to Menu.
+
+Current scope
+
+  The arena has an animated hero, a camera, and a preview HUD. Its health,
+  XP, level, and timer are demonstration values. Player movement, touch
+  controls, combat, and progression are planned for later milestones.
+  Android and iOS export configuration and device testing are also ahead.
+
+Project layout
+
+  core/app          Application entry, scene navigation, and audio lifetime
+  features          Whispering Grove and the reusable player scene
+  ui                Menus, HUD, safe-area layout, and shared theme
+  data              Character definitions and the English text catalog
+  assets            Project artwork, application icon, and audio
+  tests/smoke       Foundation navigation and behavior checks
+
+Development checks
+
+  From this directory, run the following using your Godot executable:
+
+    godot --headless --path . --import
+    godot --headless --path . --script res://tests/smoke/foundation.gd
+
+Engine attribution
+
+  Built with Godot Engine, available under the MIT License.
+  https://godotengine.org/license/

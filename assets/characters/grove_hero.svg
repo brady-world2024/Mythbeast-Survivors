@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="244" height="300" viewBox="-61 -144 122 150">
+  <defs>
+    <linearGradient id="hood" x1="0" y1="0" x2="0.28" y2="1">
+      <stop stop-color="#ffe0a1"/><stop offset=".54" stop-color="#f1bd78"/><stop offset="1" stop-color="#d68b60"/>
+    </linearGradient>
+    <linearGradient id="cape" x1="0" y1="0" x2="0.35" y2="1">
+      <stop stop-color="#d2bced"/><stop offset="1" stop-color="#9181be"/>
+    </linearGradient>
+    <linearGradient id="face" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#fff0ca"/><stop offset="1" stop-color="#f6c89c"/>
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- Lilac cape, boots, and tunic. -->
+    <path d="M-29 -64Q-39 -57 -42 -41L-53 -18Q-40 -8 -26 -14Q-17 -7 -1 -13Q12 -7 23 -14Q40 -8 53 -19Q46 -38 43 -51Q39 -66 27 -70Z" fill="url(#cape)" stroke="#534768" stroke-width="3.5"/>
+    <path d="M-42 -26Q-30 -16 -19 -23M31 -23Q40 -19 46 -24" fill="none" stroke="#e4c9ef" stroke-width="2.4" opacity=".68"/>
+    <path d="M-23 -22Q-30 -10 -25 -3Q-20 2 -8 -1Q-4 -2 -4 -8L-3 -21M21 -22Q28 -12 25 -4Q21 2 8 -1Q4 -2 4 -8L3 -21" fill="#705752" stroke="#4c3d3d" stroke-width="3.2"/>
+    <path d="M-26 -10Q-15 -5 -7 -8M9 -8Q19 -6 25 -10" fill="none" stroke="#b68369" stroke-width="2.6"/>
+    <path d="M-20 -59Q-33 -55 -34 -42Q-36 -34 -28 -33Q-22 -33 -19 -41M19 -59Q32 -55 33 -44Q36 -35 28 -34Q22 -33 19 -41" fill="#e6bd99" stroke="#574463" stroke-width="3.3"/>
+    <path d="M-16 -61Q0 -65 16 -61Q23 -45 25 -23Q13 -14 0 -16Q-13 -14 -25 -23Q-23 -45 -16 -61Z" fill="#b09acb" stroke="#59496d" stroke-width="3.1"/>
+    <path d="M-22 -27Q0 -18 22 -27M-18 -40Q0 -32 18 -40" fill="none" stroke="#e2c7e9" stroke-width="2.1"/>
+    <path d="M-6 -35Q4 -39 9 -32L7 -26Q0 -23 -6 -27Z" fill="#edbd7b" stroke="#806551" stroke-width="1.6"/>
+    <!-- Rounded hood and recessed face opening. -->
+    <path d="M-47 -99C-44 -123 -25 -135 -6 -135C11 -138 27 -131 38 -120C47 -111 51 -96 49 -85C46 -67 31 -57 16 -54C-3 -50 -26 -54 -39 -65Q-52 -76 -47 -99Z" fill="url(#hood)" stroke="#684c43" stroke-width="3.8"/>
+    <path d="M-42 -98C-43 -112 -29 -125 -16 -128C-5 -131 8 -132 19 -127" fill="none" stroke="#fff0bc" stroke-width="3.2" opacity=".9"/>
+    <path d="M-38 -83C-36 -103 -22 -117 -1 -118C21 -119 36 -103 39 -82C36 -67 20 -58 1 -59C-17 -58 -32 -64 -38 -77Z" fill="#ad7258" stroke="#9a634e" stroke-width="2.5"/>
+    <path d="M-33 -84C-29 -101 -18 -112 -1 -113C15 -113 28 -104 34 -86C37 -68 17 -61 1 -62C-16 -61 -33 -69 -33 -84Z" fill="url(#face)" stroke="#835744" stroke-width="2"/>
+    <path d="M-31 -88Q-27 -108 -8 -113Q12 -119 29 -98Q19 -96 5 -104Q6 -99 11 -96Q-5 -96 -15 -106Q-21 -95 -31 -88Z" fill="#8a6650"/>
+    <path d="M-28 -101Q-22 -109 -13 -110M-5 -111Q8 -114 19 -105" fill="none" stroke="#c19a70" stroke-width="1.6"/>
+    <path d="M-19 -92Q-15 -94 -11 -93M11 -93Q15 -94 19 -92" fill="none" stroke="#8e6253" stroke-width="1.8"/>
+    <ellipse cx="-15" cy="-83" rx="4.8" ry="6.1" fill="#493f40"/>
+    <ellipse cx="15" cy="-83" rx="4.8" ry="6.1" fill="#493f40"/>
+    <circle cx="-16.5" cy="-85" r="1.65" fill="#fff7e3"/>
+    <circle cx="13.5" cy="-85" r="1.65" fill="#fff7e3"/>
+    <ellipse cx="-24" cy="-74" rx="5.8" ry="2.7" fill="#e89f94" opacity=".72"/>
+    <ellipse cx="24" cy="-74" rx="5.8" ry="2.7" fill="#e89f94" opacity=".72"/>
+    <path d="M-4.5 -75Q0 -70 4.5 -75" fill="none" stroke="#995f57" stroke-width="1.8"/>
+    <!-- Leaf pins on the hood and at the cape clasp. -->
+    <path d="M24 -118Q21 -135 42 -140Q47 -123 30 -118Q39 -126 52 -120Q45 -109 30 -113Z" fill="#9ec28a" stroke="#5e6d50" stroke-width="2.4"/>
+    <path d="M27 -118Q33 -128 39 -133M32 -116L45 -119" fill="none" stroke="#d5dfa6" stroke-width="1.7"/>
+    <path d="M-17 -57Q-8 -50 1 -51Q11 -52 19 -57" fill="none" stroke="#78618f" stroke-width="3.2"/>
+    <path d="M-6 -53Q-3 -61 8 -60Q10 -49 1 -46Q-4 -46 -6 -53Z" fill="#b7c992" stroke="#5b6753" stroke-width="1.8"/>
+    <path d="M-1 -49L5 -56" fill="none" stroke="#e6e9b5" stroke-width="1.5"/>
+  </g>
+</svg>

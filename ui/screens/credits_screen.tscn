@@ -1,0 +1,100 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/screens/credits_screen.gd" id="Credits"]
+[ext_resource type="Script" path="res://ui/components/safe_area.gd" id="SafeArea"]
+[ext_resource type="Texture2D" path="res://assets/icons/game_icon.svg" id="GameIcon"]
+
+[sub_resource type="Gradient" id="ForestLight"]
+colors = PackedColorArray(0.2549, 0.42745, 0.32941, 1, 0.12549, 0.24314, 0.20784, 1)
+
+[sub_resource type="GradientTexture2D" id="Backdrop"]
+gradient = SubResource("ForestLight")
+width = 128
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.42)
+fill_to = Vector2(1, 1)
+
+[node name="CreditsScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("Credits")
+
+[node name="ForestLight" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("Backdrop")
+expand_mode = 1
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("SafeArea")
+
+[node name="Content" type="VBoxContainer" parent="SafeArea"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_minimum_size = Vector2(412, 0)
+theme_override_constants/separation = 24
+
+[node name="Card" type="PanelContainer" parent="SafeArea/Content"]
+layout_mode = 2
+
+[node name="ProjectCredits" type="VBoxContainer" parent="SafeArea/Content/Card"]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="SafeArea/Content/Card/ProjectCredits"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+horizontal_alignment = 1
+
+[node name="GameIcon" type="TextureRect" parent="SafeArea/Content/Card/ProjectCredits"]
+layout_mode = 2
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(88, 88)
+mouse_filter = 2
+texture = ExtResource("GameIcon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="GameTitle" type="Label" parent="SafeArea/Content/Card/ProjectCredits"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SectionLabel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Description" type="Label" parent="SafeArea/Content/Card/ProjectCredits"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="EngineCredit" type="Label" parent="SafeArea/Content/Card/ProjectCredits"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Back" type="Button" parent="SafeArea/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"QuietButton"
+custom_minimum_size = Vector2(0, 60)
+mouse_default_cursor_shape = 2

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 540 960">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0.1" y2="1">
+      <stop stop-color="#132e2b"/><stop offset=".36" stop-color="#284e3a"/><stop offset=".63" stop-color="#8aae6e"/><stop offset="1" stop-color="#173c34"/>
+    </linearGradient>
+    <radialGradient id="clearing" cx=".5" cy=".65" r=".53" gradientTransform="translate(0 .12) scale(1 .83)">
+      <stop stop-color="#efdc9a"/><stop offset=".34" stop-color="#c7ce88"/><stop offset=".69" stop-color="#6b9265"/><stop offset="1" stop-color="#2b5745"/>
+    </radialGradient>
+    <linearGradient id="forest" x1="0" y1="0" x2=".5" y2="1">
+      <stop stop-color="#345b48"/><stop offset="1" stop-color="#759068"/>
+    </linearGradient>
+    <linearGradient id="trunk" x1="0" y1="0" x2="1" y2=".4">
+      <stop stop-color="#102c28"/><stop offset="1" stop-color="#2f5846"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2=".04" y2="1">
+      <stop stop-color="#24503e" stop-opacity="0"/><stop offset=".45" stop-color="#193d31" stop-opacity=".8"/><stop offset="1" stop-color="#142e2b"/>
+    </linearGradient>
+    <radialGradient id="light">
+      <stop stop-color="#fff1bc" stop-opacity=".72"/><stop offset="1" stop-color="#f6df9a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h540v960H0z"/>
+  <!-- Distant trunks and a low, open horizon behind the hero. -->
+  <g fill="url(#forest)" opacity=".57">
+    <path d="M0 269Q18 240 47 260Q45 224 84 217Q104 172 152 188Q178 194 175 220Q211 210 231 246Q262 244 273 270Q309 251 328 227Q342 221 356 237Q367 192 411 200Q437 177 465 195Q503 177 520 218Q535 218 540 225V521H0Z"/>
+    <path d="M0 340Q43 329 60 285Q81 252 119 272Q153 233 184 266Q210 269 216 316Q243 318 256 344Q270 337 290 348Q309 317 340 321Q338 295 373 279Q391 245 432 254Q475 229 489 271Q524 251 540 265V535H0Z"/>
+  </g>
+  <g fill="none" stroke="#97af78" stroke-width="6" opacity=".3" stroke-linecap="round">
+    <path d="M72 470Q79 419 62 368M73 429L96 389M121 469Q124 404 110 340M124 418L148 380M179 455Q177 409 186 385M367 457Q368 416 357 382M366 428L382 405M418 464Q414 425 436 363M419 427L398 393M474 470L487 370"/>
+  </g>
+  <path d="M0 487C90 443 151 442 246 448C342 441 445 441 540 479V960H0Z" fill="url(#clearing)"/>
+  <ellipse cx="273" cy="516" rx="223" ry="93" fill="url(#light)"/>
+  <path d="M64 557Q91 547 122 548M396 547Q436 544 461 548M137 598Q184 583 219 590M319 584Q354 580 393 587" fill="none" stroke="#dee29a" stroke-width="2" opacity=".36" stroke-linecap="round"/>
+  <path d="M0 617Q88 586 204 599Q348 586 459 600Q510 605 540 618V960H0Z" fill="url(#ground)"/>
+  <!-- Side trees frame the portrait while leaving the title and center open. -->
+  <g fill="#1e4437">
+    <path d="M0 66Q16 55 35 61Q59 18 102 39Q133 46 139 76Q163 79 173 99Q169 135 136 147Q133 176 98 182Q105 213 76 232Q56 260 19 247L0 238Z"/>
+    <path d="M540 52Q516 43 501 56Q468 19 428 38Q407 51 412 74Q381 82 384 109Q389 138 423 148Q405 185 433 205Q431 231 461 248Q497 264 540 233Z"/>
+    <path d="M0 289Q33 264 64 277Q76 251 100 258Q132 261 142 286Q164 286 173 313Q179 336 152 348Q141 368 111 366Q91 395 61 382Q31 400 0 386Z"/>
+    <path d="M540 276Q513 266 492 282Q485 251 454 254Q425 250 409 284Q385 291 380 314Q384 341 410 347Q425 375 455 368Q478 392 508 379Q525 388 540 378Z"/>
+  </g>
+  <g fill="url(#trunk)">
+    <path d="M0 3Q24 22 31 75Q47 39 88 22Q91 31 84 41Q43 72 43 131Q53 205 42 280Q40 321 48 374Q57 454 65 469Q35 468 25 490Q18 481 0 487Z"/>
+    <path d="M540 3Q516 15 511 83Q499 52 463 29Q454 36 459 45Q495 84 493 138Q484 204 495 286Q502 390 477 470Q499 467 514 492Q526 480 540 486Z"/>
+    <path d="M32 312Q68 306 89 275Q95 276 95 281Q80 323 39 343ZM504 320Q480 305 458 272Q449 272 453 280Q468 322 499 348Z"/>
+  </g>
+  <g fill="none" stroke="#52725a" stroke-width="2" opacity=".57" stroke-linecap="round">
+    <path d="M25 117Q43 175 32 234M23 345Q22 402 38 445M15 281Q18 303 15 322M518 141Q501 204 515 252M510 355Q516 412 504 446M522 295Q520 320 525 338"/>
+  </g>
+  <!-- Rounded canopy edges and highlighted leaf clusters. -->
+  <g fill="#28503e">
+    <path d="M0 0h177Q191 27 168 40Q152 55 126 46Q115 67 87 61Q63 85 41 68Q20 76 0 54Z"/>
+    <path d="M540 0H384Q364 16 377 40Q392 55 416 48Q426 72 453 68Q473 87 499 76Q514 86 540 67Z"/>
+    <path d="M0 284Q21 265 37 277Q53 256 76 258Q90 244 114 254Q141 267 139 285Q154 287 161 300Q142 319 119 312Q106 335 84 327Q65 344 41 325Q20 339 0 325Z"/>
+    <path d="M540 282Q525 264 501 275Q483 252 464 263Q445 245 424 259Q399 273 406 289Q393 293 384 305Q404 323 426 314Q437 337 460 329Q480 346 501 326Q524 336 540 320Z"/>
+  </g>
+  <g fill="#5d8253" opacity=".52">
+    <path d="M44 283Q69 265 92 281Q73 285 60 297Q71 285 44 283ZM94 273Q119 257 133 276Q116 274 104 287Z"/>
+    <path d="M497 284Q470 265 450 283Q471 285 483 298Q476 288 497 284ZM444 272Q423 260 411 279Q425 275 435 288Z"/>
+    <path d="M40 33Q66 18 86 41Q63 31 46 44ZM462 37Q483 20 506 37Q484 33 468 48Z"/>
+  </g>
+  <!-- Rounded ground cover and flower banks. -->
+  <g fill="#315944">
+    <path d="M0 431Q15 408 39 426Q56 403 79 416Q101 412 107 438Q127 442 126 461Q145 461 151 483Q115 496 72 493Q24 506 0 489Z"/>
+    <path d="M540 426Q525 410 506 425Q488 400 463 415Q438 410 433 438Q416 444 419 463Q401 461 389 485Q434 496 468 491Q514 506 540 490Z"/>
+    <path d="M0 568Q36 551 58 569Q80 554 107 573Q97 590 65 595Q34 605 0 599Z"/>
+    <path d="M540 571Q509 552 483 570Q460 554 433 574Q447 595 477 599Q507 606 540 597Z"/>
+  </g>
+  <g fill="#83a26b">
+    <path d="M59 475Q43 448 58 438Q72 451 61 474Q78 448 97 456Q85 473 64 476Z"/>
+    <path d="M477 475Q494 453 482 442Q468 452 475 475Q461 451 441 458Q453 475 475 478Z"/>
+    <path d="M117 519Q102 497 93 508Q96 519 117 520Q115 502 129 500Q131 515 117 520Z"/>
+    <path d="M421 520Q435 497 445 508Q444 519 421 521Q425 504 411 499Q407 514 421 521Z"/>
+  </g>
+  <g fill="none" stroke="#8caf75" stroke-width="2.2" stroke-linecap="round">
+    <path d="M76 520Q74 509 72 500M93 539Q89 526 93 518M53 548Q50 541 44 535M461 521Q466 509 465 500M445 540Q449 527 446 517M486 547Q492 538 495 532"/>
+  </g>
+  <g fill="#f18d86">
+    <path d="M72 501C59 502 64 489 70 495C74 485 83 495 76 498Q77 504 72 501Z"/>
+    <path d="M446 519C435 518 438 508 444 513C450 504 456 514 451 516Q450 522 446 519Z"/>
+    <circle cx="58" cy="544" r="3.5"/><circle cx="467" cy="553" r="3"/>
+  </g>
+  <g fill="#f0d99a">
+    <path d="M91 519C82 516 85 507 91 512C97 505 103 515 96 517Q93 522 91 519Z"/>
+    <path d="M465 501C456 503 453 492 461 495C463 485 474 491 470 496Q475 504 465 501Z"/>
+    <circle cx="46" cy="534" r="3.2"/><circle cx="496" cy="532" r="3.5"/>
+  </g>
+  <g fill="#c9b6dc" opacity=".88">
+    <circle cx="37" cy="527" r="2.5"/><circle cx="106" cy="540" r="3"/><circle cx="435" cy="535" r="2.8"/><circle cx="502" cy="519" r="3"/>
+  </g>
+  <!-- Low-contrast grass and foreground leaves beneath the action group. -->
+  <g fill="#244937">
+    <path d="M0 763Q16 778 18 828Q10 808 0 801ZM540 757Q521 786 524 832Q530 809 540 805Z"/>
+    <path d="M0 874Q40 871 58 921Q52 892 58 874Q89 893 97 925Q97 902 113 898Q129 920 124 951Q142 919 164 921Q168 948 143 960H0ZM540 875Q504 877 489 921Q491 889 480 885Q453 901 449 934Q442 907 425 904Q414 926 422 953Q400 925 378 928Q374 948 398 960H540Z"/>
+  </g>
+  <g fill="#46694d" opacity=".59">
+    <path d="M9 915Q33 908 50 947Q26 943 9 915ZM69 936Q66 923 74 920Q84 926 87 947ZM523 917Q500 916 483 949Q508 945 523 917ZM454 940Q453 925 444 923Q437 933 436 948Z"/>
+  </g>
+</svg>

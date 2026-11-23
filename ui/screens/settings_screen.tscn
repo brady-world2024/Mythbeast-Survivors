@@ -1,0 +1,129 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/screens/settings_screen.gd" id="Settings"]
+[ext_resource type="Script" path="res://ui/components/safe_area.gd" id="SafeArea"]
+
+[sub_resource type="Gradient" id="ForestLight"]
+colors = PackedColorArray(0.2549, 0.42745, 0.32941, 1, 0.12549, 0.24314, 0.20784, 1)
+
+[sub_resource type="GradientTexture2D" id="Backdrop"]
+gradient = SubResource("ForestLight")
+width = 128
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.42)
+fill_to = Vector2(1, 1)
+
+[node name="SettingsScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("Settings")
+
+[node name="ForestLight" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("Backdrop")
+expand_mode = 1
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("SafeArea")
+
+[node name="Content" type="VBoxContainer" parent="SafeArea"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_minimum_size = Vector2(412, 0)
+theme_override_constants/separation = 24
+
+[node name="Card" type="PanelContainer" parent="SafeArea/Content"]
+layout_mode = 2
+
+[node name="VolumeSettings" type="VBoxContainer" parent="SafeArea/Content/Card"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Heading" type="Label" parent="SafeArea/Content/Card/VolumeSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+horizontal_alignment = 1
+
+[node name="MusicRow" type="VBoxContainer" parent="SafeArea/Content/Card/VolumeSettings"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Caption" type="HBoxContainer" parent="SafeArea/Content/Card/VolumeSettings/MusicRow"]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="SafeArea/Content/Card/VolumeSettings/MusicRow/Caption"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SectionLabel"
+autowrap_mode = 3
+
+[node name="MusicPercent" type="Label" parent="SafeArea/Content/Card/VolumeSettings/MusicRow/Caption"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+custom_minimum_size = Vector2(54, 0)
+horizontal_alignment = 2
+
+[node name="Music" type="HSlider" parent="SafeArea/Content/Card/VolumeSettings/MusicRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 56)
+mouse_default_cursor_shape = 2
+max_value = 100.0
+scrollable = false
+
+[node name="SFXRow" type="VBoxContainer" parent="SafeArea/Content/Card/VolumeSettings"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Caption" type="HBoxContainer" parent="SafeArea/Content/Card/VolumeSettings/SFXRow"]
+layout_mode = 2
+
+[node name="SFXLabel" type="Label" parent="SafeArea/Content/Card/VolumeSettings/SFXRow/Caption"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SectionLabel"
+autowrap_mode = 3
+
+[node name="SFXPercent" type="Label" parent="SafeArea/Content/Card/VolumeSettings/SFXRow/Caption"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+custom_minimum_size = Vector2(54, 0)
+horizontal_alignment = 2
+
+[node name="SFX" type="HSlider" parent="SafeArea/Content/Card/VolumeSettings/SFXRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 56)
+mouse_default_cursor_shape = 2
+max_value = 100.0
+scrollable = false
+
+[node name="Back" type="Button" parent="SafeArea/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"QuietButton"
+custom_minimum_size = Vector2(0, 60)
+mouse_default_cursor_shape = 2

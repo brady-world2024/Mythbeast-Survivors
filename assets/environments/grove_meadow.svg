@@ -1,0 +1,316 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1120" height="1440" viewBox="-560 -720 1120 1440">
+  <title>Whispering Grove meadow</title>
+  <defs>
+    <radialGradient id="meadow" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="1"
+                    gradientTransform="translate(-22 -48) scale(510 726)">
+      <stop stop-color="#bcdda3"/>
+      <stop offset=".40" stop-color="#abd69b"/>
+      <stop offset=".74" stop-color="#8ccb89"/>
+      <stop offset="1" stop-color="#67a985"/>
+    </radialGradient>
+    <radialGradient id="sun" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="1"
+                    gradientTransform="translate(-78 -141) rotate(-17) scale(285 494)">
+      <stop stop-color="#f8eed7" stop-opacity=".43"/>
+      <stop offset=".56" stop-color="#f5edb7" stop-opacity=".13"/>
+      <stop offset="1" stop-color="#f5edb7" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hill">
+      <stop stop-color="#eff2b8" stop-opacity=".52"/>
+      <stop offset="1" stop-color="#e2edb3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="upperPath" gradientUnits="userSpaceOnUse" x1="255" y1="-505" x2="41" y2="-140">
+      <stop stop-color="#e8e0a7" stop-opacity=".09"/>
+      <stop offset=".47" stop-color="#eee5ab" stop-opacity=".44"/>
+      <stop offset=".75" stop-color="#efedb8" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#f8eed7" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lowerPath" gradientUnits="userSpaceOnUse" x1="-248" y1="523" x2="-41" y2="150">
+      <stop stop-color="#e4e2a0" stop-opacity=".16"/>
+      <stop offset=".54" stop-color="#f1edb6" stop-opacity=".40"/>
+      <stop offset="1" stop-color="#f8eed7" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="shadow">
+      <stop stop-color="#294f44" stop-opacity=".42"/>
+      <stop offset=".58" stop-color="#305c4c" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#305c4c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="oakLeaves" x2=".22" y2="1">
+      <stop stop-color="#a8d697"/>
+      <stop offset=".50" stop-color="#82bc80"/>
+      <stop offset="1" stop-color="#4c976e"/>
+    </linearGradient>
+    <linearGradient id="willowLeaves" x2=".17" y2="1">
+      <stop stop-color="#a4cb94"/>
+      <stop offset=".48" stop-color="#6ba77c"/>
+      <stop offset="1" stop-color="#43876c"/>
+    </linearGradient>
+    <linearGradient id="shrubLeaves" x2=".2" y2="1">
+      <stop stop-color="#b2d58c"/>
+      <stop offset="1" stop-color="#669e68"/>
+    </linearGradient>
+
+    <g id="oak">
+      <ellipse cx="9" cy="5" rx="71" ry="24" fill="url(#shadow)"/>
+      <path d="M-10-39C-8-28-8-15-15-8c-5 5-7 10-2 12 7 3 11-4 16-5 4 1 7 6 13 5 4-1 0-7-2-11C5-16 8-25 11-39Z" fill="#775b4f"/>
+      <path d="M-8-34C-4-25-4-12-11-6m15-23C1-18 2-9 6-5" fill="none" stroke="#a18162" stroke-width="3" stroke-linecap="round"/>
+      <path d="M-57-56c-10-16-4-36 9-44 3-17 18-28 36-25 13-13 36-11 46 3 18-1 32 13 31 31 12 13 10 32-1 42-11 12-24 13-39 11-12 8-34 8-46 2-17 4-29-3-36-20Z" fill="#438163"/>
+      <path d="M-55-60c-10-15-3-32 9-41 4-16 18-25 35-22 14-12 33-9 44 4 17-1 30 12 29 29 11 12 9 27-1 37-11 11-25 11-36 8-12 9-32 9-46 3-15 4-27-3-34-18Z" fill="url(#oakLeaves)"/>
+      <path d="M-55-75c4-8 12-10 23-8 4-13 15-20 27-17 8 2 13 6 15 13 12-8 29-4 36 8 6-2 13-1 19 3-2-8-4-10-10-16 0-15-10-26-24-26-11-13-30-13-42-3-16-2-31 6-34 19-9 7-12 16-10 27Z" fill="#b8dc9c" opacity=".49"/>
+      <path d="M-46-91c6-7 15-7 20-5 3-9 14-13 21-10m17-4c8 0 15 4 19 9" fill="none" stroke="#e2efb1" stroke-width="3.5" stroke-linecap="round" opacity=".64"/>
+      <path d="M-48-67c4 8 13 12 23 11 7 6 20 7 30 3m24-7c6 2 14 0 19-3" fill="none" stroke="#367d62" stroke-width="2.4" stroke-linecap="round" opacity=".36"/>
+      <path d="M-28-85q8-7 15-1-8 8-15 1Zm49 3q7-8 13-2-5 7-13 2Z" fill="#d0e6a4" opacity=".72"/>
+      <circle cx="-39" cy="-72" r="2.6" fill="#f3d48d" opacity=".79"/>
+      <circle cx="40" cy="-65" r="2.4" fill="#f3d48d" opacity=".68"/>
+    </g>
+    <g id="willow">
+      <ellipse cx="7" cy="4" rx="62" ry="21" fill="url(#shadow)"/>
+      <path d="M-7-54C-3-34-9-18-16-10c-5 6-3 9 1 10 7 1 12-2 17-5 8 5 14 2 10-4-8-11 1-29 6-44Z" fill="#6a624f"/>
+      <path d="M-6-30q2 14-7 23" fill="none" stroke="#a28664" stroke-width="3" stroke-linecap="round"/>
+      <path d="M-49-48c-17-13-16-35-4-47 0-16 11-25 24-27 6-14 22-20 36-14 17-7 36 3 38 18 15 4 23 17 18 32 8 14 2 29-10 37-8 6-23 3-31 1-14 12-35 8-42-2-9 7-20 6-29 2Z" fill="#3f795f"/>
+      <path d="M-47-53c-17-12-15-31-4-42 0-15 11-25 24-26 6-14 21-19 34-13 16-6 34 3 36 17 14 3 22 16 17 31 8 13 2 25-9 33-8 5-20 2-30-1-13 11-31 7-41-2-9 7-19 7-27 3Z" fill="url(#willowLeaves)"/>
+      <path d="M-50-96c0-16 13-23 24-24 6-15 21-19 34-12 14-7 28 1 34 14-13-5-22-2-28 6-10-8-23-5-30 5-12-6-25-1-34 11Z" fill="#bed7a4" opacity=".46"/>
+      <path d="M-31-108c5-6 11-8 17-6m6-7c8-6 17-6 24-1m7 29c8-4 17-2 22 5" fill="none" stroke="#cce5ad" stroke-width="3" stroke-linecap="round" opacity=".67"/>
+      <path d="M-39-87c2 11 2 21-3 27m19-30c0 8 3 18 6 22m26-29c3 9 4 19 1 26m24-11c3 7 3 13 0 18" fill="none" stroke="#336e5b" stroke-width="2" stroke-linecap="round" opacity=".32"/>
+      <path d="M-9-102q8-8 14-2-5 7-14 2Zm37 1q7-6 12 1-8 6-12-1Z" fill="#d5e5ad" opacity=".75"/>
+    </g>
+    <g id="shrub">
+      <ellipse cx="5" cy="4" rx="38" ry="13" fill="url(#shadow)"/>
+      <path d="M-32-3c-7-7-5-16 3-19 4-10 14-13 21-8 5-8 17-10 24-2 8 0 15 4 15 12 8 3 11 12 5 17C22 7-19 7-32-3Z" fill="#5c976a"/>
+      <path d="M-32-5c-6-7-4-14 4-17 4-9 13-12 20-7 6-8 16-8 23-1 8-1 14 4 15 11 7 2 9 9 5 13C21 4-19 4-32-5Z" fill="url(#shrubLeaves)"/>
+      <path d="M-23-19c4-5 9-6 13-3 4-7 12-8 17-3m8 4c4-3 7-2 10 1" fill="none" stroke="#d8eab1" stroke-width="2.5" stroke-linecap="round" opacity=".65"/>
+    </g>
+    <g id="stones">
+      <ellipse cx="2" cy="4" rx="29" ry="8" fill="url(#shadow)" opacity=".7"/>
+      <path d="M-20 0c-8-4-1-12 4-14 8-3 18 4 15 10-2 5-15 6-19 4ZM3-2c-4-5 1-13 8-16 7-2 15 5 14 11-2 6-16 8-22 5Z" fill="#7f9e86"/>
+      <path d="M-20-4c-3-3 1-9 5-10 5-2 12 2 13 7-6 3-14 5-18 3ZM5-7c-4-3 2-9 7-11 5-2 10 3 12 7-8 4-13 6-19 4Z" fill="#b6c5a4"/>
+      <path d="M-14-12c2-1 5 0 6 1m19-4 4-1" stroke="#e0debc" stroke-width="2" stroke-linecap="round"/>
+    </g>
+    <g id="mushrooms">
+      <ellipse cx="2" cy="1" rx="24" ry="8" fill="url(#shadow)" opacity=".73"/>
+      <path d="M-9-13c0 5-4 8-2 12 1 2 6 2 7 0 2-4 1-7 2-11Zm17 2q0 7 3 9 3 1 4-2l-1-8Z" fill="#f1e6bf"/>
+      <path d="M-21-11q1-12 14-13 12 1 15 12c-7 4-22 5-29 1Z" fill="#c87762"/>
+      <path d="M-21-13q2-10 14-11 11 0 14 10c-8 4-20 5-28 1Z" fill="#eba67e"/>
+      <path d="M4-11q3-8 10-8 7 2 9 9c-6 2-15 2-19-1Z" fill="#e6b26e"/>
+      <circle cx="-11" cy="-18" r="2.1" fill="#f8eed7"/>
+      <circle cx="-3" cy="-17" r="1.4" fill="#f8eed7"/>
+      <circle cx="14" cy="-15" r="1.6" fill="#f8eed7"/>
+    </g>
+    <g id="grass">
+      <path d="M-8 0q-1-5-5-7m12 7q0-8-3-12M4-1q3-6 7-8" fill="none"
+            stroke="#689f71" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M7 0q2-4 6-4" fill="none" stroke="#d0e6a7" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+    <g id="fern">
+      <path d="M-1 0Q-5-13-15-25M0 1Q4-10 14-17M-2 0q-8-14-20-13" fill="none"
+            stroke="#568e64" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-9-14q-10-2-11-7 8-1 11 7Zm-3-5q-3-7 0-11 4 5 0 11Zm6 12q-7-8-2-12 4 4 2 12Zm11 0q0-9 6-12 2 7-6 12Zm8-7q7-8 12-5-1 5-12 5ZM-8-5q-9 2-14-4 8-3 14 4Z" fill="#82b67c"/>
+      <path d="M-12-16q-2-3-5-3m26 8 3-3" fill="none" stroke="#ace093" stroke-width="1.7" stroke-linecap="round"/>
+    </g>
+    <g id="wildflower">
+      <path d="M0 1q0-8 1-17m0 11q4-4 9-4M0-3q-4-6-9-6" fill="none"
+            stroke="#618d67" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M0-3q-8 2-9-6 6-1 9 6Zm1-2q2-7 9-5-1 6-9 5Z" fill="#82ab74"/>
+      <path d="M1-13c-3 2-6 0-5-3-4-2-2-5 1-5 0-4 5-5 6-1 4-1 6 2 3 5 2 3-2 5-5 4Z" fill="#a897df"/>
+      <circle cx="1" cy="-18.5" r="1.9" fill="#f8eed7"/>
+    </g>
+    <g id="daisy">
+      <path d="M0 1q-1-9 1-15m-1 9q-4-3-8-3m8 5q3-4 7-4" fill="none"
+            stroke="#78a173" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M1-11c-3 2-5 0-4-3-3-1-2-4 1-5 0-3 4-4 5-1 3-1 5 2 3 4 2 2-1 5-5 5Z" fill="#f8eed7"/>
+      <circle cx="1.4" cy="-16" r="2.1" fill="#efbe79"/>
+    </g>
+    <g id="coralBloom">
+      <path d="M0 1q0-11 4-15m-4 9q-3-4-8-4" fill="none"
+            stroke="#75a175" stroke-width="1.7" stroke-linecap="round"/>
+      <path d="M3-11c-4 0-7-3-6-7 2-1 4 0 6 1 2-4 4-5 6-4 2 5-2 10-6 10Z" fill="#f18d86"/>
+      <path d="M1-15q2 1 3 0m3-1 1-2" fill="none" stroke="#f9b5a2" stroke-width="1.4" stroke-linecap="round"/>
+    </g>
+    <g id="dew">
+      <path d="M0 1q-2-9-9-15M0 2q2-10 9-14m-9 9v-18" fill="none"
+            stroke="#5c9c78" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M-8-13q-7-2-5-8 5 1 5 8Zm17 1q0-8 6-9 2 6-6 9ZM0-19q-7-4 0-11 6 7 0 11Z" fill="#79c6dc"/>
+      <path d="M-1-23q-1-3 1-4m11 12 2-3" fill="none" stroke="#d9f2d8" stroke-width="1.6" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <!-- Soft light rolls over the clearing and into the wider canopy. -->
+  <path d="M-560-720H560V720H-560Z" fill="url(#meadow)"/>
+  <path d="M-560-720H560V720H-560Z" fill="url(#sun)"/>
+  <path d="M-560-720H560V-564c-83-48-159-22-242 14-99 42-163 19-244 8-102-13-192 47-285 27-137-29-236-18-349 50Z" fill="#5a9c79" opacity=".62"/>
+  <path d="M-560-720h178c-19 107-52 195-1 292 52 100 76 199-6 280-58 56-75 151-47 236 24 73 40 153 10 217-45 96-26 188 30 305l53 110h-217Z" fill="#69a27a" opacity=".65"/>
+  <path d="M560-720H412c3 83 3 135-30 215-39 96-31 167 36 261 41 57 52 153 17 253-43 127-27 192 33 277 54 76 12 182-43 259-37 51-67 113-81 175H560Z" fill="#67a17a" opacity=".58"/>
+  <path d="M-560 575c115-29 225-8 322 26 93 33 208 15 282-14 115-45 171-26 251 2 63 22 155 10 265-49v180H-560Z" fill="#5e9b77" opacity=".55"/>
+
+  <ellipse cx="-136" cy="106" rx="278" ry="240" fill="url(#hill)" transform="rotate(-16 -136 106)"/>
+  <ellipse cx="126" cy="229" rx="231" ry="105" fill="url(#hill)" transform="rotate(30 126 229)" opacity=".78"/>
+  <ellipse cx="96" cy="-224" rx="178" ry="115" fill="url(#hill)" transform="rotate(-18 96 -224)" opacity=".71"/>
+  <path d="M357-568c-36 64-117 69-165 119-24 25 3 74-37 111-23 22-96 33-110 70-17 44 44 83 73 110-7-32-48-67-35-93 19-39 107-42 134-83 37-57 7-85 36-106 40-30 102-38 129-84Z" fill="url(#upperPath)"/>
+  <path d="M-304 535c42-64 24-89 62-151 27-45 102-50 120-82 20-36-40-63-18-98 19-30 77-26 107-64-39 24-105 16-129 50-30 43 26 75 13 102-12 25-91 35-124 80-44 60-33 101-78 146Z" fill="url(#lowerPath)"/>
+  <path d="M-329-271c38-28 80-16 109-30 30-15 35-53 81-57 28-2 55 9 67 18-31-8-53-7-72-2-34 7-47 44-65 51-41 16-84 3-120 20Z" fill="#e4ecaf" opacity=".23"/>
+  <path d="M300 208c-48 9-72 41-84 62-17 29-41 37-66 38 31 6 63-3 82-30 18-26 31-49 68-70Z" fill="#e4ecaf" opacity=".28"/>
+  <path d="M-324 184c22-27 62-43 95-36-47 5-65 21-81 42Zm477-263c36-27 84-32 111-12-41-10-74-5-111 12Z" fill="#7ab584" opacity=".22"/>
+
+  <!-- Distant islands of foliage frame the walking space. -->
+  <g opacity=".72">
+    <use xlink:href="#willow" transform="translate(-414 -535) scale(1.30)"/>
+    <use xlink:href="#oak" transform="translate(-311 -521) scale(.97)"/>
+    <use xlink:href="#willow" transform="translate(-207 -541) scale(1.14)"/>
+    <use xlink:href="#oak" transform="translate(-90 -487) scale(.96)"/>
+    <use xlink:href="#willow" transform="translate(32 -535) scale(1.18)"/>
+    <use xlink:href="#oak" transform="translate(145 -501) scale(1.04)"/>
+    <use xlink:href="#willow" transform="translate(266 -502) scale(1.10)"/>
+    <use xlink:href="#oak" transform="translate(385 -533) scale(1.16)"/>
+    <use xlink:href="#willow" transform="translate(485 -530) scale(1.20)"/>
+    <use xlink:href="#willow" transform="translate(-391 -225) scale(1.20)"/>
+    <use xlink:href="#oak" transform="translate(-462 -58) scale(1.37)"/>
+    <use xlink:href="#willow" transform="translate(-397 169) scale(1.45)"/>
+    <use xlink:href="#oak" transform="translate(-484 278) scale(1.37)"/>
+    <use xlink:href="#willow" transform="translate(-401 413) scale(1.53)"/>
+    <use xlink:href="#oak" transform="translate(412 -292) scale(1.28)"/>
+    <use xlink:href="#willow" transform="translate(479 -116) scale(1.43)"/>
+    <use xlink:href="#oak" transform="translate(382 74) scale(1.31)"/>
+    <use xlink:href="#willow" transform="translate(489 199) scale(1.28)"/>
+    <use xlink:href="#oak" transform="translate(398 383) scale(1.43)"/>
+    <use xlink:href="#willow" transform="translate(-285 684) scale(1.46)"/>
+    <use xlink:href="#oak" transform="translate(-158 702) scale(1.24)"/>
+    <use xlink:href="#willow" transform="translate(-16 747) scale(1.43)"/>
+    <use xlink:href="#oak" transform="translate(116 721) scale(1.22)"/>
+    <use xlink:href="#willow" transform="translate(243 681) scale(1.32)"/>
+    <use xlink:href="#oak" transform="translate(384 646) scale(1.49)"/>
+  </g>
+
+  <!-- Clear gaps between the edge pockets preserve the meadow silhouette. -->
+  <use xlink:href="#shrub" transform="translate(-264 -426) scale(1.27)"/>
+  <use xlink:href="#willow" transform="translate(-272 -390) scale(1.05)"/>
+  <use xlink:href="#oak" transform="translate(-202 -419) scale(.92)"/>
+  <use xlink:href="#shrub" transform="translate(-187 -409) scale(.70)"/>
+  <use xlink:href="#shrub" transform="translate(-224 -378) scale(.82)"/>
+  <use xlink:href="#oak" transform="translate(224 -408) scale(.95)"/>
+  <use xlink:href="#willow" transform="translate(291 -370) scale(1.08)"/>
+  <use xlink:href="#shrub" transform="translate(233 -372) scale(.92)"/>
+  <use xlink:href="#shrub" transform="translate(280 -349) scale(1.08)"/>
+  <use xlink:href="#willow" transform="translate(-289 -249) scale(-1 1)"/>
+  <use xlink:href="#oak" transform="translate(-247 -202) scale(.84)"/>
+  <use xlink:href="#shrub" transform="translate(-253 -187) scale(.85)"/>
+  <use xlink:href="#willow" transform="translate(303 -225) scale(.91)"/>
+  <use xlink:href="#oak" transform="translate(268 -153) scale(-.82 .82)"/>
+  <use xlink:href="#shrub" transform="translate(238 -132) scale(.68)"/>
+  <use xlink:href="#shrub" transform="translate(289 -115) scale(1.03)"/>
+  <use xlink:href="#willow" transform="translate(-289 -12) scale(.98)"/>
+  <use xlink:href="#shrub" transform="translate(-264 3) scale(.91)"/>
+  <use xlink:href="#oak" transform="translate(308 12) scale(.86)"/>
+  <use xlink:href="#willow" transform="translate(281 87) scale(-.97 .97)"/>
+  <use xlink:href="#shrub" transform="translate(246 104) scale(.72)"/>
+  <use xlink:href="#oak" transform="translate(-283 153) scale(1.05)"/>
+  <use xlink:href="#willow" transform="translate(-249 226) scale(.88)"/>
+  <use xlink:href="#shrub" transform="translate(-275 257) scale(.83)"/>
+  <use xlink:href="#shrub" transform="translate(-223 236) scale(.72)"/>
+  <use xlink:href="#willow" transform="translate(305 238) scale(1.15)"/>
+  <use xlink:href="#oak" transform="translate(266 273) scale(.83)"/>
+  <use xlink:href="#shrub" transform="translate(263 294) scale(.91)"/>
+  <use xlink:href="#willow" transform="translate(-323 415) scale(1.15)"/>
+  <use xlink:href="#oak" transform="translate(-269 428) scale(.91)"/>
+  <use xlink:href="#shrub" transform="translate(-247 445) scale(.76)"/>
+  <use xlink:href="#oak" transform="translate(292 438) scale(-1.16 1.16)"/>
+  <use xlink:href="#willow" transform="translate(222 485) scale(.87)"/>
+  <use xlink:href="#shrub" transform="translate(266 479) scale(.94)"/>
+  <use xlink:href="#shrub" transform="translate(182 501) scale(.77)"/>
+  <use xlink:href="#willow" transform="translate(-205 578) scale(1.10)"/>
+  <use xlink:href="#oak" transform="translate(-121 624) scale(.91)"/>
+  <use xlink:href="#shrub" transform="translate(-57 604) scale(.94)"/>
+  <use xlink:href="#oak" transform="translate(61 652) scale(1.16)"/>
+  <use xlink:href="#willow" transform="translate(173 619) scale(.93)"/>
+
+  <!-- Shrub companions, warm blooms and cool dewdrop plants. -->
+  <use xlink:href="#mushrooms" transform="translate(-203 -373) scale(.91)"/>
+  <use xlink:href="#fern" transform="translate(-173 -365) scale(.8)"/>
+  <use xlink:href="#daisy" transform="translate(-165 -384) scale(.87)"/>
+  <use xlink:href="#daisy" transform="translate(-154 -377) scale(.72)"/>
+  <use xlink:href="#stones" transform="translate(-118 -434) scale(.65)"/>
+  <use xlink:href="#wildflower" transform="translate(171 -394) scale(.8)"/>
+  <use xlink:href="#wildflower" transform="translate(187 -386) scale(1.02)"/>
+  <use xlink:href="#wildflower" transform="translate(201 -392) scale(.71)"/>
+  <use xlink:href="#stones" transform="translate(253 -334) scale(.83)"/>
+  <use xlink:href="#fern" transform="translate(263 -324) scale(.70)"/>
+  <use xlink:href="#dew" transform="translate(224 -331) scale(.93)"/>
+  <use xlink:href="#dew" transform="translate(211 -328) scale(.60)"/>
+  <use xlink:href="#stones" transform="translate(-174 -277) scale(.70)"/>
+  <use xlink:href="#coralBloom" transform="translate(-158 -267) scale(.84)"/>
+  <use xlink:href="#coralBloom" transform="translate(-148 -273) scale(.70)"/>
+  <use xlink:href="#fern" transform="translate(-219 -175) scale(.92)"/>
+  <use xlink:href="#mushrooms" transform="translate(-203 -168) scale(.83)"/>
+  <use xlink:href="#grass" transform="translate(-183 -196) scale(.76)"/>
+  <use xlink:href="#grass" transform="translate(-172 -201) scale(.62)"/>
+  <use xlink:href="#daisy" transform="translate(-189 -139) scale(.64)"/>
+  <use xlink:href="#fern" transform="translate(222 -237) scale(.74)"/>
+  <use xlink:href="#wildflower" transform="translate(215 -119) scale(.90)"/>
+  <use xlink:href="#wildflower" transform="translate(199 -123) scale(.71)"/>
+  <use xlink:href="#daisy" transform="translate(186 -114) scale(.72)"/>
+  <use xlink:href="#grass" transform="translate(233 -102) scale(.77)"/>
+  <use xlink:href="#stones" transform="translate(-238 -25) scale(.66)"/>
+  <use xlink:href="#wildflower" transform="translate(-222 -11) scale(.85)"/>
+  <use xlink:href="#grass" transform="translate(-201 -33) scale(.70)"/>
+  <use xlink:href="#dew" transform="translate(-215 15) scale(.78)"/>
+  <use xlink:href="#dew" transform="translate(-228 23) scale(.61)"/>
+  <use xlink:href="#daisy" transform="translate(-183 52) scale(.62)"/>
+  <use xlink:href="#mushrooms" transform="translate(213 36) scale(.73)"/>
+  <use xlink:href="#stones" transform="translate(225 125) scale(.75)"/>
+  <use xlink:href="#coralBloom" transform="translate(231 116) scale(.73)"/>
+  <use xlink:href="#coralBloom" transform="translate(212 120) scale(.88)"/>
+  <use xlink:href="#fern" transform="translate(204 137) scale(.71)"/>
+  <use xlink:href="#wildflower" transform="translate(-175 153) scale(.96)"/>
+  <use xlink:href="#wildflower" transform="translate(-188 156) scale(.78)"/>
+  <use xlink:href="#daisy" transform="translate(-161 164) scale(.63)"/>
+  <use xlink:href="#grass" transform="translate(-159 144) scale(.79)"/>
+  <use xlink:href="#fern" transform="translate(-203 258) scale(.85)"/>
+  <use xlink:href="#coralBloom" transform="translate(-191 253) scale(.91)"/>
+  <use xlink:href="#coralBloom" transform="translate(-180 262) scale(.74)"/>
+  <use xlink:href="#stones" transform="translate(-196 271) scale(.67)"/>
+  <use xlink:href="#grass" transform="translate(-144 261) scale(.78)"/>
+  <use xlink:href="#daisy" transform="translate(-151 291) scale(.60)"/>
+  <use xlink:href="#daisy" transform="translate(-136 295) scale(.69)"/>
+  <use xlink:href="#dew" transform="translate(215 287) scale(.88)"/>
+  <use xlink:href="#dew" transform="translate(232 284) scale(.61)"/>
+  <use xlink:href="#grass" transform="translate(197 259) scale(.78)"/>
+  <use xlink:href="#mushrooms" transform="translate(241 316) scale(.79)"/>
+  <use xlink:href="#fern" transform="translate(210 314) scale(.70)"/>
+  <use xlink:href="#daisy" transform="translate(175 299) scale(.72)"/>
+  <use xlink:href="#wildflower" transform="translate(178 310) scale(.76)"/>
+  <use xlink:href="#mushrooms" transform="translate(-238 425) scale(.82)"/>
+  <use xlink:href="#wildflower" transform="translate(-175 419) scale(.84)"/>
+  <use xlink:href="#wildflower" transform="translate(-188 425) scale(.68)"/>
+  <use xlink:href="#fern" transform="translate(-168 432) scale(.88)"/>
+  <use xlink:href="#stones" transform="translate(-134 454) scale(.80)"/>
+  <use xlink:href="#grass" transform="translate(-133 429) scale(.67)"/>
+  <use xlink:href="#fern" transform="translate(183 370) scale(.85)"/>
+  <use xlink:href="#coralBloom" transform="translate(157 426) scale(.88)"/>
+  <use xlink:href="#coralBloom" transform="translate(143 430) scale(.75)"/>
+  <use xlink:href="#daisy" transform="translate(131 435) scale(.85)"/>
+  <use xlink:href="#mushrooms" transform="translate(186 483) scale(.84)"/>
+  <use xlink:href="#stones" transform="translate(158 482) scale(.76)"/>
+  <use xlink:href="#dew" transform="translate(-102 500) scale(.78)"/>
+  <use xlink:href="#mushrooms" transform="translate(-37 555) scale(.91)"/>
+  <use xlink:href="#wildflower" transform="translate(114 486) scale(.91)"/>
+  <use xlink:href="#coralBloom" transform="translate(128 499) scale(.92)"/>
+
+  <!-- Loose marks are spaced out as they approach the center. -->
+  <g opacity=".42">
+    <use xlink:href="#grass" transform="translate(-96 -262) scale(.61)"/>
+    <use xlink:href="#grass" transform="translate(-159 -227) scale(.53)"/>
+    <use xlink:href="#grass" transform="translate(69 -225) scale(.57)"/>
+    <use xlink:href="#grass" transform="translate(118 -203) scale(.70)"/>
+    <use xlink:href="#grass" transform="translate(-173 95) scale(.72)"/>
+    <use xlink:href="#grass" transform="translate(165 152) scale(.67)"/>
+    <use xlink:href="#grass" transform="translate(-97 338) scale(.62)"/>
+    <use xlink:href="#grass" transform="translate(-51 366) scale(.76)"/>
+    <use xlink:href="#grass" transform="translate(114 368) scale(.66)"/>
+    <use xlink:href="#grass" transform="translate(85 411) scale(.58)"/>
+    <use xlink:href="#grass" transform="translate(-53 475) scale(.74)"/>
+    <use xlink:href="#grass" transform="translate(49 516) scale(.82)"/>
+  </g>
+  <g fill="none" stroke="#eff1bf" stroke-width="2" stroke-linecap="round" opacity=".46">
+    <path d="M-154-316q10-4 15-3m9-2 4-1m-59 104 7-1m217-111 10-3m43 37 14-3m32 36 7 1m-320 121 8-3m296 23 11 2"/>
+    <path d="M-137 93q10-3 18-3m221 5 10 2m7 2 4 1m-119 92 7 1m85 63 7 1m-226 62 11-2m92 35 7-1m135 56 8 1m-240 79 8-2"/>
+  </g>
+</svg>

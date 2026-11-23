@@ -1,0 +1,90 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://features/levels/whispering_grove/whispering_grove.gd" id="1_arena"]
+[ext_resource type="PackedScene" path="res://features/levels/whispering_grove/grove_meadow.tscn" id="2_meadow"]
+[ext_resource type="PackedScene" path="res://features/player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://ui/hud/grove_hud.tscn" id="4_hud"]
+[ext_resource type="Script" path="res://ui/components/safe_area.gd" id="5_safe"]
+
+[node name="WhisperingGrove" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_arena")
+
+[node name="World" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="GroveMeadow" parent="World" instance=ExtResource("2_meadow")]
+
+[node name="Entities" type="Node2D" parent="World"]
+y_sort_enabled = true
+
+[node name="Player" parent="World/Entities" instance=ExtResource("3_player")]
+position = Vector2(0, 25)
+
+[node name="Effects" type="Node2D" parent="World"]
+
+[node name="Camera2D" type="Camera2D" parent="World"]
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="Interface" instance=ExtResource("4_hud")]
+unique_name_in_owner = true
+
+[node name="PauseOverlay" type="Control" parent="Interface"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Scrim" type="ColorRect" parent="Interface/PauseOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.083, 0.173, 0.139, 0.62)
+
+[node name="SafeArea" type="MarginContainer" parent="Interface/PauseOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_safe")
+
+[node name="Center" type="CenterContainer" parent="Interface/PauseOverlay/SafeArea"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Interface/PauseOverlay/SafeArea/Center"]
+custom_minimum_size = Vector2(338, 0)
+layout_mode = 2
+
+[node name="Stack" type="VBoxContainer" parent="Interface/PauseOverlay/SafeArea/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 17
+
+[node name="PauseHeading" type="Label" parent="Interface/PauseOverlay/SafeArea/Center/Panel/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+horizontal_alignment = 1
+
+[node name="Resume" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/Panel/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+
+[node name="BackToMenu" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/Panel/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"

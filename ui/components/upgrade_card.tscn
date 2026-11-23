@@ -1,0 +1,156 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/components/upgrade_card.gd" id="1_card"]
+
+[sub_resource type="StyleBoxFlat" id="Paper"]
+bg_color = Color(1, 0.9706, 0.902, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8314, 0.7627, 0.5843, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0.2863, 0.2941, 0.1922, 0.19)
+shadow_size = 3
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="Hover"]
+bg_color = Color(1, 0.94, 0.799, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7804, 0.6353, 0.3922, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0.297, 0.246, 0.154, 0.28)
+shadow_size = 3
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="Pressed"]
+bg_color = Color(0.979, 0.865, 0.650, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7686, 0.5686, 0.3451, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="Focus"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7137, 0.5020, 0.2588, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="RankPill"]
+content_margin_left = 9.0
+content_margin_top = 2.0
+content_margin_right = 9.0
+content_margin_bottom = 2.0
+bg_color = Color(0.8765, 0.9161, 0.804, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="UpgradeCard" type="Button"]
+custom_minimum_size = Vector2(0, 122)
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("Paper")
+theme_override_styles/hover = SubResource("Hover")
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_styles/disabled = SubResource("Pressed")
+theme_override_styles/focus = SubResource("Focus")
+script = ExtResource("1_card")
+
+[node name="Insets" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 9
+
+[node name="Row" type="HBoxContainer" parent="Insets"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 13
+
+[node name="AbilityIcon" type="TextureRect" parent="Insets/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Details" type="VBoxContainer" parent="Insets/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="TitleRow" type="HBoxContainer" parent="Insets/Row/Details"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="AbilityName" type="Label" parent="Insets/Row/Details/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_type_variation = &"SectionLabel"
+theme_override_font_sizes/font_size = 23
+text_overrun_behavior = 3
+
+[node name="RankPill" type="PanelContainer" parent="Insets/Row/Details/TitleRow"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("RankPill")
+
+[node name="AbilityRank" type="Label" parent="Insets/Row/Details/TitleRow/RankPill"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"CaptionLabel"
+theme_override_colors/font_color = Color(0.2745, 0.3961, 0.2745, 1)
+theme_override_font_sizes/font_size = 16
+
+[node name="AbilityDescription" type="Label" parent="Insets/Row/Details"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"CaptionLabel"
+autowrap_mode = 3
+
+[node name="AbilityDetail" type="Label" parent="Insets/Row/Details"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"CaptionLabel"
+theme_override_colors/font_color = Color(0.2510, 0.4235, 0.3294, 1)
+theme_override_font_sizes/font_size = 17
+autowrap_mode = 3

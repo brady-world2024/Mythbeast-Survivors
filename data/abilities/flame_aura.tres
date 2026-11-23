@@ -1,0 +1,17 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/ability_definition.gd" id="1_definition"]
+[ext_resource type="Texture2D" path="res://assets/abilities/flame_aura.svg" id="2_icon"]
+
+[resource]
+script = ExtResource("1_definition")
+id = &"flame_aura"
+display_name = "Flame Aura"
+description = "Burn nearby enemies with magical flames."
+category = "Automatic"
+icon = ExtResource("2_icon")
+starting_rank = 0
+max_rank = 5
+rank_values = Array[Dictionary]([{"damage": 4, "radius": 100, "interval": 1}, {"damage": 6, "radius": 105, "interval": 1}, {"damage": 8, "radius": 110, "interval": 1}, {"damage": 10, "radius": 115, "interval": 1}, {"damage": 12, "radius": 120, "interval": 1}])
+limits = {}
+rank_detail_template = "{damage} damage every {interval}s · {radius} range"

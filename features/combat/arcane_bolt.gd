@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
-const Health = preload("res://features/combat/health.gd")
+signal enemy_hit(enemy: Node2D, origin: Vector2, damage: int)
+
+const Targets = preload("res://features/combat/combat_targets.gd")
 const WeaponDefinition = preload("res://data/definitions/weapon_definition.gd")
 
 const IMPACT_DURATION := 0.18
@@ -12,6 +14,11 @@ const PALE_GOLD := Color("fff1c9")
 var _remaining_lifetime := 0.0
 var _damage := 0
 var _impact_remaining := 0.0
+var _visual_scale := 1.0
+
+
+func set_visual_rank(rank: int) -> void:
+	_visual_scale = 1.0 + clampi(rank - 1, 0, 4) * 0.06
 
 
 func launch(origin: Vector2, direction: Vector2, weapon: WeaponDefinition) -> void:
@@ -49,11 +56,14 @@ func _impact(collider: Node) -> void:
 	_impact_remaining = IMPACT_DURATION
 	queue_redraw()
 
-	if collider == null or collider.is_queued_for_deletion() or not collider.is_in_group(&"combat_enemies"):
+	var enemy := collider as Node2D
+	if enemy == null or not enemy.is_in_group(&"combat_enemies"):
 		return
-	var health := collider.get_node_or_null(^"Health") as Health
-	if health != null and health.is_alive():
+	var health := Targets.living_health(enemy)
+	if health != null:
+		var hit_origin := enemy.global_position
 		health.damage(_damage)
+		enemy_hit.emit(enemy if is_instance_valid(enemy) else null, hit_origin, _damage)
 
 
 func _draw() -> void:
@@ -63,15 +73,15 @@ func _draw() -> void:
 	var trail := VISUAL_HEIGHT - velocity.normalized() * 24.0
 	draw_line(trail, VISUAL_HEIGHT, Color(LAVENDER, 0.42), 8.0, true)
 	draw_line(trail.lerp(VISUAL_HEIGHT, 0.5), VISUAL_HEIGHT, Color(VIOLET, 0.62), 3.0, true)
-	draw_circle(VISUAL_HEIGHT, 15.0, Color(LAVENDER, 0.3), true, -1.0, true)
-	draw_circle(VISUAL_HEIGHT, 9.0, VIOLET, true, -1.0, true)
-	draw_circle(VISUAL_HEIGHT, 6.0, LAVENDER, true, -1.0, true)
+	draw_circle(VISUAL_HEIGHT, 15.0 * _visual_scale, Color(LAVENDER, 0.3), true, -1.0, true)
+	draw_circle(VISUAL_HEIGHT, 9.0 * _visual_scale, VIOLET, true, -1.0, true)
+	draw_circle(VISUAL_HEIGHT, 6.0 * _visual_scale, LAVENDER, true, -1.0, true)
 	draw_circle(VISUAL_HEIGHT + Vector2(-2, -2), 3.0, PALE_GOLD, true, -1.0, true)
 
 
 func _draw_impact() -> void:
 	var fade := _impact_remaining / IMPACT_DURATION
-	var spread := lerpf(24.0, 8.0, fade)
+	var spread := lerpf(24.0, 8.0, fade) * _visual_scale
 	draw_arc(VISUAL_HEIGHT, spread, 0.0, TAU, 24, Color(LAVENDER, fade), 3.0, true)
 	draw_circle(VISUAL_HEIGHT, 9.0, Color(PALE_GOLD, fade), true, -1.0, true)
 	for spark in range(4):

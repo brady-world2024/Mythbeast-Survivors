@@ -2,10 +2,12 @@ extends CharacterBody2D
 
 const CharacterDefinition = preload("res://data/definitions/character_definition.gd")
 const Health = preload("res://features/combat/health.gd")
+const RunAbilities = preload("res://features/abilities/run_abilities.gd")
 
 @export var definition: CharacterDefinition
 
 @onready var health: Health = $Health
+@onready var abilities: RunAbilities = %Abilities
 
 var move_direction := Vector2.ZERO
 
@@ -19,6 +21,7 @@ func _ready() -> void:
 		set_physics_process(false)
 		return
 	health.configure(definition.max_health)
+	abilities.set_base_weapon(definition.starting_weapon)
 	_visual = definition.visual_scene.instantiate()
 	$VisualAnchor.add_child(_visual)
 	health.damaged.connect(_on_damaged)
@@ -29,8 +32,12 @@ func receive_damage(amount: int) -> bool:
 	if amount <= 0 or not health.is_alive() or _invulnerability_remaining > 0.0:
 		return false
 	_invulnerability_remaining = definition.damage_invulnerability
-	health.damage(amount)
+	health.damage(abilities.damage_after_guard(amount))
 	return true
+
+
+func effective_move_speed() -> float:
+	return abilities.movement_speed(definition.move_speed)
 
 
 func play_cast() -> void:
@@ -43,10 +50,11 @@ func _physics_process(delta: float) -> void:
 		return
 	_invulnerability_remaining = move_toward(_invulnerability_remaining, 0.0, delta)
 	var direction := move_direction.limit_length()
-	velocity = direction * definition.move_speed
+	var speed := effective_move_speed()
+	velocity = direction * speed
 	move_and_slide()
 	if _visual.has_method(&"set_motion"):
-		var speed_ratio := get_real_velocity().length() / maxf(1.0, definition.move_speed)
+		var speed_ratio := get_real_velocity().length() / maxf(1.0, speed)
 		_visual.call(&"set_motion", direction, minf(1.0, speed_ratio))
 
 

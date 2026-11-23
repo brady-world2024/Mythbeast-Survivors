@@ -1,0 +1,17 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/ability_definition.gd" id="1_definition"]
+[ext_resource type="Texture2D" path="res://assets/abilities/arcane_bolt.svg" id="2_icon"]
+
+[resource]
+script = ExtResource("1_definition")
+id = &"arcane_bolt"
+display_name = "Arcane Bolt"
+description = "Increase your magic damage and attack speed."
+category = "Automatic"
+icon = ExtResource("2_icon")
+starting_rank = 1
+max_rank = 5
+rank_values = Array[Dictionary]([{"damage_bonus": 0, "cooldown_percent": 0}, {"damage_bonus": 3, "cooldown_percent": 5}, {"damage_bonus": 6, "cooldown_percent": 10}, {"damage_bonus": 9, "cooldown_percent": 15}, {"damage_bonus": 12, "cooldown_percent": 20}])
+limits = {"minimum_interval": 0.25}
+rank_detail_template = "+{damage_bonus} damage · {cooldown_percent}% shorter cooldown"

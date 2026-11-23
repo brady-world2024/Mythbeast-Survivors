@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://data/characters/grove_keeper.tres" id="2_keeper"]
 [ext_resource type="Script" path="res://features/combat/health.gd" id="3_health"]
 [ext_resource type="Script" path="res://features/combat/basic_attack.gd" id="4_attack"]
+[ext_resource type="Script" path="res://features/abilities/run_abilities.gd" id="5_abilities"]
 
 [sub_resource type="CircleShape2D" id="Footprint"]
 radius = 16.0
@@ -22,6 +23,11 @@ shape = SubResource("Footprint")
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("3_health")
+
+[node name="Abilities" type="Node2D" parent="."]
+unique_name_in_owner = true
+z_index = 1
+script = ExtResource("5_abilities")
 
 [node name="BasicAttack" type="Node2D" parent="."]
 script = ExtResource("4_attack")

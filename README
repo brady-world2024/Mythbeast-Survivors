@@ -19,17 +19,19 @@ Current scope
 
   Forest Slimes spawn in Whispering Grove and chase the hero. The hero casts
   Arcane Bolt automatically toward the nearest enemy in range. Enemy contact
-  reduces health, with a brief recovery window between hits. At zero health,
-  choose Try Again for a fresh encounter or Main Menu to leave. XP, level,
-  and time are preview values.
+  reduces health, with a brief recovery window between hits. Collect XP gems
+  dropped by slimes. Leveling up pauses the encounter so you can choose an
+  ability upgrade. At zero health, choose Try Again for a fresh encounter or
+  Main Menu to leave. Each run starts with only Arcane Bolt. The run timer is
+  a preview value.
   Android and iOS export configuration and device testing are also ahead.
 
 Project layout
 
   core/app          Application entry, scene navigation, and audio lifetime
-  features          Whispering Grove, player, enemies, and combat components
+  features          Whispering Grove, combat, progression, and ability effects
   ui                Menus, HUD, safe-area layout, and shared theme
-  data              Character, enemy, and weapon definitions and English copy
+  data              Character, enemy, weapon, and ability definitions
   assets            Project artwork, application icon, and audio
   tests/smoke       Foundation navigation and behavior checks
 
@@ -42,7 +44,7 @@ Development checks
     bash scripts/test-godot.sh
 
   The required gate runs a curated set of startup, navigation, movement,
-  and combat checks. The second command runs the full local smoke suite.
+  combat, and progression checks. The second runs the full local smoke suite.
   Add critical regressions to the gate when related behavior changes.
 
 Engine attribution

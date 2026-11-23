@@ -247,6 +247,8 @@ func _record_spawn(enemy: Node2D) -> void:
 
 func _check_game_over_and_retry(gate: bool) -> void:
 	await _clear_field()
+	# Progression has its own integration suite. Keep this case on baseline combat.
+	_arena.get_node("%Progression").set("max_level", 1)
 	var health := _hero.get_node("Health")
 	health.call("configure", int(health.get("maximum")))
 	_hero.get_node("BasicAttack").set_physics_process(true)

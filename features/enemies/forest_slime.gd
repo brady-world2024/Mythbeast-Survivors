@@ -3,6 +3,7 @@ extends CharacterBody2D
 const EnemyDefinition = preload("res://data/definitions/enemy_definition.gd")
 const Health = preload("res://features/combat/health.gd")
 const Player = preload("res://features/player/player.gd")
+const SlowStatus = preload("res://features/combat/slow_status.gd")
 
 const HIT_TINT := Color(1.75, 1.35, 1.48)
 const HIT_FLASH_SECONDS := 0.14
@@ -20,6 +21,7 @@ var _contact_cooldown := 0.0
 var _bounce_phase := 0.0
 var _hop_strength := 0.0
 var _hit_flash: Tween
+var _slow := SlowStatus.new()
 
 
 func _ready() -> void:
@@ -29,6 +31,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _slow.tick(delta):
+		_update_slow_visual()
 	_contact_cooldown = move_toward(_contact_cooldown, 0.0, delta)
 	if not is_instance_valid(target) or not target.health.is_alive():
 		velocity = Vector2.ZERO
@@ -39,7 +43,7 @@ func _physics_process(delta: float) -> void:
 	if absf(target_offset.x) > 3.0:
 		_body.flip_h = target_offset.x < 0.0
 	if target_offset.length_squared() > contact_range_squared:
-		velocity = target_offset.normalized() * definition.move_speed
+		velocity = target_offset.normalized() * effective_move_speed()
 		move_and_slide()
 	else:
 		velocity = Vector2.ZERO
@@ -50,6 +54,30 @@ func _physics_process(delta: float) -> void:
 	):
 		_contact_cooldown = definition.contact_interval
 		target.receive_damage(definition.contact_damage)
+
+
+func effective_move_speed() -> float:
+	return definition.move_speed * _slow.multiplier
+
+
+func apply_slow(ratio: float, duration: float, minimum_speed_ratio: float = 0.4) -> void:
+	if health.is_alive():
+		_slow.apply(ratio, duration, minimum_speed_ratio)
+		_update_slow_visual()
+
+
+func _update_slow_visual() -> void:
+	_body.modulate = Color("a9e7ff") if _slow.multiplier < 1.0 else Color.WHITE
+	queue_redraw()
+
+
+func _draw() -> void:
+	if _slow.multiplier >= 1.0:
+		return
+	for point in [Vector2(-21.0, -39.0), Vector2(20.0, -45.0)]:
+		for spoke in range(3):
+			var arm := Vector2.from_angle(spoke * PI / 3.0) * 5.0
+			draw_line(point - arm, point + arm, Color("c4f6ff"), 2.0, true)
 
 
 func _process(delta: float) -> void:
@@ -74,6 +102,8 @@ func _on_damaged(_amount: int) -> void:
 
 
 func _on_depleted() -> void:
+	_slow.clear()
+	_update_slow_visual()
 	remove_from_group(&"combat_enemies")
 	set_physics_process(false)
 	set_process(false)

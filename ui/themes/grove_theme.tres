@@ -333,8 +333,8 @@ corner_radius_bottom_left = 8
 corner_radius_bottom_right = 8
 
 [sub_resource type="StyleBoxFlat" id="XpBg"]
-bg_color = Color(0.76078, 0.72941, 0.81961, 1)
-border_color = Color(0.76078, 0.72941, 0.81961, 1)
+bg_color = Color(0.85882, 0.82353, 0.89412, 1)
+border_color = Color(0.85882, 0.82353, 0.89412, 1)
 border_width_left = 0
 content_margin_left = 0.0
 border_width_top = 0
@@ -349,8 +349,8 @@ corner_radius_bottom_left = 8
 corner_radius_bottom_right = 8
 
 [sub_resource type="StyleBoxFlat" id="XpFill"]
-bg_color = Color(0.65882, 0.59216, 0.87451, 1)
-border_color = Color(0.65882, 0.59216, 0.87451, 1)
+bg_color = Color(0.50588, 0.4, 0.72157, 1)
+border_color = Color(0.50588, 0.4, 0.72157, 1)
 border_width_left = 0
 content_margin_left = 0.0
 border_width_top = 0

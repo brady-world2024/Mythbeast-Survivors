@@ -1,0 +1,17 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/ability_definition.gd" id="1_definition"]
+[ext_resource type="Texture2D" path="res://assets/abilities/chain_lightning.svg" id="2_icon"]
+
+[resource]
+script = ExtResource("1_definition")
+id = &"chain_lightning"
+display_name = "Chain Lightning"
+description = "Unleash lightning that jumps between enemies."
+category = "Modifier"
+icon = ExtResource("2_icon")
+starting_rank = 0
+max_rank = 5
+rank_values = Array[Dictionary]([{"targets": 2, "range": 160, "damage_percent": 55}, {"targets": 2, "range": 175, "damage_percent": 65}, {"targets": 3, "range": 175, "damage_percent": 75}, {"targets": 3, "range": 190, "damage_percent": 85}, {"targets": 4, "range": 200, "damage_percent": 95}])
+limits = {}
+rank_detail_template = "Up to {targets} jumps · {damage_percent}% bolt damage"

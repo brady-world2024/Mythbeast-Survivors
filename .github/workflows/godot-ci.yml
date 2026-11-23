@@ -19,7 +19,7 @@ jobs:
   godot:
     name: Godot CI Gate
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - name: Check out the tested revision
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -27,17 +27,19 @@ jobs:
           persist-credentials: false
 
       - name: Install Godot 4.7.2 Standard
+        timeout-minutes: 3
         env:
           RELEASE: 4.7.2-stable
           SHA256: cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4
         run: |
           binary="Godot_v${RELEASE}_linux.x86_64"
           archive="$RUNNER_TEMP/$binary.zip"
-          curl --fail --silent --show-error --location --retry 3 --connect-timeout 15 --max-time 300 \
+          curl --fail --silent --show-error --location --retry 2 --retry-max-time 120 --connect-timeout 15 --max-time 90 \
             --output "$archive" "https://github.com/godotengine/godot-builds/releases/download/$RELEASE/$binary.zip"
           printf '%s  %s\n' "$SHA256" "$archive" | sha256sum --check
           unzip -q "$archive" -d "$RUNNER_TEMP/godot"
           printf 'GODOT_BIN=%s\n' "$RUNNER_TEMP/godot/$binary" >> "$GITHUB_ENV"
 
-      - name: Import, launch, and run smoke tests
-        run: bash scripts/test-godot.sh
+      - name: Import, launch, and run critical smoke tests
+        timeout-minutes: 2
+        run: bash scripts/test-godot.sh --gate

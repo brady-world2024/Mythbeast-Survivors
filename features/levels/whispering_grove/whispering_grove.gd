@@ -3,7 +3,11 @@ extends Node2D
 signal back_requested
 
 const English = preload("res://data/localization/english.gd")
+const Player = preload("res://features/player/player.gd")
+const FloatingStick = preload("res://ui/components/floating_stick.gd")
 
+@onready var _player: Player = %Player
+@onready var _stick: FloatingStick = %MovementStick
 @onready var _pause_overlay: Control = %PauseOverlay
 @onready var _pause_heading: Label = %PauseHeading
 @onready var _pause_button: Button = %HUD.get_node("%PauseButton")
@@ -12,12 +16,23 @@ const English = preload("res://data/localization/english.gd")
 
 
 func _ready() -> void:
+	_stick.touch_region = %HUD.get_node("%MovementArea")
+	get_viewport().size_changed.connect(_clear_movement)
 	_pause_heading.text = tr(English.PAUSED)
 	_resume.text = tr(English.RESUME)
 	_back_to_menu.text = tr(English.BACK_TO_MENU)
 	_pause_button.pressed.connect(_set_paused.bind(true))
 	_resume.pressed.connect(_set_paused.bind(false))
 	_back_to_menu.pressed.connect(back_requested.emit)
+
+
+func _physics_process(_delta: float) -> void:
+	if get_tree().paused:
+		return
+	var direction := _stick.direction
+	if direction.is_zero_approx():
+		direction = Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
+	_player.move_direction = direction
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -32,6 +47,8 @@ func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_APPLICATION_PAUSED:
 			_set_paused(true)
+		NOTIFICATION_APPLICATION_FOCUS_OUT:
+			_clear_movement()
 		NOTIFICATION_WM_GO_BACK_REQUEST:
 			_set_paused(not _pause_overlay.visible)
 
@@ -39,9 +56,16 @@ func _notification(what: int) -> void:
 func _set_paused(value: bool) -> void:
 	if _pause_overlay.visible == value:
 		return
+	if value:
+		_clear_movement()
 	_pause_overlay.visible = value
 	_pause_button.disabled = value
 	get_tree().paused = value
 	if not OS.has_feature("mobile"):
 		var focus_target := _resume if value else _pause_button
 		focus_target.grab_focus()
+
+
+func _clear_movement() -> void:
+	_stick.cancel()
+	_player.move_direction = Vector2.ZERO

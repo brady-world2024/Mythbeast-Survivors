@@ -17,7 +17,8 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var arguments := OS.get_cmdline_user_args()
-	if not arguments.is_empty():
+	var gate_only := not arguments.is_empty() and arguments[0] == "--gate"
+	if not arguments.is_empty() and not gate_only:
 		_capture_dir = arguments[0]
 		if not _check(DisplayServer.get_name() != "headless" and DirAccess.dir_exists_absolute(_capture_dir), "Screenshot directory exists and rendering is enabled"):
 			_finish()
@@ -37,6 +38,50 @@ func _run() -> void:
 	var main := _screen()
 	var play := main.find_child("Play", true, false) as Button
 	_check(play != null and play.text == "Play" and play.size.y >= 56.0, "Play has English text and a touch-sized target")
+	if not gate_only:
+		_check_music()
+	await _capture("main-menu")
+	await _press("Settings")
+	_check(_screen_name() == SETTINGS, "Settings opens from the menu")
+	if not gate_only:
+		_check_volume("Music", &"Music")
+		_check_volume("SFX", &"SFX")
+	await _capture("settings")
+	await _press("Back")
+	_check(_screen_name() == MENU, "Settings returns to the menu")
+	if not gate_only:
+		await _check_secondary_menu_navigation()
+
+	await _press("Play")
+	_check(_screen_name() == GROVE, "Play opens Whispering Grove")
+	var player := _screen().find_child("Player", true, false) as CharacterBody2D
+	if _check(player != null, "The arena owns a reusable player") and not gate_only:
+		var definition := player.get("definition") as Resource
+		_check(definition != null and definition.get("id") == &"grove_keeper", "The player references the grove keeper definition")
+		_check(player.get_node("VisualAnchor").get_child_count() == 1, "The player instantiates the definition's visual")
+	_check(_screen().find_child("Camera2D", true, false) is Camera2D, "The arena owns a camera")
+	if not gate_only:
+		var preview := _screen().find_child("Preview", true, false) as Label
+		_check(preview != null and preview.text == "Arena Preview", "The HUD identifies preview values")
+	await _capture("whispering-grove")
+	await _press("PauseButton")
+	_check(paused, "Pause stops the scene tree")
+	await _capture("pause")
+	await _press("Resume")
+	_check(not paused and _screen_name() == GROVE, "Resume returns to the grove")
+	if gate_only:
+		await _press("PauseButton")
+	else:
+		await _check_pause_lifecycle()
+	await _press("BackToMenu")
+	_check(not paused and _screen_name() == MENU, "Paused return opens a running main menu")
+	if not gate_only:
+		await _press("Play")
+		_check(not paused and _screen_name() == GROVE, "The grove can be entered again")
+	_finish()
+
+
+func _check_music() -> void:
 	var music_player := _app.get_node("Music") as AudioStreamPlayer
 	var music := music_player.stream as AudioStreamWAV
 	_check(
@@ -45,15 +90,9 @@ func _run() -> void:
 		and music.loop_end < roundi(music.get_length() * music.mix_rate),
 		"The soundtrack loops within the imported source data"
 	)
-	await _capture("main-menu")
-	await _press("Settings")
-	_check(_screen_name() == SETTINGS, "Settings opens from the menu")
-	_check_volume("Music", &"Music")
-	_check_volume("SFX", &"SFX")
-	await _capture("settings")
-	await _press("Back")
-	_check(_screen_name() == MENU, "Settings returns to the menu")
 
+
+func _check_secondary_menu_navigation() -> void:
 	await _press("Credits")
 	_check(_screen_name() == CREDITS, "Credits opens from the menu")
 	await _capture("credits")
@@ -65,22 +104,8 @@ func _run() -> void:
 	await process_frame
 	_check(_screen_name() == MENU, "Android Back returns from settings to the menu")
 
-	await _press("Play")
-	_check(_screen_name() == GROVE, "Play opens Whispering Grove")
-	var player := _screen().find_child("Player", true, false) as CharacterBody2D
-	if _check(player != null, "The arena owns a reusable player"):
-		var definition := player.get("definition") as Resource
-		_check(definition != null and definition.get("id") == &"grove_keeper", "The player references the grove keeper definition")
-		_check(player.get_node("VisualAnchor").get_child_count() == 1, "The player instantiates the definition's visual")
-	_check(_screen().find_child("Camera2D", true, false) is Camera2D, "The arena owns a camera")
-	var preview := _screen().find_child("Preview", true, false) as Label
-	_check(preview != null and preview.text == "Arena Preview", "The HUD identifies preview values")
-	await _capture("whispering-grove")
-	await _press("PauseButton")
-	_check(paused, "Pause stops the scene tree")
-	await _capture("pause")
-	await _press("Resume")
-	_check(not paused and _screen_name() == GROVE, "Resume returns to the grove")
+
+func _check_pause_lifecycle() -> void:
 	var escape := InputEventKey.new()
 	escape.physical_keycode = KEY_ESCAPE
 	escape.pressed = true
@@ -97,11 +122,6 @@ func _run() -> void:
 	_screen().notification(NOTIFICATION_APPLICATION_RESUMED)
 	await process_frame
 	_check(paused, "Returning from suspension requires an explicit resume")
-	await _press("BackToMenu")
-	_check(not paused and _screen_name() == MENU, "Paused return opens a running main menu")
-	await _press("Play")
-	_check(not paused and _screen_name() == GROVE, "The grove can be entered again")
-	_finish()
 
 
 func _screen() -> Node:

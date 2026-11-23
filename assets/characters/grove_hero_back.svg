@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="244" height="300" viewBox="-61 -144 122 150">
+  <defs>
+    <linearGradient id="hood" x1="0" y1="0" x2="0.28" y2="1">
+      <stop stop-color="#ffe0a1"/><stop offset=".54" stop-color="#f1bd78"/><stop offset="1" stop-color="#d68b60"/>
+    </linearGradient>
+    <linearGradient id="cape" x1="0" y1="0" x2="0.35" y2="1">
+      <stop stop-color="#d2bced"/><stop offset="1" stop-color="#9181be"/>
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-20 -61Q-33 -55 -34 -42Q-36 -34 -28 -33Q-23 -33 -19 -40M20 -61Q34 -55 34 -43Q36 -35 28 -34Q22 -34 19 -41" fill="#e6bd99" stroke="#574463" stroke-width="3.3"/>
+    <path d="M-23 -22Q-30 -10 -25 -3Q-20 2 -8 -1Q-4 -2 -4 -8L-3 -21M21 -22Q28 -12 25 -4Q21 2 8 -1Q4 -2 4 -8L3 -21" fill="#705752" stroke="#4c3d3d" stroke-width="3.2"/>
+    <path d="M-25 -6Q-16 -3 -7 -6M8 -6Q17 -3 25 -7" fill="none" stroke="#b68369" stroke-width="2.3"/>
+    <path d="M-26 -65Q-39 -58 -43 -43Q-46 -30 -52 -18Q-42 -11 -27 -13Q-14 -7 0 -13Q14 -7 28 -13Q42 -11 52 -19Q46 -30 43 -43Q39 -58 27 -65Z" fill="url(#cape)" stroke="#534768" stroke-width="3.5"/>
+    <path d="M-21 -51Q-24 -33 -32 -20M23 -51Q25 -33 33 -20" fill="none" stroke="#9380b5" stroke-width="2.2"/>
+    <path d="M-44 -20Q-37 -16 -28 -18Q-14 -12 0 -18Q15 -12 28 -18Q38 -16 44 -21" fill="none" stroke="#e4c9ef" stroke-width="2.4" opacity=".68"/>
+    <path d="M-7 -36Q-5 -45 8 -46Q11 -34 0 -31Q-4 -32 -7 -36Z" fill="#ddc9eb" opacity=".85"/>
+    <path d="M-3 -33L5 -42" fill="none" stroke="#a190c2" stroke-width="1.5"/>
+
+    <path d="M-30 -114Q-47 -121 -42 -138Q-23 -133 -25 -117Q-31 -129 -48 -124Q-48 -112 -32 -111Z" fill="#9ec28a" stroke="#5e6d50" stroke-width="2.4"/>
+    <path d="M-28 -116L-39 -132M-33 -114L-43 -120" fill="none" stroke="#d5dfa6" stroke-width="1.7"/>
+    <path d="M-48 -96Q-47 -119 -27 -130Q-14 -137 0 -135Q22 -138 38 -119Q49 -105 49 -86Q47 -66 29 -58Q17 -52 0 -52Q-18 -52 -31 -59Q-51 -69 -48 -96Z" fill="url(#hood)" stroke="#684c43" stroke-width="3.8"/>
+    <path d="M-42 -99Q-39 -118 -24 -124Q-17 -129 -9 -129" fill="none" stroke="#fff0bc" stroke-width="3.2" opacity=".9"/>
+    <path d="M3 -130Q14 -108 13 -88Q12 -68 1 -57" fill="none" stroke="#d0905d" stroke-width="2.6"/>
+    <path d="M-27 -66Q-13 -57 2 -58Q20 -58 33 -70" fill="none" stroke="#e3a479" stroke-width="2.5"/>
+  </g>
+</svg>

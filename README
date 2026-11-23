@@ -11,14 +11,15 @@ Getting started
   Press F5 and select Play to enter Whispering Grove.
 
   The main menu also opens Settings and Credits. Settings controls the
-  music and sound effects for the current session. In the arena, use Pause
-  or Esc to open the pause menu, then choose Resume or Back to Menu.
+  music and sound effects for the current session. Move with WASD or the
+  arrow keys on desktop. On a touchscreen, press and drag below the HUD.
+  Release to stop. Use Pause or Esc to open the pause menu.
 
 Current scope
 
-  The arena has an animated hero, a camera, and a preview HUD. Its health,
-  XP, level, and timer are demonstration values. Player movement, touch
-  controls, combat, and progression are planned for later milestones.
+  The arena has a four-direction animated hero, a floating touch stick,
+  collision boundaries, a camera, and a preview HUD. Its health, XP, level,
+  and timer are demonstration values. Combat and progression are planned.
   Android and iOS export configuration and device testing are also ahead.
 
 Project layout
@@ -32,10 +33,15 @@ Project layout
 
 Development checks
 
-  From this directory, run the following using your Godot executable:
+  Run these commands from this directory. Set GODOT_BIN if the executable
+  is installed outside PATH.
 
-    godot --headless --path . --import
-    godot --headless --path . --script res://tests/smoke/foundation.gd
+    bash scripts/test-godot.sh --gate
+    bash scripts/test-godot.sh
+
+  The required gate runs a curated set of startup, navigation, and movement
+  checks. The second command runs the full local smoke suite. Add critical
+  regressions to the gate when related behavior changes.
 
 Engine attribution
 

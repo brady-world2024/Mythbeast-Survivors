@@ -49,10 +49,17 @@ var _charge_warning_length := 0.0
 var _impact_time := 0.0
 var _body_clock := 0.0
 var _hit_flash: Tween
+var _run_health_multiplier := 1.0
+var _run_damage_multiplier := 1.0
+
+
+func configure_difficulty(hp_multiplier: float, damage_multiplier: float) -> void:
+	_run_health_multiplier = hp_multiplier
+	_run_damage_multiplier = damage_multiplier
 
 
 func _ready() -> void:
-	health.configure(definition.max_health)
+	health.configure(roundi(definition.max_health * _run_health_multiplier))
 	health.changed.connect(_on_health_changed)
 	health.damaged.connect(_on_damaged)
 	health.depleted.connect(_on_depleted)
@@ -120,7 +127,7 @@ func _chase() -> void:
 		for index in get_slide_collision_count():
 			if get_slide_collision(index).get_collider() == _target:
 				_contact_cooldown = definition.contact_interval
-				_target.receive_damage(definition.contact_damage)
+				_damage_target(definition.contact_damage)
 				break
 
 
@@ -160,7 +167,7 @@ func _resolve_stomp() -> void:
 	_change_state(State.RECOVERY, definition.recovery_duration)
 	var radius := definition.stomp_radius
 	if global_position.distance_squared_to(_target.global_position) <= radius * radius:
-		_target.receive_damage(definition.stomp_damage)
+		_damage_target(definition.stomp_damage)
 
 
 func _advance_charge(delta: float) -> void:
@@ -171,7 +178,11 @@ func _advance_charge(delta: float) -> void:
 	if collision != null or _charge_left <= 0.01:
 		_change_state(State.RECOVERY, definition.recovery_duration)
 		if collision != null and collision.get_collider() == _target:
-			_target.receive_damage(definition.charge_damage)
+			_damage_target(definition.charge_damage)
+
+
+func _damage_target(amount: int) -> void:
+	_target.receive_damage(roundi(amount * _run_damage_multiplier))
 
 
 func _phase_speed_multiplier() -> float:

@@ -1,5 +1,7 @@
 extends SceneTree
 
+const AppFixture = preload("res://tests/support/app_fixture.gd")
+
 const MENU := &"MainMenu"
 const SETTINGS := &"SettingsScreen"
 const CREDITS := &"CreditsScreen"
@@ -23,12 +25,10 @@ func _run() -> void:
 		if not _check(DisplayServer.get_name() != "headless" and DirAccess.dir_exists_absolute(_capture_dir), "Screenshot directory exists and rendering is enabled"):
 			_finish()
 			return
-	var main_path: String = ProjectSettings.get_setting("application/run/main_scene")
-	var scene := load(main_path) as PackedScene
-	if not _check(scene != null, "The configured main scene loads"):
+	_app = AppFixture.instantiate()
+	if not _check(_app != null, "The configured main scene loads"):
 		_finish()
 		return
-	_app = scene.instantiate()
 	root.add_child(_app)
 	await process_frame
 	if not _check(_screen_name() == MENU, "Boot opens the main menu"):
@@ -53,6 +53,8 @@ func _run() -> void:
 		await _check_secondary_menu_navigation()
 
 	await _press("Play")
+	_check(_screen_name() == &"StageSelect", "Play opens stage selection")
+	await _press("StartAdventure")
 	_check(_screen_name() == GROVE, "Play opens Whispering Grove")
 	var player := _screen().find_child("Player", true, false) as CharacterBody2D
 	if _check(player != null, "The arena owns a reusable player") and not gate_only:
@@ -77,6 +79,7 @@ func _run() -> void:
 	_check(not paused and _screen_name() == MENU, "Paused return opens a running main menu")
 	if not gate_only:
 		await _press("Play")
+		await _press("StartAdventure")
 		_check(not paused and _screen_name() == GROVE, "The grove can be entered again")
 	_finish()
 

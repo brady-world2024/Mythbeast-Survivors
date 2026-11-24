@@ -1,0 +1,14 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/stage_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://ui/screens/menu_grove.svg" id="2"]
+[ext_resource type="Resource" path="res://data/levels/whispering_grove.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = &"whispering_grove"
+display_name = "Whispering Grove"
+illustration = ExtResource("2")
+available = true
+scene_path = "res://features/levels/whispering_grove/whispering_grove.tscn"
+level_definition = ExtResource("3")

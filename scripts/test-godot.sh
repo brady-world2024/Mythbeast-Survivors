@@ -10,6 +10,10 @@ fi
 godot_bin=${1:-${GODOT_BIN:-godot}}
 shopt -s nullglob
 
+test_save_dir=$(mktemp -d "${TMPDIR:-/tmp}/mythbeast-smoke.XXXXXX")
+export MYTHBEAST_TEST_SAVE_DIR="$test_save_dir"
+trap 'rm -rf -- "$test_save_dir"' EXIT
+
 run_godot() {
     local output status=0
     output=$("$godot_bin" --headless --path "$project_root" "$@" 2>&1) || status=$?
@@ -31,7 +35,7 @@ fi
 printf '%s\n' 'Importing the Godot project.'
 run_godot --import
 printf '%s\n' 'Launching the configured main scene.'
-run_godot --quit-after 8
+run_godot --script res://tests/support/boot.gd
 
 if (( gate_only )); then
     # Keep the required gate on an explicit list of critical suites.
@@ -41,6 +45,7 @@ if (( gate_only )); then
         "$project_root/tests/smoke/combat.gd"
         "$project_root/tests/smoke/progression.gd"
         "$project_root/tests/smoke/survival.gd"
+        "$project_root/tests/smoke/persistent_progression.gd"
     )
 else
     smoke_tests=("$project_root"/tests/smoke/*.gd)

@@ -2,6 +2,7 @@ extends Node2D
 
 signal back_requested
 signal restart_requested
+signal stages_requested
 
 enum RunState { PLAYING, PAUSED, CHOOSING_UPGRADE, ENDED }
 
@@ -11,12 +12,14 @@ const Player = preload("res://features/player/player.gd")
 const EnemyActor = preload("res://features/enemies/enemy_actor.gd")
 const WaveSpawner = preload("res://features/enemies/wave_spawner.gd")
 const LevelDefinition = preload("res://data/definitions/level_definition.gd")
+const DifficultyDefinition = preload("res://data/definitions/difficulty_definition.gd")
 const RunTimeline = preload("res://features/levels/run_timeline.gd")
 const Progression = preload("res://features/progression/progression.gd")
 const XpGem = preload("res://features/progression/xp_gem.gd")
 const UpgradePicker = preload("res://ui/screens/upgrade_picker.gd")
 const FloatingStick = preload("res://ui/components/floating_stick.gd")
 const GroveHud = preload("res://ui/hud/grove_hud.gd")
+const RunRewards = preload("res://ui/components/run_rewards.gd")
 const XP_GEM_SCENE = preload("res://features/progression/xp_gem.tscn")
 const MAX_ACTIVE_GEMS := 48
 
@@ -46,9 +49,31 @@ var _offered_ids: Array[StringName] = []
 var _boss: CharacterBody2D
 var _placement_retry := 0.0
 var _clock_second := -1
+var run_id := 0
+var _difficulty: DifficultyDefinition
+var _run_setup: Dictionary
+var _settle: Callable
+var _reward_panel: RunRewards
+var _reward_saved := false
+var _run_won := false
+
+
+func configure_run(setup: Dictionary, settle_run: Callable) -> void:
+	_run_setup = setup
+	var authored_level := setup.get("level_definition") as LevelDefinition
+	if authored_level != null:
+		definition = authored_level
+	run_id = int(setup["run_id"])
+	_difficulty = setup.get("difficulty") as DifficultyDefinition
+	_settle = settle_run
 
 
 func _ready() -> void:
+	if not _run_setup.is_empty():
+		_player.initialize_run_bonuses(int(_run_setup["bonus_hp"]), float(_run_setup["magic_multiplier"]),
+			float(_run_setup["speed_multiplier"]))
+		_run_setup = {}
+	_spawner.difficulty = _difficulty
 	%Player.position = definition.player_start
 	$World/ArenaBounds/West.position.x = definition.arena_bounds.position.x
 	$World/ArenaBounds/East.position.x = definition.arena_bounds.end.x
@@ -89,6 +114,8 @@ func _ready() -> void:
 	%VictoryMessage.text = tr(English.CLEARED) % tr(definition.display_name)
 	%PlayAgain.text = tr(English.PLAY_AGAIN)
 	%VictoryMainMenu.text = tr(English.MAIN_MENU)
+	%VictoryStages.text = tr(English.STAGES)
+	%DefeatStages.text = tr(English.STAGES)
 	_pause_button.pressed.connect(_set_paused.bind(true))
 	_resume.pressed.connect(_set_paused.bind(false))
 	%BackToMenu.pressed.connect(_request_menu)
@@ -96,6 +123,10 @@ func _ready() -> void:
 	%MainMenu.pressed.connect(_request_menu)
 	%PlayAgain.pressed.connect(_request_restart)
 	%VictoryMainMenu.pressed.connect(_request_menu)
+	%VictoryStages.pressed.connect(_request_stages)
+	%DefeatStages.pressed.connect(_request_stages)
+	%VictoryRewards.retry_requested.connect(_settle_rewards)
+	%DefeatRewards.retry_requested.connect(_settle_rewards)
 
 
 func _physics_process(delta: float) -> void:
@@ -166,10 +197,35 @@ func _finish_run(panel: Control, focus: Button) -> void:
 	_picker.dismiss()
 	_spawner.stop()
 	_hud.hide_boss_warning()
+	_update_clock()
 	_pause_panel.hide()
 	panel.show()
 	_pause_overlay.show()
 	_set_world_paused(true, focus)
+	_run_won = panel == _victory_panel
+	if not _run_won:
+		%DefeatKills.text = _result_value(English.ENEMIES_DEFEATED, str(_timeline.enemies_defeated))
+		%DefeatLevel.text = _result_value(English.LEVEL_REACHED, str(_progression.level))
+		%DefeatTime.text = _result_value(English.SURVIVAL_TIME, _result_time())
+	_reward_panel = %VictoryRewards if _run_won else %DefeatRewards
+	_settle_rewards()
+
+
+func _settle_rewards() -> void:
+	if _reward_saved or _state != RunState.ENDED or not _settle.is_valid():
+		return
+	var receipt: Dictionary = _settle.call(run_id, _run_won, _timeline.enemies_defeated, _progression.level, _timeline.elapsed)
+	var status: StringName = receipt.get("status", &"invalid")
+	_reward_saved = status == &"ok" or status == &"duplicate"
+	_reward_panel.show_receipt(receipt, _run_won)
+
+
+func _result_value(label: String, amount: String) -> String:
+	return tr(English.VALUE_FORMAT) % [tr(label), amount]
+
+
+func _result_time() -> String:
+	return GroveHud.format_time(floori(_timeline.elapsed + RunTimeline.EPSILON))
 
 
 func _apply_wave(index: int) -> void:
@@ -211,6 +267,8 @@ func _continue_boss_intro(delta: float) -> void:
 			return
 		var entities: Node2D = %Entities
 		boss.position = entities.to_local(location)
+		if _difficulty != null:
+			boss.call(&"configure_difficulty", _difficulty.boss_hp_multiplier, _difficulty.boss_damage_multiplier)
 		entities.add_child(boss)
 		_boss = boss
 		_hud.show_boss_intro(_boss.get("definition").display_name)
@@ -258,9 +316,9 @@ func _boss_defeated() -> void:
 func _complete_victory() -> void:
 	if not _player.health.is_alive() or not _timeline.finish(true):
 		return
-	%VictoryKills.text = tr(English.VALUE_FORMAT) % [tr(English.ENEMIES_DEFEATED), str(_timeline.enemies_defeated)]
-	%VictoryLevel.text = tr(English.VALUE_FORMAT) % [tr(English.LEVEL_REACHED), str(_progression.level)]
-	%VictoryTime.text = tr(English.VALUE_FORMAT) % [tr(English.SURVIVAL_TIME), GroveHud.format_time(_clock_second)]
+	%VictoryKills.text = _result_value(English.ENEMIES_DEFEATED, str(_timeline.enemies_defeated))
+	%VictoryLevel.text = _result_value(English.LEVEL_REACHED, str(_progression.level))
+	%VictoryTime.text = _result_value(English.SURVIVAL_TIME, _result_time())
 	_finish_run(_victory_panel, %PlayAgain)
 
 
@@ -359,6 +417,13 @@ func _request_restart() -> void:
 		return
 	_transition_requested = true
 	restart_requested.emit()
+
+
+func _request_stages() -> void:
+	if _state != RunState.ENDED or _transition_requested:
+		return
+	_transition_requested = true
+	stages_requested.emit()
 
 
 func _spawn_bounds() -> Rect2:

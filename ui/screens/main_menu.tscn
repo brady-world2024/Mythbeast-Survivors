@@ -114,6 +114,13 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_type_variation = &"PrimaryButton"
 
+[node name="PermanentUpgrades" type="Button" parent="SafeArea/Stack/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_type_variation = &"SecondaryButton"
+
 [node name="Settings" type="Button" parent="SafeArea/Stack/Actions"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 58)
@@ -127,6 +134,15 @@ custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_type_variation = &"QuietButton"
+
+[node name="SaveNotice" type="Label" parent="SafeArea/Stack"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"LightCaption"
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="LowerSpace" type="Control" parent="SafeArea/Stack"]
 layout_mode = 2

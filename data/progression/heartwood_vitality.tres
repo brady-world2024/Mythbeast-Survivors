@@ -1,0 +1,14 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/permanent_upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/progression/heartwood_vitality.svg" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"heartwood_vitality"
+display_name = "Heartwood Vitality"
+description = "Increase your maximum health."
+icon = ExtResource("2")
+effect = "maximum_health"
+per_rank = 10
+bonus_format = "+%d Max HP"

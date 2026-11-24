@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/progression/star_essence.svg" id="1_star"]
+[ext_resource type="Script" path="res://ui/components/profile_balance.gd" id="2_balance"]
+
+[node name="ProfileBalance" type="PanelContainer"]
+size_flags_horizontal = 4
+theme_type_variation = &"HudPanel"
+mouse_filter = 2
+script = ExtResource("2_balance")
+
+[node name="Balance" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+mouse_filter = 2
+
+[node name="Star" type="TextureRect" parent="Balance"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BalanceText" type="Label" parent="Balance"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"SectionLabel"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.44, 0.319, 0.159, 1)

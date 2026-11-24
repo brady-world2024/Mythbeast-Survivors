@@ -1,5 +1,7 @@
 extends SceneTree
 
+const AppFixture = preload("res://tests/support/app_fixture.gd")
+
 const HEALTH := preload("res://features/combat/health.gd")
 const SLIME_SCENE := "res://features/enemies/forest_slime.tscn"
 const BOLT_SCENE := "res://features/combat/arcane_bolt.tscn"
@@ -25,11 +27,12 @@ func _run() -> void:
 	var gate := not arguments.is_empty() and arguments[0] == "--gate"
 	if not gate and not arguments.is_empty():
 		_capture_dir = arguments[0]
-	var app_scene := load(str(ProjectSettings.get_setting("application/run/main_scene"))) as PackedScene
-	_app = app_scene.instantiate()
+	_app = AppFixture.instantiate()
 	root.add_child(_app)
 	await process_frame
 	_press(_button(_active_screen(), "Play"))
+	await _settle()
+	_press(_button(_active_screen(), "StartAdventure"))
 	await _settle()
 	_bind_arena()
 	var has_bolt := _check(ResourceLoader.exists(BOLT_SCENE), "Arcane Bolt has a projectile scene")

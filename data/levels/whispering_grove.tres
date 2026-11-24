@@ -1,0 +1,79 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/level_definition.gd" id="1_level"]
+[ext_resource type="Script" path="res://data/definitions/wave_definition.gd" id="2_wave"]
+[ext_resource type="Script" path="res://data/definitions/enemy_spawn_entry.gd" id="3_entry"]
+[ext_resource type="PackedScene" path="res://features/levels/whispering_grove/grove_meadow.tscn" id="4_meadow"]
+[ext_resource type="PackedScene" path="res://features/enemies/forest_slime.tscn" id="5_slime"]
+[ext_resource type="PackedScene" path="res://features/enemies/swift_fangling.tscn" id="6_fangling"]
+[ext_resource type="PackedScene" path="res://features/enemies/moss_golem.tscn" id="7_golem"]
+[ext_resource type="PackedScene" path="res://features/bosses/ancient_grove_beast.tscn" id="8_boss"]
+
+[sub_resource type="Resource" id="AwakeningSlime"]
+script = ExtResource("3_entry")
+enemy_scene = ExtResource("5_slime")
+
+[sub_resource type="Resource" id="HuntSlime"]
+script = ExtResource("3_entry")
+enemy_scene = ExtResource("5_slime")
+weight = 65
+
+[sub_resource type="Resource" id="Fangling"]
+script = ExtResource("3_entry")
+enemy_scene = ExtResource("6_fangling")
+weight = 35
+clearance_radius = 25.0
+
+[sub_resource type="Resource" id="SiegeSlime"]
+script = ExtResource("3_entry")
+enemy_scene = ExtResource("5_slime")
+weight = 45
+
+[sub_resource type="Resource" id="SiegeGolem"]
+script = ExtResource("3_entry")
+enemy_scene = ExtResource("7_golem")
+weight = 20
+clearance_radius = 36.0
+
+[sub_resource type="Resource" id="ForestAwakening"]
+script = ExtResource("2_wave")
+id = &"forest_awakening"
+display_name = "Forest Awakening"
+start_time = 0.0
+end_time = 60.0
+spawn_interval = 1.8
+max_active = 12
+entries = Array[ExtResource("3_entry")]([SubResource("AwakeningSlime")])
+
+[sub_resource type="Resource" id="TheHuntBegins"]
+script = ExtResource("2_wave")
+id = &"the_hunt_begins"
+display_name = "The Hunt Begins"
+start_time = 60.0
+end_time = 120.0
+spawn_interval = 1.4
+max_active = 20
+entries = Array[ExtResource("3_entry")]([SubResource("HuntSlime"), SubResource("Fangling")])
+
+[sub_resource type="Resource" id="GroveUnderSiege"]
+script = ExtResource("2_wave")
+id = &"grove_under_siege"
+display_name = "Grove Under Siege"
+start_time = 120.0
+end_time = 180.0
+spawn_interval = 1.0
+max_active = 28
+entries = Array[ExtResource("3_entry")]([SubResource("SiegeSlime"), SubResource("Fangling"), SubResource("SiegeGolem")])
+health_multiplier = 1.05
+speed_multiplier = 1.03
+
+[resource]
+script = ExtResource("1_level")
+id = &"whispering_grove"
+display_name = "Whispering Grove"
+environment_scene = ExtResource("4_meadow")
+survival_duration = 180.0
+waves = Array[ExtResource("2_wave")]([SubResource("ForestAwakening"), SubResource("TheHuntBegins"), SubResource("GroveUnderSiege")])
+boss_scene = ExtResource("8_boss")
+boss_intro_duration = 2.4
+minimum_spawn_distance = 135.0

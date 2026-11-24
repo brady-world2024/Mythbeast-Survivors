@@ -60,7 +60,7 @@ func _bind_run() -> void:
 	_progression = _arena.get_node_or_null("%Progression")
 	_picker = _arena.get_node_or_null("%UpgradePicker") as Control
 	_abilities = _hero.get_node_or_null("%Abilities")
-	_spawner = _arena.get_node_or_null("%SlimeSpawner")
+	_spawner = _arena.get_node_or_null("%WaveSpawner")
 
 
 func _check_rewards(gate: bool) -> void:

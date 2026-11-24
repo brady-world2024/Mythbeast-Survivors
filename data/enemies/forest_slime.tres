@@ -4,6 +4,8 @@
 
 [resource]
 script = ExtResource("1_definition")
+id = &"forest_slime"
+display_name = "Forest Slime"
 move_speed = 80.0
 max_health = 30
 contact_damage = 8

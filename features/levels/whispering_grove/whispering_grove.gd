@@ -3,13 +3,15 @@ extends Node2D
 signal back_requested
 signal restart_requested
 
-enum RunState { PLAYING, PAUSED, CHOOSING_UPGRADE, DEFEATED }
+enum RunState { PLAYING, PAUSED, CHOOSING_UPGRADE, ENDED }
 
 const English = preload("res://data/localization/english.gd")
 const BasicAttack = preload("res://features/combat/basic_attack.gd")
 const Player = preload("res://features/player/player.gd")
-const ForestSlime = preload("res://features/enemies/forest_slime.gd")
-const SlimeSpawner = preload("res://features/enemies/slime_spawner.gd")
+const EnemyActor = preload("res://features/enemies/enemy_actor.gd")
+const WaveSpawner = preload("res://features/enemies/wave_spawner.gd")
+const LevelDefinition = preload("res://data/definitions/level_definition.gd")
+const RunTimeline = preload("res://features/levels/run_timeline.gd")
 const Progression = preload("res://features/progression/progression.gd")
 const XpGem = preload("res://features/progression/xp_gem.gd")
 const UpgradePicker = preload("res://ui/screens/upgrade_picker.gd")
@@ -18,10 +20,12 @@ const GroveHud = preload("res://ui/hud/grove_hud.gd")
 const XP_GEM_SCENE = preload("res://features/progression/xp_gem.tscn")
 const MAX_ACTIVE_GEMS := 48
 
+@export var definition: LevelDefinition
 @export var upgrade_seed := 0
 
 @onready var _player: Player = %Player
-@onready var _spawner: SlimeSpawner = %SlimeSpawner
+@onready var _spawner: WaveSpawner = %WaveSpawner
+@onready var _timeline: RunTimeline = %RunTimeline
 @onready var _progression: Progression = %Progression
 @onready var _picker: UpgradePicker = %UpgradePicker
 @onready var _rewards: Node2D = %Rewards
@@ -30,6 +34,7 @@ const MAX_ACTIVE_GEMS := 48
 @onready var _pause_overlay: Control = %PauseOverlay
 @onready var _pause_panel: Control = %PausePanel
 @onready var _game_over_panel: Control = %GameOverPanel
+@onready var _victory_panel: Control = %VictoryPanel
 @onready var _pause_button: Button = _hud.get_node("%PauseButton")
 @onready var _resume: Button = %Resume
 @onready var _try_again: Button = %TryAgain
@@ -38,9 +43,26 @@ var _state := RunState.PLAYING
 var _transition_requested := false
 var _upgrade_random := RandomNumberGenerator.new()
 var _offered_ids: Array[StringName] = []
+var _boss: CharacterBody2D
+var _placement_retry := 0.0
+var _clock_second := -1
 
 
 func _ready() -> void:
+	%Player.position = definition.player_start
+	$World/ArenaBounds/West.position.x = definition.arena_bounds.position.x
+	$World/ArenaBounds/East.position.x = definition.arena_bounds.end.x
+	$World/ArenaBounds/North.position.y = definition.arena_bounds.position.y
+	$World/ArenaBounds/South.position.y = definition.arena_bounds.end.y
+	if definition.environment_scene != null:
+		%Environment.add_child(definition.environment_scene.instantiate())
+	_hud.set_level_name(definition.display_name)
+	_spawner.minimum_spawn_distance = definition.minimum_spawn_distance
+	_spawner.spawned.connect(_track_enemy_reward)
+	_timeline.wave_changed.connect(_apply_wave)
+	_timeline.boss_intro_started.connect(_begin_boss_intro)
+	_timeline.begin(definition)
+	_update_clock()
 	var basic_attack := _player.get_node("BasicAttack") as BasicAttack
 	basic_attack.projectile_parent = %Effects
 	_player.health.changed.connect(_hud.set_health)
@@ -63,22 +85,30 @@ func _ready() -> void:
 	%GameOverMessage.text = tr(English.GAME_OVER_MESSAGE)
 	_try_again.text = tr(English.TRY_AGAIN)
 	%MainMenu.text = tr(English.MAIN_MENU)
+	%VictoryHeading.text = tr(English.VICTORY)
+	%VictoryMessage.text = tr(English.CLEARED) % tr(definition.display_name)
+	%PlayAgain.text = tr(English.PLAY_AGAIN)
+	%VictoryMainMenu.text = tr(English.MAIN_MENU)
 	_pause_button.pressed.connect(_set_paused.bind(true))
 	_resume.pressed.connect(_set_paused.bind(false))
 	%BackToMenu.pressed.connect(_request_menu)
 	_try_again.pressed.connect(_request_restart)
 	%MainMenu.pressed.connect(_request_menu)
-	_spawner.spawned.connect(_track_enemy_reward)
-	_spawner.start(_player, %Entities, _spawn_bounds())
+	%PlayAgain.pressed.connect(_request_restart)
+	%VictoryMainMenu.pressed.connect(_request_menu)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if get_tree().paused:
 		return
 	var direction := _stick.direction
 	if direction.is_zero_approx():
 		direction = Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
 	_player.move_direction = direction
+	_timeline.advance(delta)
+	_update_clock()
+	if _timeline.phase == RunTimeline.Phase.BOSS_INTRO:
+		_continue_boss_intro(delta)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -96,7 +126,7 @@ func _notification(what: int) -> void:
 		NOTIFICATION_APPLICATION_FOCUS_OUT:
 			_clear_movement()
 		NOTIFICATION_WM_GO_BACK_REQUEST:
-			if _state == RunState.DEFEATED:
+			if _state == RunState.ENDED:
 				_request_menu()
 			else:
 				_set_paused(not _pause_overlay.visible)
@@ -125,24 +155,124 @@ func _set_world_paused(value: bool, focus_target: Control = null) -> void:
 
 
 func _show_game_over() -> void:
-	if _state == RunState.DEFEATED:
+	if not _timeline.finish(false):
 		return
-	_state = RunState.DEFEATED
+	_finish_run(_game_over_panel, _try_again)
+
+
+func _finish_run(panel: Control, focus: Button) -> void:
+	_state = RunState.ENDED
 	_offered_ids.clear()
 	_picker.dismiss()
 	_spawner.stop()
+	_hud.hide_boss_warning()
 	_pause_panel.hide()
-	_game_over_panel.show()
+	panel.show()
 	_pause_overlay.show()
-	_set_world_paused(true, _try_again)
+	_set_world_paused(true, focus)
 
 
-func _track_enemy_reward(enemy: ForestSlime) -> void:
+func _apply_wave(index: int) -> void:
+	if index < 0:
+		_spawner.stop()
+		return
+	_spawner.use_wave(definition.waves[index])
+	if not _spawner.is_spawning():
+		_spawner.start(_player, %Entities, _spawn_bounds())
+	_hud.set_wave(index, definition.waves.size())
+
+
+func _update_clock() -> void:
+	var next := floori(_timeline.elapsed + RunTimeline.EPSILON)
+	if next == _clock_second:
+		return
+	_clock_second = next
+	_hud.set_clock(next, ceili(definition.survival_duration))
+
+
+func _begin_boss_intro() -> void:
+	_spawner.stop()
+	_spawner.clear_enemies()
+	# Existing shots belong to the survival phase and must not fire into the introduction.
+	for effect in %Effects.get_children():
+		effect.queue_free()
+
+
+func _continue_boss_intro(delta: float) -> void:
+	if not is_instance_valid(_boss):
+		_placement_retry = move_toward(_placement_retry, 0.0, delta)
+		if _placement_retry > 0.0:
+			return
+		var boss := definition.boss_scene.instantiate() as CharacterBody2D
+		var location := _boss_spawn_position(float(boss.get("spawn_radius")))
+		if not location.is_finite():
+			_placement_retry = 0.4
+			boss.free()
+			return
+		var entities: Node2D = %Entities
+		boss.position = entities.to_local(location)
+		entities.add_child(boss)
+		_boss = boss
+		_hud.show_boss_intro(_boss.get("definition").display_name)
+		_timeline.mark_boss_visible()
+	if not _timeline.begin_boss():
+		return
+	var health: Node = _boss.get_node("Health")
+	_hud.show_boss(_boss.get("definition").display_name, health.get("maximum"))
+	health.connect(&"changed", _hud.set_boss_health)
+	_boss.connect(&"phase_changed", _hud.set_boss_phase)
+	_boss.connect(&"defeated", _boss_defeated, CONNECT_ONE_SHOT)
+	_boss.call(&"start", _player)
+
+
+func _boss_spawn_position(radius: float) -> Vector2:
+	var bounds := _spawn_bounds().grow(-(radius + 4.0))
+	var space := get_world_2d().direct_space_state
+	var footprint := CircleShape2D.new()
+	footprint.radius = radius
+	var query := PhysicsShapeQueryParameters2D.new()
+	query.shape = footprint
+	query.collision_mask = 3 # World and player. The ordinary wave has been cleared.
+	var best := Vector2.INF
+	var best_distance := -1.0
+	for fraction: Vector2 in [Vector2(0.50, 0.24), Vector2(0.24, 0.28), Vector2(0.76, 0.28),
+			Vector2(0.27, 0.58), Vector2(0.73, 0.58), Vector2(0.50, 0.78)]:
+		var candidate := bounds.position + bounds.size * fraction
+		query.transform = Transform2D(0.0, candidate)
+		if not space.intersect_shape(query, 1).is_empty():
+			continue
+		var distance := candidate.distance_squared_to(_player.global_position)
+		if distance >= 125.0 * 125.0:
+			return candidate
+		if distance > best_distance:
+			best_distance = distance
+			best = candidate
+	return best
+
+
+func _boss_defeated() -> void:
+	# A player death in the same physics step wins the terminal-state arbitration.
+	_complete_victory.call_deferred()
+
+
+func _complete_victory() -> void:
+	if not _player.health.is_alive() or not _timeline.finish(true):
+		return
+	%VictoryKills.text = tr(English.VALUE_FORMAT) % [tr(English.ENEMIES_DEFEATED), str(_timeline.enemies_defeated)]
+	%VictoryLevel.text = tr(English.VALUE_FORMAT) % [tr(English.LEVEL_REACHED), str(_progression.level)]
+	%VictoryTime.text = tr(English.VALUE_FORMAT) % [tr(English.SURVIVAL_TIME), GroveHud.format_time(_clock_second)]
+	_finish_run(_victory_panel, %PlayAgain)
+
+
+func _track_enemy_reward(enemy: EnemyActor) -> void:
 	enemy.health.depleted.connect(_drop_xp.bind(enemy), CONNECT_ONE_SHOT)
 
 
-func _drop_xp(enemy: ForestSlime) -> void:
-	if _state == RunState.DEFEATED or _transition_requested or enemy.definition.xp_reward <= 0:
+func _drop_xp(enemy: EnemyActor) -> void:
+	if _timeline.phase != RunTimeline.Phase.SURVIVAL or _transition_requested:
+		return
+	_timeline.record_enemy_defeat()
+	if enemy.definition.xp_reward <= 0:
 		return
 	var reward := enemy.definition.xp_reward
 	var position := _rewards.to_local(enemy.global_position)
@@ -225,7 +355,7 @@ func _request_menu() -> void:
 
 
 func _request_restart() -> void:
-	if _state != RunState.DEFEATED or _transition_requested:
+	if _state != RunState.ENDED or _transition_requested:
 		return
 	_transition_requested = true
 	restart_requested.emit()

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/boss_definition.gd" id="1_definition"]
+
+[resource]
+script = ExtResource("1_definition")
+id = &"ancient_grove_beast"
+display_name = "Ancient Grove Beast"
+max_health = 550
+move_speed = 55.0
+stomp_damage = 18
+stomp_radius = 111.0
+stomp_windup = 0.8
+charge_damage = 15
+charge_windup = 0.78
+charge_distance = 260.0
+charge_speed = 350.0
+attack_cooldown = 2.0
+phase_threshold = 0.5
+phase_two_speed_multiplier = 1.18
+phase_two_cooldown_multiplier = 0.72

@@ -20,7 +20,7 @@ func _run() -> void:
 		_capture_dir = arguments[0]
 	_arena = ARENA.instantiate() as Node2D
 	root.add_child(_arena)
-	_arena.get_node("%SlimeSpawner").call("stop")
+	_arena.get_node("%WaveSpawner").call("stop")
 	for enemy in get_nodes_in_group(&"combat_enemies"):
 		enemy.queue_free()
 	_player = _arena.find_child("Player", true, false) as CharacterBody2D
@@ -66,7 +66,7 @@ func _check_touch(gate: bool) -> void:
 	var pause_button := _arena.find_child("PauseButton", true, false) as Button
 	var pause_position := pause_button.get_global_rect().get_center()
 	if not gate:
-		var preview := _arena.find_child("Preview", true, false) as Label
+		var preview := _arena.find_child("WaveCaption", true, false) as Label
 		_touch(2, preview.get_global_rect().get_center(), true)
 		_drag(2, origin)
 		await _ticks(5)

@@ -1,86 +1,20 @@
-extends CharacterBody2D
-
-const EnemyDefinition = preload("res://data/definitions/enemy_definition.gd")
-const Health = preload("res://features/combat/health.gd")
-const Player = preload("res://features/player/player.gd")
-const SlowStatus = preload("res://features/combat/slow_status.gd")
-
-const HIT_TINT := Color(1.75, 1.35, 1.48)
-const HIT_FLASH_SECONDS := 0.14
-
-@export var definition: EnemyDefinition
-
-@onready var health: Health = $Health
-@onready var _visual: Node2D = $Visual
-@onready var _body: Sprite2D = $Visual/Body
-@onready var _shadow: Sprite2D = $Visual/Shadow
-
-var target: Player
+extends "res://features/enemies/enemy_actor.gd"
 
 var _contact_cooldown := 0.0
 var _bounce_phase := 0.0
 var _hop_strength := 0.0
-var _hit_flash: Tween
-var _slow := SlowStatus.new()
 
 
-func _ready() -> void:
-	health.configure(definition.max_health)
-	health.damaged.connect(_on_damaged)
-	health.depleted.connect(_on_depleted)
-
-
-func _physics_process(delta: float) -> void:
-	if _slow.tick(delta):
-		_update_slow_visual()
+func _step_ai(delta: float) -> void:
 	_contact_cooldown = move_toward(_contact_cooldown, 0.0, delta)
-	if not is_instance_valid(target) or not target.health.is_alive():
-		velocity = Vector2.ZERO
-		return
-
-	var target_offset := target.global_position - global_position
-	var contact_range_squared := definition.contact_range * definition.contact_range
-	if absf(target_offset.x) > 3.0:
-		_body.flip_h = target_offset.x < 0.0
-	if target_offset.length_squared() > contact_range_squared:
-		velocity = target_offset.normalized() * effective_move_speed()
-		move_and_slide()
-	else:
-		velocity = Vector2.ZERO
-
-	if (
-		_contact_cooldown <= 0.0
-		and global_position.distance_squared_to(target.global_position) <= contact_range_squared
-	):
+	var distance_squared := definition.contact_range * definition.contact_range
+	chase(target.global_position - global_position, definition.contact_range)
+	if _contact_cooldown <= 0.0 and global_position.distance_squared_to(target.global_position) <= distance_squared:
 		_contact_cooldown = definition.contact_interval
-		target.receive_damage(definition.contact_damage)
+		damage_player()
 
 
-func effective_move_speed() -> float:
-	return definition.move_speed * _slow.multiplier
-
-
-func apply_slow(ratio: float, duration: float, minimum_speed_ratio: float = 0.4) -> void:
-	if health.is_alive():
-		_slow.apply(ratio, duration, minimum_speed_ratio)
-		_update_slow_visual()
-
-
-func _update_slow_visual() -> void:
-	_body.modulate = Color("a9e7ff") if _slow.multiplier < 1.0 else Color.WHITE
-	queue_redraw()
-
-
-func _draw() -> void:
-	if _slow.multiplier >= 1.0:
-		return
-	for point in [Vector2(-21.0, -39.0), Vector2(20.0, -45.0)]:
-		for spoke in range(3):
-			var arm := Vector2.from_angle(spoke * PI / 3.0) * 5.0
-			draw_line(point - arm, point + arm, Color("c4f6ff"), 2.0, true)
-
-
-func _process(delta: float) -> void:
+func _animate(delta: float) -> void:
 	var speed_ratio := 0.0
 	if not velocity.is_zero_approx():
 		speed_ratio = minf(get_real_velocity().length() / definition.move_speed, 1.0)
@@ -91,29 +25,3 @@ func _process(delta: float) -> void:
 	_body.position.y = -lift * lerpf(2.0, 8.0, _hop_strength)
 	_body.scale = Vector2(1.0 + squash, 1.0 - squash)
 	_shadow.scale = Vector2.ONE * (1.0 - 0.12 * lift * _hop_strength)
-
-
-func _on_damaged(_amount: int) -> void:
-	if _hit_flash != null:
-		_hit_flash.kill()
-	_body.self_modulate = HIT_TINT
-	_hit_flash = create_tween()
-	_hit_flash.tween_property(_body, "self_modulate", Color.WHITE, HIT_FLASH_SECONDS)
-
-
-func _on_depleted() -> void:
-	_slow.clear()
-	_update_slow_visual()
-	remove_from_group(&"combat_enemies")
-	set_physics_process(false)
-	set_process(false)
-	velocity = Vector2.ZERO
-	collision_layer = 0
-	collision_mask = 0
-
-	var fade := create_tween()
-	fade.tween_property(_body, "position:y", 0.0, 0.07)
-	fade.parallel().tween_property(_body, "scale", Vector2(1.23, 0.62), 0.07)
-	fade.tween_property(_visual, "modulate:a", 0.0, 0.15)
-	fade.parallel().tween_property(_body, "scale", Vector2(0.8, 0.16), 0.15)
-	fade.tween_callback(queue_free)

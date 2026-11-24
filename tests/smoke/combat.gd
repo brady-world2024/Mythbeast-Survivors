@@ -52,7 +52,7 @@ func _run() -> void:
 func _bind_arena() -> void:
 	_arena = _active_screen() as Node2D
 	_hero = _arena.get_node("%Player") as CharacterBody2D
-	_spawner = _arena.get_node_or_null("%SlimeSpawner")
+	_spawner = _arena.get_node_or_null("%WaveSpawner")
 	_effects = _arena.get_node_or_null("%Effects") as Node2D
 
 
@@ -223,6 +223,7 @@ func _check_spawn_cap() -> void:
 	_hero.get_node("BasicAttack").set_physics_process(false)
 	_spawns = 0
 	_safe_spawns = true
+	_spawner.set("max_active", 8)
 	_spawner.connect("spawned", _record_spawn)
 	_begin_spawns(0.10, 11)
 	await _ticks(75)

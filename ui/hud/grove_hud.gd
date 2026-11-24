@@ -2,21 +2,69 @@ extends Control
 
 const English = preload("res://data/localization/english.gd")
 
-const TIME_PREVIEW := "0:00"
 const XP_FILL_DURATION := 0.14
 
 @onready var _xp_bar: ProgressBar = %XP
 
 var _xp_tween: Tween
+var _boss_tween: Tween
 var _displayed_level := 0
 
 
 func _ready() -> void:
-	%GroveName.text = tr(English.GROVE)
-	%Preview.text = tr(English.PREVIEW)
 	%PauseButton.text = tr(English.PAUSE)
 	%MoveHint.text = tr(English.TOUCH_MOVE_HINT if OS.has_feature("mobile") else English.KEYBOARD_MOVE_HINT)
-	%TimerCaption.text = _metric(English.TIMER, TIME_PREVIEW)
+	%BossWarningTitle.text = tr(English.BOSS_INCOMING)
+
+
+func set_level_name(display_name: String) -> void:
+	%GroveName.text = tr(display_name)
+
+
+func set_wave(index: int, wave_count: int) -> void:
+	%WaveCaption.text = tr(English.FINAL_WAVE) if index == wave_count - 1 and wave_count > 1 else (
+		tr(English.WAVE_FORMAT) % (index + 1)
+	)
+
+
+func set_clock(elapsed: int, duration: int) -> void:
+	%TimerCaption.text = tr(English.SURVIVAL_CLOCK) % [format_time(elapsed), format_time(duration)]
+
+
+func show_boss_intro(display_name: String) -> void:
+	%BossWarningName.text = tr(display_name)
+	%BossWarning.show()
+
+
+func show_boss(display_name: String, maximum: int) -> void:
+	%BossWarning.hide()
+	%WaveCaption.text = tr(English.BOSS_BATTLE)
+	%BossName.text = tr(display_name)
+	%BossHealth.max_value = maximum
+	%BossHealth.value = maximum
+	%BossHealthValue.text = tr(English.HEALTH_FRACTION) % [maximum, maximum]
+	set_boss_phase(1)
+	%BossVitals.show()
+
+
+func set_boss_health(current: int, maximum: int) -> void:
+	%BossHealthValue.text = tr(English.HEALTH_FRACTION) % [current, maximum]
+	if _boss_tween != null:
+		_boss_tween.kill()
+	_boss_tween = create_tween()
+	_boss_tween.tween_property(%BossHealth, "value", float(current), XP_FILL_DURATION)
+
+
+func set_boss_phase(phase: int) -> void:
+	%BossPhase.text = tr(English.BOSS_PHASE) % phase
+
+
+func hide_boss_warning() -> void:
+	%BossWarning.hide()
+
+
+static func format_time(seconds: int) -> String:
+	return "%02d:%02d" % [floori(seconds / 60.0), seconds % 60]
 
 
 func set_health(current: int, maximum: int) -> void:

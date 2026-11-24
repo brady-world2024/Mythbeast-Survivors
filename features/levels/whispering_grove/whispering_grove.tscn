@@ -1,14 +1,15 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://features/levels/whispering_grove/whispering_grove.gd" id="1_arena"]
-[ext_resource type="PackedScene" path="res://features/levels/whispering_grove/grove_meadow.tscn" id="2_meadow"]
+[ext_resource type="Resource" path="res://data/levels/whispering_grove.tres" id="2_level"]
 [ext_resource type="PackedScene" path="res://features/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://ui/hud/grove_hud.tscn" id="4_hud"]
 [ext_resource type="Script" path="res://ui/components/safe_area.gd" id="5_safe"]
 [ext_resource type="Script" path="res://ui/components/floating_stick.gd" id="6_stick"]
-[ext_resource type="Script" path="res://features/enemies/slime_spawner.gd" id="7_spawner"]
+[ext_resource type="Script" path="res://features/enemies/wave_spawner.gd" id="7_spawner"]
 [ext_resource type="Script" path="res://features/progression/progression.gd" id="8_progression"]
 [ext_resource type="PackedScene" path="res://ui/screens/upgrade_picker.tscn" id="9_upgrades"]
+[ext_resource type="Script" path="res://features/levels/run_timeline.gd" id="10_timeline"]
 
 [sub_resource type="WorldBoundaryShape2D" id="West"]
 normal = Vector2(1, 0)
@@ -24,11 +25,13 @@ normal = Vector2(0, 1)
 [node name="WhisperingGrove" type="Node2D"]
 process_mode = 3
 script = ExtResource("1_arena")
+definition = ExtResource("2_level")
 
 [node name="World" type="Node2D" parent="."]
 process_mode = 1
 
-[node name="GroveMeadow" parent="World" instance=ExtResource("2_meadow")]
+[node name="Environment" type="Node2D" parent="World"]
+unique_name_in_owner = true
 
 [node name="ArenaBounds" type="StaticBody2D" parent="World"]
 collision_mask = 0
@@ -57,7 +60,7 @@ y_sort_enabled = true
 unique_name_in_owner = true
 position = Vector2(0, 25)
 
-[node name="SlimeSpawner" type="Node2D" parent="World"]
+[node name="WaveSpawner" type="Node2D" parent="World"]
 unique_name_in_owner = true
 script = ExtResource("7_spawner")
 
@@ -70,6 +73,10 @@ unique_name_in_owner = true
 [node name="Progression" type="Node" parent="World"]
 unique_name_in_owner = true
 script = ExtResource("8_progression")
+
+[node name="RunTimeline" type="Node" parent="World"]
+unique_name_in_owner = true
+script = ExtResource("10_timeline")
 
 [node name="Camera2D" type="Camera2D" parent="World"]
 
@@ -180,6 +187,67 @@ layout_mode = 2
 theme_type_variation = &"PrimaryButton"
 
 [node name="MainMenu" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/GameOverPanel/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+
+[node name="VictoryPanel" type="PanelContainer" parent="Interface/PauseOverlay/SafeArea/Center"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(388, 0)
+layout_mode = 2
+
+[node name="Stack" type="VBoxContainer" parent="Interface/PauseOverlay/SafeArea/Center/VictoryPanel"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="VictoryHeading" type="Label" parent="Interface/PauseOverlay/SafeArea/Center/VictoryPanel/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+horizontal_alignment = 1
+
+[node name="VictoryMessage" type="Label" parent="Interface/PauseOverlay/SafeArea/Center/VictoryPanel/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Stats" type="PanelContainer" parent="Interface/PauseOverlay/SafeArea/Center/VictoryPanel/Stack"]
+layout_mode = 2
+theme_type_variation = &"HudPanel"
+
+[node name="Rows" type="VBoxContainer" parent="Interface/PauseOverlay/SafeArea/Center/VictoryPanel/Stack/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="VictoryKills" type="Label" parent="Interface/PauseOverlay/SafeArea/Center/VictoryPanel/Stack/Stats/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+horizontal_alignment = 1
+
+[node name="VictoryLevel" type="Label" parent="Interface/PauseOverlay/SafeArea/Center/VictoryPanel/Stack/Stats/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+horizontal_alignment = 1
+
+[node name="VictoryTime" type="Label" parent="Interface/PauseOverlay/SafeArea/Center/VictoryPanel/Stack/Stats/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+horizontal_alignment = 1
+
+[node name="PlayAgain" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/VictoryPanel/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+
+[node name="VictoryMainMenu" type="Button" parent="Interface/PauseOverlay/SafeArea/Center/VictoryPanel/Stack"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 58)
 layout_mode = 2

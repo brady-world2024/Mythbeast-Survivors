@@ -1,8 +1,8 @@
 Mythbeast Survivors
 
 An offline, single-player, portrait 2D survivor game built with Godot and
-GDScript. This foundation explores Whispering Grove, a woodland arena
-featuring an original chibi adventurer, soft forest scenery, and local audio.
+GDScript. Fight through Whispering Grove, a woodland arena featuring an
+original chibi adventurer, soft forest scenery, and local audio.
 
 Getting started
 
@@ -15,23 +15,23 @@ Getting started
   arrow keys on desktop. On a touchscreen, press and drag below the HUD.
   Release to stop. Use Pause or Esc to open the pause menu.
 
-Current scope
+Whispering Grove
 
-  Forest Slimes spawn in Whispering Grove and chase the hero. The hero casts
-  Arcane Bolt automatically toward the nearest enemy in range. Enemy contact
-  reduces health, with a brief recovery window between hits. Collect XP gems
-  dropped by slimes. Leveling up pauses the encounter so you can choose an
-  ability upgrade. At zero health, choose Try Again for a fresh encounter or
-  Main Menu to leave. Each run starts with only Arcane Bolt. The run timer is
-  a preview value.
+  Survive three escalating waves of Forest Slimes, Swift Fanglings, and Moss
+  Golems. Your hero casts Arcane Bolt automatically. Collect XP crystals to
+  choose among six run upgrades. Pause and upgrade selection freeze the clock.
+  At 03:00, defeat the Ancient Grove Beast to win. Move out of the circular
+  stomp or the charge lane before the warning resolves. Play Again starts a
+  fresh run after victory, and Try Again restarts after defeat.
+
   Android and iOS export configuration and device testing are also ahead.
 
 Project layout
 
   core/app          Application entry, scene navigation, and audio lifetime
-  features          Whispering Grove, combat, progression, and ability effects
+  features          Native level, combat, progression, enemies, and boss
   ui                Menus, HUD, safe-area layout, and shared theme
-  data              Character, enemy, weapon, and ability definitions
+  data              Level, wave, character, enemy, boss, and ability data
   assets            Project artwork, application icon, and audio
   tests/smoke       Foundation navigation and behavior checks
 
@@ -44,7 +44,8 @@ Development checks
     bash scripts/test-godot.sh
 
   The required gate runs a curated set of startup, navigation, movement,
-  combat, and progression checks. The second runs the full local smoke suite.
+  combat, progression, and survival checks. The second runs the full local
+  suite, including spawn safety, enemy AI, and boss attack patterns.
   Add critical regressions to the gate when related behavior changes.
 
 Engine attribution

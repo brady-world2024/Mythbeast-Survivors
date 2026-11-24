@@ -61,8 +61,8 @@ func _run() -> void:
 		_check(player.get_node("VisualAnchor").get_child_count() == 1, "The player instantiates the definition's visual")
 	_check(_screen().find_child("Camera2D", true, false) is Camera2D, "The arena owns a camera")
 	if not gate_only:
-		var preview := _screen().find_child("Preview", true, false) as Label
-		_check(preview != null and preview.text == "Arena Preview", "The HUD identifies preview values")
+		var preview := _screen().find_child("WaveCaption", true, false) as Label
+		_check(preview != null and preview.text == "Wave 1", "The HUD identifies the opening wave")
 	await _capture("whispering-grove")
 	await _press("PauseButton")
 	_check(paused, "Pause stops the scene tree")

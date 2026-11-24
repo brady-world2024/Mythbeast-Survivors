@@ -4,6 +4,9 @@ signal back_requested
 
 const English = preload("res://data/localization/english.gd")
 
+var service: RefCounted
+var _pending_save := false
+
 @onready var _heading: Label = %Heading
 @onready var _music_label: Label = %MusicLabel
 @onready var _sfx_label: Label = %SFXLabel
@@ -12,6 +15,7 @@ const English = preload("res://data/localization/english.gd")
 @onready var _music_percent: Label = %MusicPercent
 @onready var _sfx_percent: Label = %SFXPercent
 @onready var _back: Button = %Back
+@onready var _save_timer: Timer = %SaveTimer
 
 
 func _ready() -> void:
@@ -22,6 +26,9 @@ func _ready() -> void:
 	_sfx.accessibility_name = _sfx_label.text
 	_back.text = tr(English.BACK)
 	_back.pressed.connect(back_requested.emit)
+	%SettingsRetry.text = tr(English.RETRY_SAVE)
+	%SettingsRetry.pressed.connect(flush_settings)
+	_save_timer.timeout.connect(flush_settings)
 	_connect_slider(_music, _music_percent, &"Music")
 	_connect_slider(_sfx, _sfx_percent, &"SFX")
 
@@ -44,3 +51,18 @@ func _set_volume(percent: float, bus: int, percent_label: Label) -> void:
 		AudioServer.set_bus_volume_linear(bus, percent / 100.0)
 	AudioServer.set_bus_mute(bus, percent <= 0.0)
 	percent_label.text = tr(English.PERCENT_FORMAT) % roundi(percent)
+	if service != null:
+		_pending_save = true
+		_save_timer.start()
+
+
+func flush_settings() -> bool:
+	if service == null or not _pending_save:
+		return true
+	_save_timer.stop()
+	var saved := bool(service.call(&"set_audio", _music.value / 100.0, _sfx.value / 100.0))
+	_pending_save = not saved
+	%SettingsStatus.text = tr(English.SETTINGS_SAVE_FAILED)
+	%SettingsStatus.visible = not saved
+	%SettingsRetry.visible = not saved
+	return saved

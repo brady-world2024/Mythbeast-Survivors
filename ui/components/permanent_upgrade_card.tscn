@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/components/permanent_upgrade_card.gd" id="1_card"]
+
+[node name="PermanentUpgradeCard" type="PanelContainer"]
+script = ExtResource("1_card")
+
+[node name="Contents" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="Contents"]
+layout_mode = 2
+theme_override_constants/separation = 11
+
+[node name="UpgradeIcon" type="TextureRect" parent="Contents/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Identity" type="VBoxContainer" parent="Contents/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="NameRow" type="HBoxContainer" parent="Contents/Header/Identity"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="UpgradeTitle" type="Label" parent="Contents/Header/Identity/NameRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SectionLabel"
+theme_override_font_sizes/font_size = 23
+autowrap_mode = 3
+
+[node name="UpgradeRank" type="Label" parent="Contents/Header/Identity/NameRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+theme_override_colors/font_color = Color(0.2745, 0.3961, 0.2745, 1)
+
+[node name="UpgradeDescription" type="Label" parent="Contents/Header/Identity"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CaptionLabel"
+autowrap_mode = 3
+
+[node name="Bonuses" type="HBoxContainer" parent="Contents"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CurrentBonus" type="Label" parent="Contents/Bonuses"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+autowrap_mode = 3
+
+[node name="NextBonus" type="Label" parent="Contents/Bonuses"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+theme_override_colors/font_color = Color(0.2510, 0.4235, 0.3294, 1)
+autowrap_mode = 3
+
+[node name="Purchase" type="Button" parent="Contents"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_type_variation = &"QuietButton"
+mouse_default_cursor_shape = 2

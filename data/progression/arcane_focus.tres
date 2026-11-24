@@ -1,0 +1,14 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/permanent_upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/abilities/arcane_bolt.svg" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"arcane_focus"
+display_name = "Arcane Focus"
+description = "Increase your magical attack damage."
+icon = ExtResource("2")
+effect = "magic_damage"
+per_rank = 5
+bonus_format = "+%d%% Magic Damage"

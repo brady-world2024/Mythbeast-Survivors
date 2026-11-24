@@ -8,10 +8,10 @@ Getting started
 
   Install Godot 4.7.2 Standard.
   In the Godot Project Manager, import project.godot from this directory.
-  Press F5 and select Play to enter Whispering Grove.
+  Press F5, select Play, and start Whispering Grove on Normal.
 
-  The main menu also opens Settings and Credits. Settings controls the
-  music and sound effects for the current session. Move with WASD or the
+  The main menu opens Permanent Upgrades, Settings, and Credits. Audio
+  settings save locally. Move with WASD or the
   arrow keys on desktop. On a touchscreen, press and drag below the HUD.
   Release to stop. Use Pause or Esc to open the pause menu.
 
@@ -24,6 +24,11 @@ Whispering Grove
   stomp or the charge lane before the warning resolves. Play Again starts a
   fresh run after victory, and Try Again restarts after defeat.
 
+  Victories and qualifying defeats earn Star Essence. Spend it on permanent
+  health, magic damage, or movement upgrades. Clearing Normal unlocks Hard.
+  The local save keeps your progress, records, and audio settings. Crystal
+  Caverns is shown as Coming Soon.
+
   Android and iOS export configuration and device testing are also ahead.
 
 Project layout
@@ -31,7 +36,7 @@ Project layout
   core/app          Application entry, scene navigation, and audio lifetime
   features          Native level, combat, progression, enemies, and boss
   ui                Menus, HUD, safe-area layout, and shared theme
-  data              Level, wave, character, enemy, boss, and ability data
+  data              Levels, waves, combat, rewards, difficulty, and upgrades
   assets            Project artwork, application icon, and audio
   tests/smoke       Foundation navigation and behavior checks
 
@@ -44,8 +49,9 @@ Development checks
     bash scripts/test-godot.sh
 
   The required gate runs a curated set of startup, navigation, movement,
-  combat, progression, and survival checks. The second runs the full local
-  suite, including spawn safety, enemy AI, and boss attack patterns.
+  combat, progression, survival, and persistent replay checks. The second
+  also covers save recovery, purchases, and failure handling. Both isolate
+  their test profiles from the player's save.
   Add critical regressions to the gate when related behavior changes.
 
 Engine attribution

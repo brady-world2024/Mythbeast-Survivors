@@ -1,5 +1,7 @@
 extends SceneTree
 
+const AppFixture = preload("res://tests/support/app_fixture.gd")
+
 const PROGRESSION_PATH := "res://features/progression/progression.gd"
 const GEM_PATH := "res://features/progression/xp_gem.tscn"
 const ABILITY_IDS := [&"arcane_bolt", &"chain_lightning", &"flame_aura", &"frost_touch", &"swift_steps", &"iron_guard"]
@@ -25,11 +27,12 @@ func _run() -> void:
 	var gate := not arguments.is_empty() and arguments[0] == "--gate"
 	if not gate and not arguments.is_empty():
 		_capture_dir = arguments[0]
-	var app_scene := load(str(ProjectSettings.get_setting("application/run/main_scene"))) as PackedScene
-	_app = app_scene.instantiate()
+	_app = AppFixture.instantiate()
 	root.add_child(_app)
 	await process_frame
 	_press(_button(_screen(), "Play"))
+	await _settle()
+	_press(_button(_screen(), "StartAdventure"))
 	await _settle()
 	_bind_run()
 	var has_progression := _check(_progression != null, "The playable grove owns run progression")

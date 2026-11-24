@@ -1,0 +1,14 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/definitions/permanent_upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/progression/windstep_boots.svg" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"windstep_boots"
+display_name = "Windstep Boots"
+description = "Increase your movement speed."
+icon = ExtResource("2")
+effect = "movement_speed"
+per_rank = 3
+bonus_format = "+%d%% Move Speed"

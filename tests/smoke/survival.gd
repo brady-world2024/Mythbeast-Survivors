@@ -1,5 +1,7 @@
 extends SceneTree
 
+const AppFixture = preload("res://tests/support/app_fixture.gd")
+
 const LEVEL := "res://data/levels/whispering_grove.tres"
 
 var _app: Node
@@ -22,11 +24,12 @@ func _run() -> void:
 	var gate := not arguments.is_empty() and arguments[0] == "--gate"
 	if not arguments.is_empty() and not gate:
 		_capture_dir = arguments[0]
-	var scene := load(str(ProjectSettings.get_setting("application/run/main_scene"))) as PackedScene
-	_app = scene.instantiate()
+	_app = AppFixture.instantiate()
 	root.add_child(_app)
 	await process_frame
 	_press(_button(_screen(), "Play"))
+	await _settle()
+	_press(_button(_screen(), "StartAdventure"))
 	await _settle()
 	_bind()
 	if not _check(_timeline != null and ResourceLoader.exists(LEVEL), "The grove uses an authored level and a run timeline"):

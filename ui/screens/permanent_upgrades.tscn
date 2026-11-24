@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/screens/permanent_upgrades.gd" id="1_screen"]
+[ext_resource type="Script" path="res://ui/components/safe_area.gd" id="2_safe"]
+[ext_resource type="PackedScene" path="res://ui/components/profile_backdrop.tscn" id="3_backdrop"]
+[ext_resource type="PackedScene" path="res://ui/components/profile_balance.tscn" id="4_balance"]
+
+[node name="PermanentUpgrades" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_screen")
+
+[node name="ProfileBackdrop" parent="." instance=ExtResource("3_backdrop")]
+layout_mode = 1
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_safe")
+gutter_override = 24
+
+[node name="Layout" type="VBoxContainer" parent="SafeArea"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Heading" type="Label" parent="SafeArea/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"DisplayLabel"
+theme_override_font_sizes/font_size = 39
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Balance" parent="SafeArea/Layout" instance=ExtResource("4_balance")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="SafeArea/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+scroll_deadzone = 12
+horizontal_scroll_mode = 0
+
+[node name="Body" type="VBoxContainer" parent="SafeArea/Layout/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="Upgrades" type="VBoxContainer" parent="SafeArea/Layout/Scroll/Body"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 13
+
+[node name="PurchaseStatus" type="Label" parent="SafeArea/Layout"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"LightCaption"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Back" type="Button" parent="SafeArea/Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme_type_variation = &"QuietButton"
+mouse_default_cursor_shape = 2
+
+[node name="PurchaseCooldown" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.32
+one_shot = true

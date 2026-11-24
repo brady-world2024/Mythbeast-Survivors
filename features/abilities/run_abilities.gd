@@ -34,6 +34,7 @@ var bolt: WeaponDefinition
 var _definitions: Dictionary[StringName, AbilityDefinition] = {}
 var _ranks: Dictionary[StringName, int] = {}
 var _base_weapon: WeaponDefinition
+var _magic_multiplier := 1.0
 var _aura_cooldown := 0.0
 var _aura_pulse := 0.0
 var _chain_points := PackedVector2Array()
@@ -53,8 +54,9 @@ func _ready() -> void:
 	_update_processing()
 
 
-func set_base_weapon(weapon: WeaponDefinition) -> void:
+func set_base_weapon(weapon: WeaponDefinition, magic_multiplier: float = 1.0) -> void:
 	_base_weapon = weapon
+	_magic_multiplier = magic_multiplier
 	_refresh_bolt()
 	_update_processing()
 
@@ -148,7 +150,7 @@ func _refresh_bolt() -> void:
 		bolt = null
 		return
 	bolt = _base_weapon.duplicate() as WeaponDefinition
-	bolt.damage = maxi(1, _base_weapon.damage + roundi(_value(ARCANE_BOLT, "damage_bonus")))
+	bolt.damage = maxi(1, roundi((_base_weapon.damage + _value(ARCANE_BOLT, "damage_bonus")) * _magic_multiplier))
 	var floor_interval := minf(_base_weapon.attack_interval, _limit(ARCANE_BOLT, "minimum_interval", 0.25))
 	var cooldown_scale := 1.0 - _value(ARCANE_BOLT, "cooldown_percent") * 0.01
 	bolt.attack_interval = maxf(floor_interval, _base_weapon.attack_interval * cooldown_scale)
@@ -178,7 +180,7 @@ func _pulse_aura() -> void:
 	_aura_cooldown = maxf(0.05, _value(FLAME_AURA, "interval", 1.0))
 	_aura_pulse = AURA_PULSE_DURATION
 	var radius := _value(FLAME_AURA, "radius")
-	var damage := roundi(_value(FLAME_AURA, "damage"))
+	var damage := roundi(_value(FLAME_AURA, "damage") * _magic_multiplier)
 	for candidate in get_tree().get_nodes_in_group(ENEMIES):
 		var enemy := candidate as Node2D
 		var health := Targets.living_health(enemy)

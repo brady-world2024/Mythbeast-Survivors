@@ -13,6 +13,7 @@ var move_direction := Vector2.ZERO
 
 var _visual: Node
 var _invulnerability_remaining := 0.0
+var _permanent_speed_multiplier := 1.0
 
 
 func _ready() -> void:
@@ -37,7 +38,13 @@ func receive_damage(amount: int) -> bool:
 
 
 func effective_move_speed() -> float:
-	return abilities.movement_speed(definition.move_speed)
+	return abilities.movement_speed(definition.move_speed * _permanent_speed_multiplier)
+
+
+func initialize_run_bonuses(bonus_hp: int, magic_multiplier: float, speed_multiplier: float) -> void:
+	_permanent_speed_multiplier = speed_multiplier
+	health.configure(definition.max_health + bonus_hp)
+	abilities.set_base_weapon(definition.starting_weapon, magic_multiplier)
 
 
 func play_cast() -> void:

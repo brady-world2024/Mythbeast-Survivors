@@ -4,6 +4,7 @@ extends Node2D
 const EnemyActor = preload("res://features/enemies/enemy_actor.gd")
 const Player = preload("res://features/player/player.gd")
 const WaveDefinition = preload("res://data/definitions/wave_definition.gd")
+const DifficultyDefinition = preload("res://data/definitions/difficulty_definition.gd")
 
 signal spawned(enemy: EnemyActor)
 
@@ -16,6 +17,7 @@ var spawn_interval: float = 1.8
 var max_active: int = 12
 @export_range(40.0, 400.0, 1.0) var minimum_spawn_distance: float = 135.0
 @export var spawn_seed: int = 0
+var difficulty: DifficultyDefinition
 
 var _wave: WaveDefinition
 var _player: Player
@@ -41,7 +43,7 @@ func use_wave(wave: WaveDefinition) -> void:
 	if _wave == null:
 		stop()
 		return
-	spawn_interval = _wave.spawn_interval
+	spawn_interval = _wave.spawn_interval * (difficulty.spawn_interval_multiplier if difficulty != null else 1.0)
 	max_active = _wave.max_active
 	_time_until_spawn = minf(_time_until_spawn, spawn_interval)
 
@@ -108,7 +110,11 @@ func _physics_process(delta: float) -> void:
 		return
 	enemy.position = _entities.to_local(position_in_world)
 	enemy.target = _player
-	enemy.configure_spawn(_wave.health_multiplier, _wave.speed_multiplier, _wave.damage_multiplier)
+	var hp_scale := difficulty.enemy_hp_multiplier if difficulty != null else 1.0
+	var speed_scale := difficulty.enemy_speed_multiplier if difficulty != null else 1.0
+	var damage_scale := difficulty.enemy_damage_multiplier if difficulty != null else 1.0
+	enemy.configure_spawn(_wave.health_multiplier * hp_scale, _wave.speed_multiplier * speed_scale,
+		_wave.damage_multiplier * damage_scale)
 	_entities.add_child(enemy)
 	_active.append(enemy)
 	spawned.emit(enemy)

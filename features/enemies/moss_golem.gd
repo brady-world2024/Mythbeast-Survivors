@@ -62,10 +62,13 @@ func _animate(delta: float) -> void:
 	_body.scale = Vector2.ONE
 	if _stage == AttackStage.WIND_UP:
 		var lift := 1.0 - _stage_remaining / definition.attack_windup
-		_body.position.y = -4.0 - lift * 12.0
-		_body.scale = Vector2(0.95, 1.07)
+		_body.position.y = -4.0 - lift * lift * 12.0
+		_body.rotation *= 1.0 - lift
+		_body.scale = Vector2.ONE.lerp(Vector2(0.95, 1.09), lift)
 	elif _impact_remaining > 0.0:
-		_body.scale = Vector2.ONE.lerp(Vector2(1.13, 0.88), _impact_remaining / IMPACT_SECONDS)
+		var impact := _impact_remaining / IMPACT_SECONDS
+		_body.position.y = 3.0 * impact
+		_body.scale = Vector2.ONE.lerp(Vector2(1.15, 0.85), impact)
 
 
 func _draw() -> void:
@@ -78,10 +81,15 @@ func _draw() -> void:
 		draw_circle(Vector2.ZERO, radius, Color(WARNING_COLOR, 0.12))
 		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 40, Color(WARNING_COLOR, 0.8), 3.0, true)
 		draw_arc(Vector2.ZERO, radius - 6.0, -PI / 2.0, -PI / 2.0 + TAU * progress, 32, IMPACT_COLOR, 4.0, true)
+		for index in range(4):
+			var direction := Vector2.from_angle(index * PI / 2.0)
+			draw_line(direction * (radius - 12.0), direction * (radius - 4.0), Color(WARNING_COLOR, 0.88), 2.5, true)
 	elif _impact_remaining > 0.0:
 		var fade := _impact_remaining / IMPACT_SECONDS
 		var impact_radius := lerpf(radius, radius * 0.32, fade)
 		draw_arc(Vector2.ZERO, impact_radius, 0.0, TAU, 32, Color(IMPACT_COLOR, fade), 4.0, true)
+		if Comfort.reduced_effects:
+			return
 		for index in range(7):
 			var direction := Vector2.from_angle(index * TAU / 7.0)
 			draw_line(direction * impact_radius, direction * (impact_radius + 9.0), Color(IMPACT_COLOR, fade), 2.0, true)

@@ -5,6 +5,8 @@ const AbilityDefinition = preload("res://data/definitions/ability_definition.gd"
 const WeaponDefinition = preload("res://data/definitions/weapon_definition.gd")
 const Health = preload("res://features/combat/health.gd")
 const Targets = preload("res://features/combat/combat_targets.gd")
+const Comfort = preload("res://features/presentation/comfort.gd")
+const Feedback = preload("res://features/presentation/feedback.gd")
 
 const ARCANE_BOLT := &"arcane_bolt"
 const CHAIN_LIGHTNING := &"chain_lightning"
@@ -16,6 +18,7 @@ const ENEMIES := &"combat_enemies"
 const CHAIN_DURATION := 0.24
 const GAIN_DURATION := 0.55
 const AURA_PULSE_DURATION := 0.27
+const SHIELD_DURATION := 0.24
 
 @export var catalog: Array[AbilityDefinition] = [
 	preload("res://data/abilities/arcane_bolt.tres"),
@@ -26,7 +29,7 @@ const AURA_PULSE_DURATION := 0.27
 	preload("res://data/abilities/iron_guard.tres"),
 ]
 
-@onready var _hero: Node2D = get_parent()
+@onready var _hero: CharacterBody2D = get_parent()
 @onready var _health: Health = _hero.get_node("Health")
 
 var bolt: WeaponDefinition
@@ -41,6 +44,8 @@ var _chain_points := PackedVector2Array()
 var _chain_remaining := 0.0
 var _gain_color := Color.WHITE
 var _gain_remaining := 0.0
+var _shield_remaining := 0.0
+var _wind := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -121,6 +126,13 @@ func damage_after_guard(incoming: int) -> int:
 	return maxi(1, incoming - blocked)
 
 
+func play_guard_block() -> void:
+	_shield_remaining = SHIELD_DURATION
+	Feedback.sound(self, &"guard")
+	_update_processing()
+	queue_redraw()
+
+
 func on_bolt_hit(enemy: Node2D, origin: Vector2, bolt_damage: int) -> void:
 	if not _health.is_alive():
 		return
@@ -129,20 +141,28 @@ func on_bolt_hit(enemy: Node2D, origin: Vector2, bolt_damage: int) -> void:
 		var duration := _value(FROST_TOUCH, "duration")
 		var minimum_speed := _limit(FROST_TOUCH, "minimum_speed_percent", 40.0) * 0.01
 		enemy.call(&"apply_slow", slow, duration, minimum_speed)
+		Feedback.sound(self, &"frost")
 	if rank_of(CHAIN_LIGHTNING) > 0:
 		_chain(origin, enemy, bolt_damage)
 
 
 func _physics_process(delta: float) -> void:
+	var had_accent := _chain_remaining > 0.0 or _gain_remaining > 0.0 \
+		or _shield_remaining > 0.0 or _aura_pulse > 0.0
+	var previous_wind := _wind
 	_chain_remaining = move_toward(_chain_remaining, 0.0, delta)
 	_gain_remaining = move_toward(_gain_remaining, 0.0, delta)
+	_shield_remaining = move_toward(_shield_remaining, 0.0, delta)
 	_aura_pulse = move_toward(_aura_pulse, 0.0, delta)
+	if _show_wind():
+		_wind = _wind.move_toward((_hero.velocity / 240.0).limit_length(), delta * 10.0)
 	if rank_of(FLAME_AURA) > 0:
 		_aura_cooldown = move_toward(_aura_cooldown, 0.0, delta)
 		if _aura_cooldown == 0.0:
 			_pulse_aura()
 	_update_processing()
-	queue_redraw()
+	if had_accent or _aura_pulse > 0.0 or previous_wind != _wind:
+		queue_redraw()
 
 
 func _refresh_bolt() -> void:
@@ -172,6 +192,7 @@ func _chain(origin: Vector2, first_enemy: Node2D, bolt_damage: int) -> void:
 	if points.size() > 1:
 		_chain_points = points
 		_chain_remaining = CHAIN_DURATION
+		Feedback.sound(self, &"chain")
 		_update_processing()
 		queue_redraw()
 
@@ -181,11 +202,15 @@ func _pulse_aura() -> void:
 	_aura_pulse = AURA_PULSE_DURATION
 	var radius := _value(FLAME_AURA, "radius")
 	var damage := roundi(_value(FLAME_AURA, "damage") * _magic_multiplier)
+	var landed := false
 	for candidate in get_tree().get_nodes_in_group(ENEMIES):
 		var enemy := candidate as Node2D
 		var health := Targets.living_health(enemy)
 		if health != null and global_position.distance_squared_to(enemy.global_position) <= radius * radius:
 			health.damage(damage)
+			landed = true
+	if landed:
+		Feedback.sound(self, &"flame")
 
 
 func _show_gain(color: Color) -> void:
@@ -197,6 +222,8 @@ func _clear_effects() -> void:
 	_chain_points.clear()
 	_chain_remaining = 0.0
 	_gain_remaining = 0.0
+	_shield_remaining = 0.0
+	_wind = Vector2.ZERO
 	_aura_pulse = 0.0
 	_update_processing()
 	queue_redraw()
@@ -204,8 +231,13 @@ func _clear_effects() -> void:
 
 func _update_processing() -> void:
 	set_physics_process(
-		_health.is_alive() and (rank_of(FLAME_AURA) > 0 or _chain_remaining > 0.0 or _gain_remaining > 0.0)
+		_health.is_alive() and (rank_of(FLAME_AURA) > 0 or _chain_remaining > 0.0
+			or _gain_remaining > 0.0 or _shield_remaining > 0.0 or _show_wind())
 	)
+
+
+func _show_wind() -> bool:
+	return not Comfort.reduced_effects and rank_of(SWIFT_STEPS) > 0
 
 
 func _max_rank(definition: AbilityDefinition) -> int:
@@ -231,16 +263,24 @@ func _draw() -> void:
 		_draw_chain()
 	if _gain_remaining > 0.0:
 		_draw_gain()
+	if _shield_remaining > 0.0:
+		_draw_shield()
+	if _show_wind() and _wind.length_squared() > 0.02:
+		_draw_wind()
 
 
 func _draw_aura() -> void:
 	var radius := _value(FLAME_AURA, "radius")
 	var pulse := _aura_pulse / AURA_PULSE_DURATION
-	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(1.0, 0.53, 0.22, 0.18 + 0.33 * pulse), 6.0, true)
 	draw_arc(Vector2.ZERO, radius - 1.0, 0.0, TAU, 48, Color(1.0, 0.85, 0.43, 0.37 + 0.4 * pulse), 2.0, true)
+	if Comfort.reduced_effects:
+		return
+	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(1.0, 0.53, 0.22, 0.18 + 0.33 * pulse), 6.0, true)
 	for index in range(8):
-		var spot := Vector2.from_angle(index * TAU / 8.0) * (radius - 3.0)
-		draw_circle(spot, 2.2 + 2.0 * pulse, Color(1.0, 0.72, 0.36, 0.46 + 0.43 * pulse), true, -1.0, true)
+		var radial := Vector2.from_angle(index * TAU / 8.0)
+		var spot := radial * (radius - 4.0)
+		draw_line(spot - radial * (6.0 + pulse * 6.0), spot, Color(1.0, 0.64, 0.29, 0.43 + 0.33 * pulse), 3.0, true)
+		draw_circle(spot, 2.5 + pulse, Color(1.0, 0.84, 0.53, 0.52 + 0.42 * pulse), true, -1.0, true)
 
 
 func _draw_chain() -> void:
@@ -250,7 +290,9 @@ func _draw_chain() -> void:
 		var end := to_local(_chain_points[index + 1]) + Vector2(0.0, -28.0)
 		var offset := (end - start).normalized().orthogonal() * 7.0
 		var path := PackedVector2Array([start, start.lerp(end, 0.3) + offset, start.lerp(end, 0.65) - offset, end])
-		draw_polyline(path, Color(0.44, 0.47, 1.0, 0.34 * fade), 8.0, true)
+		if not Comfort.reduced_effects:
+			draw_polyline(path, Color(0.44, 0.47, 1.0, 0.34 * fade), 8.0, true)
+			draw_line(end - Vector2(0, 8), end + Vector2(0, 8), Color(0.82, 0.9, 1.0, fade), 2.0, true)
 		draw_polyline(path, Color(0.79, 0.88, 1.0, fade), 3.3, true)
 		draw_circle(end, 6.0 * fade, Color(0.8, 0.9, 1.0, fade), true, -1.0, true)
 
@@ -259,6 +301,26 @@ func _draw_gain() -> void:
 	var fade := _gain_remaining / GAIN_DURATION
 	var radius := lerpf(64.0, 28.0, fade)
 	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 32, Color(_gain_color, 0.7 * fade), 3.2, true)
+	if Comfort.reduced_effects:
+		return
 	for index in range(6):
 		var spot := Vector2.from_angle(index * TAU / 6.0) * radius + Vector2(0.0, -16.0)
 		draw_circle(spot, 3.8 * fade, Color(_gain_color, fade), true, -1.0, true)
+
+
+func _draw_shield() -> void:
+	var fade := _shield_remaining / SHIELD_DURATION
+	var origin := Vector2(0, -28)
+	var shield := PackedVector2Array([Vector2(-32, -22), Vector2(0, -33), Vector2(32, -22),
+		Vector2(27, 13), Vector2(0, 29), Vector2(-27, 13), Vector2(-32, -22)])
+	for index in shield.size():
+		shield[index] = origin + shield[index] * (1.0 + 0.12 * (1.0 - fade))
+	draw_polyline(shield, Color(1.0, 0.84, 0.51, fade * 0.8), 3.0, true)
+
+
+func _draw_wind() -> void:
+	var trail := -_wind.normalized()
+	var side := trail.orthogonal()
+	for index: float in [-1.0, 1.0]:
+		var anchor := trail * 18.0 + side * index * 13.0
+		draw_line(anchor, anchor + trail * 23.0, Color(0.68, 0.94, 0.66, _wind.length() * 0.63), 3.0, true)

@@ -1,6 +1,7 @@
 extends Control
 ## A small number of drifting lights in the forest illustration's reference space.
 
+const Comfort = preload("res://features/presentation/comfort.gd")
 const REFERENCE_SIZE := Vector2(540.0, 960.0)
 const UPDATE_INTERVAL := 1.0 / 24.0
 const MOTE_COLOR := Color(0.99, 0.90, 0.64)
@@ -15,6 +16,10 @@ var _elapsed := 0.0
 var _time_since_draw := 0.0
 
 
+func _ready() -> void:
+	set_process(not Comfort.reduced_effects)
+
+
 func _process(delta: float) -> void:
 	_elapsed += delta
 	_time_since_draw += delta
@@ -24,6 +29,8 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
+	if Comfort.reduced_effects:
+		return
 	var cover := maxf(size.x / REFERENCE_SIZE.x, size.y / REFERENCE_SIZE.y)
 	var image_offset := (size - REFERENCE_SIZE * cover) * 0.5
 	for index in MOTES.size():

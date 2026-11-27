@@ -33,7 +33,10 @@ func receive_damage(amount: int) -> bool:
 	if amount <= 0 or not health.is_alive() or _invulnerability_remaining > 0.0:
 		return false
 	_invulnerability_remaining = definition.damage_invulnerability
-	health.damage(abilities.damage_after_guard(amount))
+	var damage := abilities.damage_after_guard(amount)
+	if damage < amount:
+		abilities.play_guard_block()
+	health.damage(damage)
 	return true
 
 
@@ -50,6 +53,12 @@ func initialize_run_bonuses(bonus_hp: int, magic_multiplier: float, speed_multip
 func play_cast() -> void:
 	if is_instance_valid(_visual) and _visual.has_method(&"play_cast"):
 		_visual.call(&"play_cast")
+
+
+func play_result(victory: bool) -> void:
+	var pose := &"play_victory" if victory else &"play_defeat"
+	if is_instance_valid(_visual) and _visual.has_method(pose):
+		_visual.call(pose)
 
 
 func _physics_process(delta: float) -> void:

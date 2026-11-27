@@ -67,8 +67,13 @@ func _draw() -> void:
 	var gold := get_theme_color(&"warm_gold", &"GrovePalette")
 	var pine := get_theme_color(&"pine", &"GrovePalette")
 	var thumb := _ring_center + direction * THUMB_TRAVEL
-	draw_circle(_ring_center, RING_RADIUS, Color(pine, 0.46), true, -1.0, true)
-	draw_circle(_ring_center, RING_RADIUS, Color(cream, 0.55), false, 2.0, true)
+	draw_circle(_ring_center, RING_RADIUS, Color(pine, 0.49), true, -1.0, true)
+	draw_circle(_ring_center, RING_RADIUS, Color(pine, 0.83), false, 4.0, true)
+	draw_circle(_ring_center, RING_RADIUS - 2.0, Color(cream, 0.81), false, 2.0, true)
+	for axis: Vector2 in [Vector2.UP, Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT]:
+		draw_line(_ring_center + axis * (RING_RADIUS - 11.0),
+			_ring_center + axis * (RING_RADIUS - 5.0), Color(cream, 0.76), 2.0, true)
+	draw_line(_ring_center, thumb, Color(gold, 0.72), 3.0, true)
 	draw_circle(thumb + Vector2(0.0, 2.0), THUMB_RADIUS, Color(pine, 0.56), true, -1.0, true)
-	draw_circle(thumb, THUMB_RADIUS, Color(gold, 0.88), true, -1.0, true)
-	draw_circle(thumb, THUMB_RADIUS, Color(cream, 0.67), false, 2.0, true)
+	draw_circle(thumb, THUMB_RADIUS, Color(gold, 0.95), true, -1.0, true)
+	draw_circle(thumb, THUMB_RADIUS, Color(cream, 0.88), false, 2.0, true)

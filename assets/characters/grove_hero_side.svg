@@ -38,5 +38,6 @@
     <path d="M7 -56Q14 -52 22 -57" fill="none" stroke="#78618f" stroke-width="3.2"/>
     <path d="M14 -53Q16 -60 23 -59Q26 -52 20 -47Q16 -46 14 -53Z" fill="#b7c992" stroke="#5b6753" stroke-width="1.8"/>
     <path d="M18 -50L21 -55" fill="none" stroke="#e6e9b5" stroke-width="1.5"/>
+    <path d="M-44 -23l4 2m3 1 4 1m3 1 4 1m3 1 4 1" fill="none" stroke="#fff0d3" stroke-width="1.7" opacity=".8"/>
   </g>
 </svg>

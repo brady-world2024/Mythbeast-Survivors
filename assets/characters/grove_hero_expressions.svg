@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="280" height="116" viewBox="-35 -116 140 58">
+  <defs>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#fff0ca"/><stop offset="1" stop-color="#f6c89c"/>
+    </linearGradient>
+    <g id="face">
+      <path d="M-33 -84C-29 -101 -18 -112 -1 -113C15 -113 28 -104 34 -86C37 -68 17 -61 1 -62C-16 -61 -33 -69 -33 -84Z" fill="url(#skin)" stroke="#835744" stroke-width="2"/>
+      <path d="M-31 -88Q-27 -108 -8 -113Q12 -119 29 -98Q19 -96 5 -104Q6 -99 11 -96Q-5 -96 -15 -106Q-21 -95 -31 -88Z" fill="#8a6650"/>
+      <path d="M-28 -101Q-22 -109 -13 -110M-5 -111Q8 -114 19 -105" fill="none" stroke="#c19a70" stroke-width="1.6"/>
+      <ellipse cx="-24" cy="-74" rx="5.8" ry="2.7" fill="#e89f94" opacity=".72"/>
+      <ellipse cx="24" cy="-74" rx="5.8" ry="2.7" fill="#e89f94" opacity=".72"/>
+    </g>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <use xlink:href="#face"/>
+    <path d="M-21 -84q6 6 12 0m18 0q6 6 12 0" fill="none" stroke="#684c43" stroke-width="2.8"/>
+    <path d="M-3 -73q3-3 6 0" fill="none" stroke="#995f57" stroke-width="1.8"/>
+    <g transform="translate(70 0)">
+      <use xlink:href="#face"/>
+      <path d="M-21 -83q6-9 12 0m18 0q6-9 12 0" fill="none" stroke="#493f40" stroke-width="2.8"/>
+      <path d="M-7 -77q7 3 14 0-2 9-7 9-5 0-7-9Z" fill="#995f57"/>
+      <path d="M-3 -71q3-2 6 0-3 3-6 0Z" fill="#f3b598"/>
+    </g>
+  </g>
+</svg>

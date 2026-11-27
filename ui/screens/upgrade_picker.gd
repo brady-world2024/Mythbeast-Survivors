@@ -3,6 +3,7 @@ extends Control
 signal selected(id: StringName)
 
 const English = preload("res://data/localization/english.gd")
+const Comfort = preload("res://features/presentation/comfort.gd")
 const UpgradeCard = preload("res://ui/components/upgrade_card.gd")
 const PANEL_WIDTH := 476.0
 
@@ -67,6 +68,9 @@ func _resize_panel() -> void:
 func _animate_entrance() -> void:
 	if _entrance != null:
 		_entrance.kill()
+	if Comfort.reduced_effects:
+		_panel.modulate.a = 1.0
+		return
 	_panel.modulate.a = 0.0
 	_entrance = create_tween()
 	_entrance.tween_property(_panel, "modulate:a", 1.0, 0.20).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)

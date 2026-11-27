@@ -111,13 +111,13 @@ mouse_filter = 2
 [node name="LevelCaption" type="Label" parent="SafeArea/Stack/Vitals/Columns/Run"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"CaptionLabel"
+theme_type_variation = &"HudReadout"
 horizontal_alignment = 2
 
 [node name="TimerCaption" type="Label" parent="SafeArea/Stack/Vitals/Columns/Run"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"CaptionLabel"
+theme_type_variation = &"HudReadout"
 horizontal_alignment = 2
 
 [node name="BossVitals" type="PanelContainer" parent="SafeArea/Stack"]
@@ -145,7 +145,7 @@ theme_type_variation = &"CaptionLabel"
 [node name="BossPhase" type="Label" parent="SafeArea/Stack/BossVitals/Content/Names"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"CaptionLabel"
+theme_type_variation = &"HudReadout"
 
 [node name="Readout" type="HBoxContainer" parent="SafeArea/Stack/BossVitals/Content"]
 layout_mode = 2
@@ -164,7 +164,7 @@ mouse_filter = 2
 [node name="BossHealthValue" type="Label" parent="SafeArea/Stack/BossVitals/Content/Readout"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"CaptionLabel"
+theme_type_variation = &"HudReadout"
 
 [node name="BossWarning" type="PanelContainer" parent="SafeArea/Stack"]
 unique_name_in_owner = true

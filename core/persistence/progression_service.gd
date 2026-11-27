@@ -196,18 +196,22 @@ func audio_settings() -> Dictionary:
 
 
 func set_audio(music: float, sfx: float) -> bool:
+	return set_settings(music, sfx, _snapshot.settings.reduced_effects)
+
+
+func set_settings(music: float, sfx: float, reduced_effects: bool) -> bool:
 	if not is_finite(music) or not is_finite(sfx) or music < 0.0 or music > 1.0 or sfx < 0.0 or sfx > 1.0:
 		return false
 	if is_equal_approx(float(_snapshot.settings.music_volume), music) \
-		and is_equal_approx(float(_snapshot.settings.sfx_volume), sfx):
+		and is_equal_approx(float(_snapshot.settings.sfx_volume), sfx) \
+		and _snapshot.settings.reduced_effects == reduced_effects:
 		return true
 
 	var next := _snapshot.duplicate(true)
 	next.settings.music_volume = music
 	next.settings.sfx_volume = sfx
-	if not _save(next):
-		return false
-	return true
+	next.settings.reduced_effects = reduced_effects
+	return _save(next)
 
 
 func _requirements_met(stage_id: StringName, difficulty_id: StringName) -> bool:

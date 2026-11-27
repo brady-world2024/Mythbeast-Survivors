@@ -4,6 +4,8 @@ signal enemy_hit(enemy: Node2D, origin: Vector2, damage: int)
 
 const Targets = preload("res://features/combat/combat_targets.gd")
 const WeaponDefinition = preload("res://data/definitions/weapon_definition.gd")
+const Comfort = preload("res://features/presentation/comfort.gd")
+const Feedback = preload("res://features/presentation/feedback.gd")
 
 const IMPACT_DURATION := 0.18
 const VISUAL_HEIGHT := Vector2(0, -30)
@@ -55,6 +57,7 @@ func _impact(collider: Node) -> void:
 	velocity = Vector2.ZERO
 	_impact_remaining = IMPACT_DURATION
 	queue_redraw()
+	Feedback.sound(self, &"bolt_impact")
 
 	var enemy := collider as Node2D
 	if enemy == null or not enemy.is_in_group(&"combat_enemies"):
@@ -72,8 +75,9 @@ func _draw() -> void:
 		return
 	var trail := VISUAL_HEIGHT - velocity.normalized() * 24.0
 	draw_line(trail, VISUAL_HEIGHT, Color(LAVENDER, 0.42), 8.0, true)
-	draw_line(trail.lerp(VISUAL_HEIGHT, 0.5), VISUAL_HEIGHT, Color(VIOLET, 0.62), 3.0, true)
-	draw_circle(VISUAL_HEIGHT, 15.0 * _visual_scale, Color(LAVENDER, 0.3), true, -1.0, true)
+	if not Comfort.reduced_effects:
+		draw_line(trail.lerp(VISUAL_HEIGHT, 0.5), VISUAL_HEIGHT, Color(VIOLET, 0.62), 3.0, true)
+		draw_circle(VISUAL_HEIGHT, 15.0 * _visual_scale, Color(LAVENDER, 0.3), true, -1.0, true)
 	draw_circle(VISUAL_HEIGHT, 9.0 * _visual_scale, VIOLET, true, -1.0, true)
 	draw_circle(VISUAL_HEIGHT, 6.0 * _visual_scale, LAVENDER, true, -1.0, true)
 	draw_circle(VISUAL_HEIGHT + Vector2(-2, -2), 3.0, PALE_GOLD, true, -1.0, true)
@@ -84,6 +88,8 @@ func _draw_impact() -> void:
 	var spread := lerpf(24.0, 8.0, fade) * _visual_scale
 	draw_arc(VISUAL_HEIGHT, spread, 0.0, TAU, 24, Color(LAVENDER, fade), 3.0, true)
 	draw_circle(VISUAL_HEIGHT, 9.0, Color(PALE_GOLD, fade), true, -1.0, true)
+	if Comfort.reduced_effects:
+		return
 	for spark in range(4):
 		var direction := Vector2.from_angle(spark * TAU / 4.0 + 0.45)
 		var point := VISUAL_HEIGHT + direction * spread

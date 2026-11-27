@@ -13,6 +13,8 @@
     <path d="M62 130q-5-10 3-13 11-3 13 10m16 2q0-11 9-13 8-2 10 11" fill="none" stroke="#aa683f" stroke-width="4"/>
     <path d="M31 67Q23 40 34 14q20 7 35 27 13-4 28 0 13-23 38-24 8 24-1 53 11 19-1 36-17 18-49 19-37 0-55-19Q16 88 31 67z" fill="url(#fur)" stroke-width="6"/>
     <path d="M37 53q-4-16 1-28 13 6 23 19-12 1-24 9zm66-9q10-16 25-18 5 14-1 31-9-9-24-13z" fill="#f9b5aa" stroke="none"/>
+    <path d="M43 34q-1 7 0 12m79-13q0 7-2 11m-62 8q14-9 31-5" fill="none" stroke="#ffe1af" stroke-width="3" opacity=".92"/>
+    <path d="M77 56q7-4 14 0l-7 9Z" fill="#d57b59" stroke="none"/>
     <path d="M31 88q12-13 26-1 14 13 25 9 13 5 29-8 12-9 25 1-2 25-52 30-39 0-53-19z" fill="#ffe9c6" stroke="none"/>
     <path d="M56 75q5-5 11-4m32 1q7-2 12 4" fill="none" stroke="#a3654e" stroke-width="4"/>
     <ellipse cx="57" cy="87" rx="6.5" ry="8" fill="#553b41" stroke="none"/>

@@ -78,19 +78,40 @@ func _lunge(delta: float) -> void:
 
 
 func _animate(delta: float) -> void:
-	_stride += delta * (3.0 if velocity.is_zero_approx() else 16.0)
+	var moving := not velocity.is_zero_approx()
+	_stride += delta * (16.0 if moving else 3.0)
 	var bounce := absf(sin(_stride))
-	_body.position.y = -bounce * (2.0 if velocity.is_zero_approx() else 7.0)
-	_body.scale = Vector2(1.04, 0.83) if _stage == AttackStage.WIND_UP else Vector2.ONE
-	if _stage == AttackStage.LUNGE:
-		_body.position.y = -8.0
-		_body.scale = Vector2(1.12, 0.92)
+	_body.position.y = -bounce * (7.0 if moving else 2.0)
+	_body.rotation = sin(_stride) * (0.065 if moving else 0.018)
+	_body.scale = Vector2.ONE
+	match _stage:
+		AttackStage.WIND_UP:
+			var crouch := 1.0 - _stage_remaining / definition.attack_windup
+			_body.position.y = lerpf(0.0, 4.0, crouch)
+			_body.scale = Vector2.ONE.lerp(Vector2(1.12, 0.77), crouch)
+			_body.rotation = -_aim.x * crouch * 0.10
+		AttackStage.LUNGE:
+			_body.position.y = -8.0
+			_body.scale = Vector2(1.12, 0.92)
+			_body.rotation = _aim.x * 0.18
+		AttackStage.RECOVER:
+			var recovery := _stage_remaining / definition.attack_recovery
+			_body.position.y *= 1.0 - recovery
+			_body.scale = Vector2.ONE.lerp(Vector2(1.12, 0.86), recovery)
 	_shadow.scale = Vector2.ONE * (1.0 - 0.07 * bounce)
 
 
 func _draw() -> void:
 	super._draw()
-	if not health.is_alive() or _stage != AttackStage.WIND_UP:
+	if not health.is_alive():
+		return
+	if _stage == AttackStage.LUNGE and not Comfort.reduced_effects:
+		var across := _aim.orthogonal() * 11.0
+		for offset: Vector2 in [across, -across]:
+			var tail := offset - _aim * 28.0
+			draw_line(tail, tail - _aim * 20.0, Color(IMPACT_COLOR, 0.68), 2.5, true)
+		return
+	if _stage != AttackStage.WIND_UP:
 		return
 	var distance := definition.lunge_speed * definition.lunge_duration
 	var across := _aim.orthogonal()

@@ -18,6 +18,9 @@
     <path d="M47 69q10-31 48-32 47-9 68 20 11 13 10 34 0 25-30 36l-63 3q-35-5-42-27-5-17 9-34z" fill="url(#stone)" stroke-width="7"/>
     <path d="M47 76q13-34 46-38 50-9 68 22 7 8 8 12-16-4-25 3-10 9-22 3-8-6-19 1-14 11-26 3-15-8-30-6z" fill="url(#moss)" stroke-width="5"/>
     <path d="M104 40q-12-18-6-27 13 0 17 15 6-13 18-12 1 13-16 26" fill="#a5c574" stroke-width="5"/>
+    <path d="M59 67q8-15 27-19m37-3q18 2 31 14" fill="none" stroke="#e4e8ae" stroke-width="4" opacity=".88"/>
+    <path d="M64 150l8 5-7 7m82-14-7 5 4 6" fill="none" stroke="#56776a" stroke-width="3"/>
+    <path d="M105 143l8 8-8 10-8-10Z" fill="#afc993" stroke="#62856e" stroke-width="3"/>
     <path d="M54 87q7 4 11 12m79-13-5 8 7 3" fill="none" stroke="#84998d" stroke-width="4"/>
     <path d="M23 135l8-7m151 1l8 8m-88 27l7-7" fill="none" stroke="#789384" stroke-width="4"/>
     <path d="M70 93q6-5 12-4m45 1q6-1 13 4" fill="none" stroke="#5d7464" stroke-width="4"/>

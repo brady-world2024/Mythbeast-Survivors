@@ -10,10 +10,10 @@ Getting started
   In the Godot Project Manager, import project.godot from this directory.
   Press F5, select Play, and start Whispering Grove on Normal.
 
-  The main menu opens Permanent Upgrades, Settings, and Credits. Audio
-  settings save locally. Move with WASD or the
-  arrow keys on desktop. On a touchscreen, press and drag below the HUD.
-  Release to stop. Use Pause or Esc to open the pause menu.
+  The main menu opens Permanent Upgrades, Settings, and Credits. Settings
+  saves music, sound effects, and Reduced Effects on this device. Move
+  with WASD or the arrow keys on desktop. On a touchscreen, press and
+  drag below the HUD. Release to stop. Use Pause or Esc to pause.
 
 Whispering Grove
 
@@ -24,9 +24,14 @@ Whispering Grove
   stomp or the charge lane before the warning resolves. Play Again starts a
   fresh run after victory, and Try Again restarts after defeat.
 
+  Enemy silhouettes, color-coded ability effects, and short damage numbers
+  help you read the fight. The Grove and its boss have separate music.
+  Reduced Effects limits extra particles, damage accents, and camera motion
+  while keeping attack warnings and ability areas visible.
+
   Victories and qualifying defeats earn Star Essence. Spend it on permanent
   health, magic damage, or movement upgrades. Clearing Normal unlocks Hard.
-  The local save keeps your progress, records, and audio settings. Crystal
+  The local save keeps your progress, records, and settings. Crystal
   Caverns is shown as Coming Soon.
 
   Android and iOS export configuration and device testing are also ahead.
@@ -49,9 +54,10 @@ Development checks
     bash scripts/test-godot.sh
 
   The required gate runs a curated set of startup, navigation, movement,
-  combat, progression, survival, and persistent replay checks. The second
-  also covers save recovery, purchases, and failure handling. Both isolate
-  their test profiles from the player's save.
+  combat, progression, survival, persistent replay, and combat feedback
+  checks. The second runs every smoke suite, including audio, touch layout,
+  save recovery, and purchase failure handling. Both isolate test profiles
+  from the player's save.
   Add critical regressions to the gate when related behavior changes.
 
 Engine attribution

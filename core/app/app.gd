@@ -3,7 +3,9 @@ extends Node
 enum Screen { MENU, SETTINGS, CREDITS, STAGES, UPGRADES, GROVE }
 
 const ProgressionService = preload("res://core/persistence/progression_service.gd")
-const AUDIO_DRAIN_SECONDS := 0.1
+const AudioFeedback = preload("res://core/audio/audio_feedback.gd")
+const Comfort = preload("res://features/presentation/comfort.gd")
+const AUDIO_DRAIN_MS := 120
 const SCREEN_PATHS: Dictionary[Screen, String] = {
 	Screen.MENU: "res://ui/screens/main_menu.tscn",
 	Screen.SETTINGS: "res://ui/screens/settings_screen.tscn",
@@ -16,7 +18,7 @@ const SCREEN_PATHS: Dictionary[Screen, String] = {
 
 @onready var _host: Node = $ScreenHost
 @onready var _music: AudioStreamPlayer = $Music
-@onready var _tap: AudioStreamPlayer = $Tap
+@onready var _audio_feedback: AudioFeedback = $AudioFeedback
 
 var service: ProgressionService
 
@@ -31,9 +33,8 @@ var _quitting := false
 func _ready() -> void:
 	service = ProgressionService.new(save_path)
 	_restore_saved_audio()
+	_audio_feedback.configure(_music, _audio_enabled)
 	_show_screen(Screen.MENU)
-	if _audio_enabled:
-		_music.play()
 
 
 func _notification(what: int) -> void:
@@ -44,6 +45,9 @@ func _notification(what: int) -> void:
 			request_quit()
 		NOTIFICATION_APPLICATION_PAUSED:
 			_flush_settings()
+			_audio_feedback.set_backgrounded(true)
+		NOTIFICATION_APPLICATION_RESUMED:
+			_audio_feedback.set_backgrounded(false)
 		NOTIFICATION_WM_GO_BACK_REQUEST:
 			match _active_route:
 				Screen.MENU:
@@ -58,10 +62,11 @@ func request_quit(exit_code: int = 0) -> void:
 	_quitting = true
 	_flush_settings()
 	if _audio_enabled:
-		_music.stop()
-		_tap.stop()
-		# Playback stops on the audio mixer, so give it time to release its streams.
-		await get_tree().create_timer(AUDIO_DRAIN_SECONDS).timeout
+		_audio_feedback.stop()
+		# Native mixer work runs on wall time even during fixed-rate QA runs.
+		var drain_until := Time.get_ticks_msec() + AUDIO_DRAIN_MS
+		while Time.get_ticks_msec() < drain_until:
+			await get_tree().process_frame
 	get_tree().quit(exit_code)
 
 
@@ -93,6 +98,7 @@ func _start_run(stage: StringName, difficulty: StringName) -> bool:
 	_active_stage = stage
 	_active_difficulty = difficulty
 	_replace_screen(next, Screen.GROVE)
+	_audio_feedback.play_cue(&"confirm")
 	return true
 
 
@@ -138,12 +144,14 @@ func _replace_screen(next: Node, destination: Screen) -> void:
 	_screen = next
 	_active_route = destination
 	_host.add_child(_screen)
+	_audio_feedback.enter_scene(&"grove" if destination == Screen.GROVE else &"menu")
 	if not settings_saved and destination == Screen.MENU:
 		_screen.call(&"show_settings_error")
 	if _audio_enabled:
+		var source_id := _screen.get_instance_id()
 		for node in _screen.find_children("*", "Button", true, false):
 			var button := node as Button
-			button.pressed.connect(_play_tap)
+			button.pressed.connect(_play_tap.bind(destination, source_id))
 
 
 func _flush_settings() -> bool:
@@ -154,6 +162,7 @@ func _flush_settings() -> bool:
 
 func _restore_saved_audio() -> void:
 	var settings := service.audio_settings()
+	Comfort.reduced_effects = bool(settings.get("reduced_effects", false))
 	_apply_sound(&"Music", float(settings["music_volume"]))
 	_apply_sound(&"SFX", float(settings["sfx_volume"]))
 
@@ -167,6 +176,6 @@ func _apply_sound(bus_name: StringName, gain: float) -> void:
 	AudioServer.set_bus_mute(bus, gain <= 0.0)
 
 
-func _play_tap() -> void:
-	if not _quitting:
-		_tap.play()
+func _play_tap(route: Screen, source_id: int) -> void:
+	if not _quitting and _is_current(route, source_id):
+		_audio_feedback.play_cue(&"tap")

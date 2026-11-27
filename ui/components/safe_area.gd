@@ -28,11 +28,15 @@ func _mobile_insets() -> Vector4:
 	if not OS.has_feature("mobile"):
 		return Vector4.ZERO
 	var window := get_window()
-	var window_rect := Rect2i(window.position, window.size)
-	var safe_rect := window_rect.intersection(DisplayServer.get_display_safe_area())
+	return layout_insets(Rect2i(window.position, window.size), DisplayServer.get_display_safe_area(),
+		get_viewport().get_visible_rect().size)
+
+
+static func layout_insets(window_rect: Rect2i, safe_rect: Rect2i, viewport_size: Vector2) -> Vector4:
+	safe_rect = window_rect.intersection(safe_rect)
 	if not safe_rect.has_area():
 		return Vector4.ZERO
-	var scaled := get_viewport().get_visible_rect().size / Vector2(window.size)
+	var scaled := viewport_size / Vector2(window_rect.size)
 	var before := Vector2(safe_rect.position - window_rect.position) * scaled
 	var after := Vector2(window_rect.end - safe_rect.end) * scaled
 	return Vector4(before.x, before.y, after.x, after.y)

@@ -3,6 +3,7 @@ extends "res://features/enemies/enemy_actor.gd"
 var _contact_cooldown := 0.0
 var _bounce_phase := 0.0
 var _hop_strength := 0.0
+var _contact_pose := 0.0
 
 
 func _step_ai(delta: float) -> void:
@@ -11,6 +12,7 @@ func _step_ai(delta: float) -> void:
 	chase(target.global_position - global_position, definition.contact_range)
 	if _contact_cooldown <= 0.0 and global_position.distance_squared_to(target.global_position) <= distance_squared:
 		_contact_cooldown = definition.contact_interval
+		_contact_pose = 1.0
 		damage_player()
 
 
@@ -19,9 +21,10 @@ func _animate(delta: float) -> void:
 	if not velocity.is_zero_approx():
 		speed_ratio = minf(get_real_velocity().length() / definition.move_speed, 1.0)
 	_hop_strength = move_toward(_hop_strength, speed_ratio, 8.0 * delta)
+	_contact_pose = move_toward(_contact_pose, 0.0, 5.0 * delta)
 	_bounce_phase = fposmod(_bounce_phase + delta * lerpf(0.8, 2.2, _hop_strength), 1.0)
 	var lift := sin(PI * _bounce_phase)
-	var squash := 0.07 - 0.14 * lift
+	var squash := 0.07 - 0.14 * lift + 0.13 * _contact_pose
 	_body.position.y = -lift * lerpf(2.0, 8.0, _hop_strength)
 	_body.scale = Vector2(1.0 + squash, 1.0 - squash)
 	_shadow.scale = Vector2.ONE * (1.0 - 0.12 * lift * _hop_strength)

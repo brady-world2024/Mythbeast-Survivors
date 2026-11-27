@@ -41,7 +41,7 @@ static func default_snapshot() -> Dictionary:
 	return {
 		"schema_version": SCHEMA_VERSION,
 		"profile": {"star_essence": 0, "permanent_upgrades": {}, "best_records": {}},
-		"settings": {"music_volume": DEFAULT_MUSIC_VOLUME, "sfx_volume": DEFAULT_SFX_VOLUME},
+		"settings": {"music_volume": DEFAULT_MUSIC_VOLUME, "sfx_volume": DEFAULT_SFX_VOLUME, "reduced_effects": false},
 		"settlement": {"last_run_id": 0},
 	}
 
@@ -183,6 +183,7 @@ func _normalize(raw: Dictionary) -> Dictionary:
 		ranks[id] = rank
 
 	var settings := _dictionary_or_empty(raw.get("settings"))
+	var reduced_effects: Variant = settings.get("reduced_effects", false)
 	return {
 		"schema_version": SCHEMA_VERSION,
 		"profile": {
@@ -193,6 +194,7 @@ func _normalize(raw: Dictionary) -> Dictionary:
 		"settings": {
 			"music_volume": _float_or(settings.get("music_volume"), 0.0, 1.0, DEFAULT_MUSIC_VOLUME),
 			"sfx_volume": _float_or(settings.get("sfx_volume"), 0.0, 1.0, DEFAULT_SFX_VOLUME),
+			"reduced_effects": reduced_effects is bool and reduced_effects,
 		},
 		"settlement": {"last_run_id": run_id},
 	}

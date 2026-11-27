@@ -5,9 +5,11 @@ const EnemyDefinition = preload("res://data/definitions/enemy_definition.gd")
 const Health = preload("res://features/combat/health.gd")
 const Player = preload("res://features/player/player.gd")
 const SlowStatus = preload("res://features/combat/slow_status.gd")
+const Comfort = preload("res://features/presentation/comfort.gd")
 
-const HIT_TINT := Color(1.75, 1.35, 1.48)
+const HIT_TINT := Color(1.34, 1.14, 1.19)
 const HIT_FLASH_SECONDS := 0.14
+const DISSOLVE_TINT := Color("#eff2c6")
 
 @export var definition: EnemyDefinition
 
@@ -23,6 +25,7 @@ var _speed_scale := 1.0
 var _damage_scale := 1.0
 var _hit_flash: Tween
 var _slow := SlowStatus.new()
+var _death_fade := 0.0
 
 
 func configure_spawn(health_multiplier: float, speed_multiplier: float, damage_multiplier: float) -> void:
@@ -92,11 +95,20 @@ func apply_slow(ratio: float, duration: float, minimum_speed_ratio: float = 0.4)
 
 
 func _update_slow_visual() -> void:
-	_body.modulate = Color("a9e7ff") if _slow.multiplier < 1.0 else Color.WHITE
-	queue_redraw()
+	var tint := Color("a9e7ff") if _slow.multiplier < 1.0 else Color.WHITE
+	if _body.modulate != tint:
+		_body.modulate = tint
+		queue_redraw()
 
 
 func _draw() -> void:
+	if _death_fade > 0.0:
+		var distance := lerpf(24.0, 10.0, _death_fade)
+		var tint := Color(DISSOLVE_TINT, _death_fade * 0.8)
+		for index in range(3):
+			var direction := Vector2.from_angle(-PI * (0.2 + index * 0.3))
+			var center := direction * distance + Vector2(0, -9)
+			draw_line(center - direction * 2.0, center + direction * 4.0, tint, 2.0, true)
 	if _slow.multiplier >= 1.0:
 		return
 	for point: Vector2 in [Vector2(-21.0, -39.0), Vector2(20.0, -45.0)]:
@@ -108,19 +120,27 @@ func _draw() -> void:
 func _on_damaged(_amount: int) -> void:
 	if _hit_flash != null:
 		_hit_flash.kill()
-	_body.self_modulate = HIT_TINT
+	_body.self_modulate = Color.WHITE.lerp(HIT_TINT, 0.35) if Comfort.reduced_effects else HIT_TINT
 	_hit_flash = create_tween()
 	_hit_flash.tween_property(_body, "self_modulate", Color.WHITE, HIT_FLASH_SECONDS)
 
 
 func _on_depleted() -> void:
 	_disable_combat()
+	queue_redraw()
 	var sway := create_tween()
 	sway.tween_property(_body, "position:y", 0.0, 0.07)
 	sway.parallel().tween_property(_body, "scale", Vector2(1.23, 0.62), 0.07)
 	sway.tween_property(_visual, "modulate:a", 0.0, 0.15)
 	sway.parallel().tween_property(_body, "scale", Vector2(0.8, 0.16), 0.15)
+	if not Comfort.reduced_effects:
+		sway.parallel().tween_method(_set_death_fade, 1.0, 0.0, 0.15)
 	sway.tween_callback(queue_free)
+
+
+func _set_death_fade(fade: float) -> void:
+	_death_fade = fade
+	queue_redraw()
 
 
 func dismiss() -> void:

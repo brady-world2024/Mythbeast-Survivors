@@ -2,6 +2,7 @@ extends Node2D
 
 const Player = preload("res://features/player/player.gd")
 const Targets = preload("res://features/combat/combat_targets.gd")
+const Feedback = preload("res://features/presentation/feedback.gd")
 
 @onready var _player := get_parent() as Player
 
@@ -39,5 +40,6 @@ func _physics_process(delta: float) -> void:
 		projectile.call(&"set_visual_rank", _player.abilities.rank_of(&"arcane_bolt"))
 	projectile_parent.add_child(projectile)
 	projectile.call(&"launch", origin, direction, weapon)
+	Feedback.sound(self, &"bolt_fire")
 	_cooldown_fraction = 1.0
 	_player.play_cast()

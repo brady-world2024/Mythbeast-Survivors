@@ -16,6 +16,8 @@
   <path d="M20 104c16 17 83 24 112-2 1 19-23 25-53 25-27 1-50-6-59-23Z" fill="#438d83" opacity=".46"/>
   <path d="M31 83c11-8 18-14 24-24 5-8 10-14 18-15" fill="none" stroke="#f1f6bd" stroke-width="8" stroke-linecap="round" opacity=".83"/>
   <ellipse cx="101" cy="67" rx="8" ry="4" transform="rotate(27 101 67)" fill="#e6f5bd" opacity=".78"/>
+  <path d="M29 101q8 12 27 15m56-2q10-5 14-12" fill="none" stroke="#d8ecad" stroke-width="3" stroke-linecap="round" opacity=".66"/>
+  <g fill="#edfac7" opacity=".9"><circle cx="55" cy="68" r="3"/><circle cx="64" cy="58" r="2"/><circle cx="39" cy="84" r="2"/></g>
   <ellipse cx="42" cy="102" rx="7" ry="4.5" fill="#f1c58d" opacity=".9"/>
   <ellipse cx="110" cy="102" rx="7" ry="4.5" fill="#f1c58d" opacity=".9"/>
   <ellipse cx="57" cy="89" rx="5.8" ry="8" fill="#254c43"/>

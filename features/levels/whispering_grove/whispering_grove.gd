@@ -20,6 +20,8 @@ const UpgradePicker = preload("res://ui/screens/upgrade_picker.gd")
 const FloatingStick = preload("res://ui/components/floating_stick.gd")
 const GroveHud = preload("res://ui/hud/grove_hud.gd")
 const RunRewards = preload("res://ui/components/run_rewards.gd")
+const CombatFeedback = preload("res://features/presentation/combat_feedback.gd")
+const Feedback = preload("res://features/presentation/feedback.gd")
 const XP_GEM_SCENE = preload("res://features/progression/xp_gem.tscn")
 const MAX_ACTIVE_GEMS := 48
 
@@ -33,6 +35,7 @@ const MAX_ACTIVE_GEMS := 48
 @onready var _picker: UpgradePicker = %UpgradePicker
 @onready var _rewards: Node2D = %Rewards
 @onready var _hud: GroveHud = %HUD
+@onready var _feedback: CombatFeedback = %CombatFeedback
 @onready var _stick: FloatingStick = %MovementStick
 @onready var _pause_overlay: Control = %PauseOverlay
 @onready var _pause_panel: Control = %PausePanel
@@ -69,6 +72,7 @@ func configure_run(setup: Dictionary, settle_run: Callable) -> void:
 
 
 func _ready() -> void:
+	_feedback.camera = $World/Camera2D
 	if not _run_setup.is_empty():
 		_player.initialize_run_bonuses(int(_run_setup["bonus_hp"]), float(_run_setup["magic_multiplier"]),
 			float(_run_setup["speed_multiplier"]))
@@ -91,6 +95,7 @@ func _ready() -> void:
 	var basic_attack := _player.get_node("BasicAttack") as BasicAttack
 	basic_attack.projectile_parent = %Effects
 	_player.health.changed.connect(_hud.set_health)
+	_player.health.damaged.connect(_on_actor_hit.bind(_player, true))
 	_player.health.depleted.connect(_show_game_over)
 	_hud.set_health(_player.health.current, _player.health.maximum)
 	_progression.changed.connect(_hud.set_progress)
@@ -179,6 +184,7 @@ func _set_paused(value: bool) -> void:
 func _set_world_paused(value: bool, focus_target: Control = null) -> void:
 	if value:
 		_clear_movement()
+		_feedback.clear_shake()
 	_pause_button.disabled = value
 	get_tree().paused = value
 	if focus_target != null and not OS.has_feature("mobile"):
@@ -203,6 +209,8 @@ func _finish_run(panel: Control, focus: Button) -> void:
 	_pause_overlay.show()
 	_set_world_paused(true, focus)
 	_run_won = panel == _victory_panel
+	_player.play_result(_run_won)
+	Feedback.sound(self, &"victory" if _run_won else &"game_over")
 	if not _run_won:
 		%DefeatKills.text = _result_value(English.ENEMIES_DEFEATED, str(_timeline.enemies_defeated))
 		%DefeatLevel.text = _result_value(English.LEVEL_REACHED, str(_progression.level))
@@ -272,13 +280,17 @@ func _continue_boss_intro(delta: float) -> void:
 		entities.add_child(boss)
 		_boss = boss
 		_hud.show_boss_intro(_boss.get("definition").display_name)
+		Feedback.sound(self, &"boss_intro")
 		_timeline.mark_boss_visible()
 	if not _timeline.begin_boss():
 		return
 	var health: Node = _boss.get_node("Health")
 	_hud.show_boss(_boss.get("definition").display_name, health.get("maximum"))
 	health.connect(&"changed", _hud.set_boss_health)
+	health.connect(&"damaged", _on_actor_hit.bind(_boss, false))
 	_boss.connect(&"phase_changed", _hud.set_boss_phase)
+	if _boss.has_signal(&"presentation_cue"):
+		_boss.connect(&"presentation_cue", _on_boss_cue)
 	_boss.connect(&"defeated", _boss_defeated, CONNECT_ONE_SHOT)
 	_boss.call(&"start", _player)
 
@@ -323,13 +335,27 @@ func _complete_victory() -> void:
 
 
 func _track_enemy_reward(enemy: EnemyActor) -> void:
+	enemy.health.damaged.connect(_on_actor_hit.bind(enemy, false))
 	enemy.health.depleted.connect(_drop_xp.bind(enemy), CONNECT_ONE_SHOT)
+
+
+func _on_actor_hit(amount: int, actor: Node2D, hero: bool) -> void:
+	_feedback.hit(actor, amount, hero)
+	Feedback.sound(self, &"player_hit" if hero else &"enemy_hit")
+
+
+func _on_boss_cue(cue: StringName) -> void:
+	Feedback.sound(self, cue)
+	if cue == &"boss_stomp" or cue == &"boss_phase":
+		_feedback.impact(2.8 if cue == &"boss_stomp" else 1.7)
 
 
 func _drop_xp(enemy: EnemyActor) -> void:
 	if _timeline.phase != RunTimeline.Phase.SURVIVAL or _transition_requested:
 		return
 	_timeline.record_enemy_defeat()
+	_feedback.sparkle(enemy.global_position, true)
+	Feedback.sound(self, &"enemy_death")
 	if enemy.definition.xp_reward <= 0:
 		return
 	var reward := enemy.definition.xp_reward
@@ -352,8 +378,14 @@ func _drop_xp(enemy: EnemyActor) -> void:
 	var gem := XP_GEM_SCENE.instantiate() as XpGem
 	gem.position = position
 	gem.setup(_player, reward)
-	gem.collected.connect(_progression.grant_xp, CONNECT_ONE_SHOT)
+	gem.collected.connect(_collect_xp.bind(gem), CONNECT_ONE_SHOT)
 	_rewards.add_child(gem)
+
+
+func _collect_xp(amount: int, gem: XpGem) -> void:
+	_feedback.sparkle(gem.global_position)
+	Feedback.sound(self, &"xp_pickup")
+	_progression.grant_xp(amount)
 
 
 func _offer_next_upgrade() -> void:
@@ -386,6 +418,7 @@ func _offer_next_upgrade() -> void:
 	_state = RunState.CHOOSING_UPGRADE
 	_set_world_paused(true)
 	_picker.present(cards)
+	Feedback.sound(self, &"level_up")
 
 
 func _select_upgrade(id: StringName) -> void:
@@ -394,6 +427,7 @@ func _select_upgrade(id: StringName) -> void:
 	_offered_ids.clear()
 	if _player.abilities.apply_upgrade(id):
 		_progression.consume_upgrade()
+		Feedback.sound(self, &"upgrade_pick")
 	_offer_next_upgrade.call_deferred()
 
 

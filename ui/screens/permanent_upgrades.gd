@@ -3,6 +3,7 @@ extends Control
 signal back_requested
 
 const English = preload("res://data/localization/english.gd")
+const Feedback = preload("res://features/presentation/feedback.gd")
 const UpgradeCard = preload("res://ui/components/permanent_upgrade_card.tscn")
 
 var service: RefCounted
@@ -48,6 +49,7 @@ func _purchase(id: StringName, expected_next_rank: int) -> void:
 	match status:
 		&"ok":
 			%PurchaseStatus.text = tr(English.UPGRADE_PURCHASED)
+			Feedback.sound(self, &"purchase")
 		&"unaffordable":
 			%PurchaseStatus.text = tr(English.NOT_ENOUGH_ESSENCE)
 		&"max_rank":

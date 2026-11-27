@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://features/levels/run_timeline.gd" id="10_timeline"]
 
 [ext_resource type="PackedScene" path="res://ui/components/run_rewards.tscn" id="11_rewards"]
+[ext_resource type="Script" path="res://features/presentation/combat_feedback.gd" id="12_feedback"]
 
 [sub_resource type="WorldBoundaryShape2D" id="West"]
 normal = Vector2(1, 0)
@@ -68,6 +69,10 @@ script = ExtResource("7_spawner")
 
 [node name="Effects" type="Node2D" parent="World"]
 unique_name_in_owner = true
+
+[node name="CombatFeedback" type="Node2D" parent="World"]
+unique_name_in_owner = true
+script = ExtResource("12_feedback")
 
 [node name="Rewards" type="Node2D" parent="World"]
 unique_name_in_owner = true

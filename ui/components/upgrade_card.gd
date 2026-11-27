@@ -12,7 +12,8 @@ const English = preload("res://data/localization/english.gd")
 func configure(choice: Dictionary) -> void:
 	_icon.texture = choice.get("icon") as Texture2D
 	_title.text = tr(String(choice.get("name", "")))
-	_rank.text = tr(English.ABILITY_RANK_FORMAT) % [choice.get("rank", 1), choice.get("max_rank", 1)]
+	var rank := int(choice.get("rank", 1))
+	_rank.text = tr(English.NEW_ABILITY) if rank == 1 else tr(English.ABILITY_RANK_FORMAT) % [rank, choice.get("max_rank", 1)]
 	_description.text = tr(String(choice.get("description", "")))
 	_detail.text = String(choice.get("detail", ""))
 	_detail.visible = not _detail.text.is_empty()

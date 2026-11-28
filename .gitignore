@@ -2,6 +2,10 @@
 .DS_Store
 /export/
 /build/
+/export_credentials.cfg
 *.keystore
 *.jks
 *.mobileprovision
+*.provisionprofile
+*.p12
+*.p8

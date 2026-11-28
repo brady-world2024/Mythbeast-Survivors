@@ -26,6 +26,11 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Check native export scripts
+        run: |
+          bash -n scripts/build-android-debug.sh
+          bash -n scripts/export-ios.sh
+
       - name: Install Godot 4.7.2 Standard
         timeout-minutes: 3
         env:

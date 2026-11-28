@@ -34,7 +34,24 @@ Whispering Grove
   The local save keeps your progress, records, and settings. Crystal
   Caverns is shown as Coming Soon.
 
-  Android and iOS export configuration and device testing are also ahead.
+Native test builds
+
+  The Android Debug preset builds an ARM64 APK for Android 7.0 (API 24)
+  or later. Configure the Java 17 and Android SDK paths in Godot's
+  Editor Settings under Export > Android. With the matching Godot export
+  templates installed, run:
+
+    bash scripts/build-android-debug.sh
+
+  The script verifies the APK signature, alignment, package identity, and
+  manifest permissions. The APK is written to
+  build/android/MythbeastSurvivors-debug.apk. The package identifier is
+  io.github.bradyworld2024.mythbeastsurvivors.
+
+  The iOS preset uses the same app identity and version. On macOS
+  with Xcode, set GODOT_IOS_TEAM_ID to your Apple team and run
+  bash scripts/export-ios.sh to generate an Xcode project. Xcode manages
+  development signing and iPhone deployment separately.
 
 Project layout
 
@@ -55,7 +72,8 @@ Development checks
 
   The required gate runs a curated set of startup, navigation, movement,
   combat, progression, survival, persistent replay, and combat feedback
-  checks. The second runs every smoke suite, including audio, touch layout,
+  checks. CI also checks the native build scripts' shell syntax. The second
+  command runs every smoke suite, including audio, touch layout,
   save recovery, and purchase failure handling. Both isolate test profiles
   from the player's save.
   Add critical regressions to the gate when related behavior changes.
